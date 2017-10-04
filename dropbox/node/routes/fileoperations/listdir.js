@@ -1,62 +1,60 @@
 var fs = require('fs');
 var ejs = require('ejs');
 var testFolder = './routes/';
-
+var fileUtils = require('./../utils/files');
 
 var checkFileIsFolder = function (filename){
 	try{
 		var stats = fs.statSync(filename);
-		//console.log('is file ? ' + stats.isFile());
 		return !stats.isFile();
 	}catch(ex){
-		//console.log(ex);
+		console.log(ex);
 	}
 	
 	return false;
 };
 
-var listdir = function (req,res)
-{
-	var response = "";
-	testFolder = req.param('dir');
-	console.log(testFolder);
-	fs.readdir(testFolder, function (err, files) 
-	{
-		console.log(files.length);
-		
-		for(var i=0;i<files.length;i++)
-		{
-			//console.log(files[i]);
-			if(checkFileIsFolder(testFolder+files[i])){
-				response+= " +&nbsp&nbsp ";
-			}else{
-				response+= "&nbsp&nbsp&nbsp&nbsp&nbsp";
-			}
-			response += files[i]+"<br>";
-			//console.log(files[i]+" is folder :"+checkFileIsFolder(testFolder+files[i]));
+
+
+var DirectoryList=function (root,callback){
+	fs.readdir(fileUtils.GLOBAL_FILE_PATH +"/"+root, function (err, files) 
+			{
+		if(err){
+			throw err;
 		}
-		res.send(response);
-	});
+		var sendFiles=[];
+		var file = {};
+				for(var i=0;i<files.length;i++)
+				{
+					file.name = files[i];
+					file.path = root+"/"+files[i];
+					if(checkFileIsFolder(fileUtils.GLOBAL_FILE_PATH +"/"+root+"/"+files[i])){
+						
+						file.isFolder = true;
+					}else{
+						file.isFolder = false;
+					}
+					sendFiles.push(file);
+				}
+				callback(err,sendFiles);
+			});
 };
 
-
-
-var loadDirPage = function (req,res)
+var listdir = function (req,res)
 {
-	ejs.renderFile('./views/ListDir.ejs',function(err, result) {
-		if (!err) {
-			res.end(result);
-		}
-		else {
-			res.end('An error occurred');
+	var root = req.param('dir');
+	return DirectoryList(root,function(err,files){
+		if(err){
 			console.log(err);
+		}else{
+			res.send(files);
 		}
 	});
 	
-	//res.render("ListDir");
-	//res.render("index");
 };
 
 
+
+
+exports.DirectoryList = DirectoryList;
 exports.listdir = listdir;
-exports.loadDirPage = loadDirPage;

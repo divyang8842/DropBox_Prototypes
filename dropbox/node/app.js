@@ -9,11 +9,15 @@ var express = require('express')
   , login = require('./routes/login/loginJS')
   ,	signup = require('./routes/login/Signup');
 
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var cors = require('cors');
+
 
 var app = express();
 
-//Enable CORS
-app.use(cors());
+
  
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,20 +30,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//Enable CORS
+app.use(cors());
 
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/listdir',listdir.loadDirPage);
-app.post('/listdir',listdir.listdir);
+//app.get('/listdir',listdir.loadDirPage);
+//app.post('/listdir',listdir.listdir);
 
 app.get('/signup', signup.signup);
 app.post('/afterSignUp', signup.afterSignUp);
 
-app.get('/signin', login.signin);
-app.post('/afterSignIn', login.afterSignIn);
-
-app.get('/getAllUsers', login.getAllUsers);
+//app.get('/signin', login.signin);
+app.post('/signin', login.signin);
+//
+//app.get('/getAllUsers', login.getAllUsers);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
