@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Signup</title>
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<link rel='stylesheet' href='/stylesheets/signup.css' />
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+		<div class="row">
+			<div class="panel panel-primary">
+				<div class="panel-body">
+					<form method="post" action="/afterSignUp" role="form">
+						<div class="form-group">
+							<h2>Create account</h2>
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="signup1fName">First Name</label>
+							<input id="signup1fName" type="text" name="ufname" maxlength="50" class="form-control">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="signup1lName">Last Name</label>
+							<input id="signup1lName" type="text" name="ulname"  maxlength="50" class="form-control">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="signupEmail">Email</label>
+							<input id="signupEmail" type="email" name="email" maxlength="50" class="form-control">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="gender">Gender</label>
+							<div class="radio" id="gender">
+  								<label><input type="radio" value="1" name="gender">Male</label>
+  								<label><input type="radio" value="2" name="gender">Female</label>
+  								<label><input type="radio" value="0" name="gender">Other</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="dob">DOB</label>
+							<input id="dob" type="date" name="dob" maxlength="50" class="form-control">
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="signupPassword">Password</label>
+							<input id="signupPassword" type="password" name="pswrd" maxlength="25" class="form-control" placeholder="at least 6 characters" length="40">
+						</div>
+						<div class="form-group">
+							<button id="signupSubmit" type="submit" class="btn btn-info btn-block">Create your account</button>
+						</div>
+						<p class="form-group">By creating an account, you agree to our <a href="#">Terms of Use</a> and our <a href="#">Privacy Policy</a>.</p>
+						<hr>
+						<p></p>Already have an account? <a href="/signin">Sign in</a></p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
