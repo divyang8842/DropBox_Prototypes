@@ -2,6 +2,7 @@ var mysql = require('./../database/mysql');
 
 var GROUP = 1;
 var USER = 0;
+var link = 2;
 
 var setPermission = function(dataJson,callback) {
 	var setPermit = "INSERT INTO Directory_Permission (directoryid,permissiontype,permit_id) VALUES(?,?,?)";
