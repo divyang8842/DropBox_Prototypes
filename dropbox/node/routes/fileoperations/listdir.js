@@ -23,9 +23,10 @@ var DirectoryList=function (root,callback){
 			throw err;
 		}
 		var sendFiles=[];
-		var file = {};
+		
 				for(var i=0;i<files.length;i++)
 				{
+					var file = {};
 					file.name = files[i];
 					file.path = root+"/"+files[i];
 					if(checkFileIsFolder(fileUtils.GLOBAL_FILE_PATH +"/"+root+"/"+files[i])){

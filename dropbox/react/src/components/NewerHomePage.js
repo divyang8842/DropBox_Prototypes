@@ -4,7 +4,7 @@ import * as API from '../api/API';
 import Login from "./Login";
 import Message from "./Message";
 import Welcome from "./Welcome";
-/*import ListDir from "./ListDirectory";*/
+import ListDir from "./ListDirectory";
 import SignUp from "./SignUp";
 
 class NewerHomePage extends Component {
@@ -87,9 +87,9 @@ class NewerHomePage extends Component {
                     <Welcome username={this.state.username}/>
                 )}/>
 
-               {/* <Route exact path="/listdir" render={() => (
+                <Route exact path="/listdir" render={() => (
                     <ListDir username={this.state.username}/>
-                )}/>*/}
+                )}/>
             </div>
         );
     }

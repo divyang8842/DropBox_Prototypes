@@ -7,23 +7,6 @@ var listdir = require('./../fileoperations/listdir');
 
 
 
-//function signin(req,res) {
-//
-//	ejs.renderFile('./views/login/login.ejs',function(err, result) {
-//	   // render on success
-//	   if (!err) {
-//	            res.end(result);
-//	   }
-//	   // render or error
-//	   else {
-//	            res.end('An error occurred');
-//	            console.log(err);
-//	   }   
-//   });
-//	
-//	// res.render('signin');
-//}
-
 function renderUserResults(results){
 	var length = results.length;
 	while(length-->0){

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import FileView from "./FileView";
 
 class ListDirectory extends Component {
 
@@ -20,51 +21,52 @@ class ListDirectory extends Component {
     }
 
     render() {
-        return (
-            <div className="row justify-content-md-center">
-                <div className="col-md-3">
-                    <form>
-                        <div className="form-group">
-                            <h1>Login</h1>
-                        </div>
-                        <div className="form-group">
-                            <input
-                                className="form-control"
-                                type="text"
-                                label="Username"
-                                placeholder="Enter Username"
-                                value={this.state.username}
-                                onChange={(event) => {
-                                    this.setState({
-                                        username: event.target.value
-                                    });
-                                }}
-                            />
-                        </div>
 
-                        <div className="form-group">
-                            <input
-                                className="form-control"
-                                type="password"
-                                label="password"
-                                placeholder="Enter Password"
-                                value={this.state.password}
-                                onChange={(event) => {
-                                    this.setState({
-                                        password: event.target.value
-                                    });
-                                }}
-                            />
+
+        var totStyle={float:'right',fontSize:25};
+        var totStyle1={float:'left', fontSize:25};
+        var borderStyle={borderStyle: 'inset', backgroundColor:'lightBlue'};
+
+
+        return (
+            <div className="container-fluid" >
+                <div className="row justify-content-md-center">
+                    <div className="col-md-6">
+                        <h2 className="text-center">Food Ordering App</h2>
+                    </div>
+
+                </div>
+                <hr/>
+
+                <hr/>
+                <div className="row justify-content-md-center" >
+
+                    <div className="card col-sm-4"  >
+                        <div className="card-body">
+                            <h4>Order</h4>
+                            {
+                                this.props.todoArr.map((todo,index) => {
+                                    if (todo.quantity > 0) {
+                                        return (
+                                            <FileView
+                                                key={index}
+                                                item={todo}
+                                                value={'false'}
+                                            />
+                                        );
+                                    }
+                                })
+                            }
                         </div>
-                        <div className="form-group">
-                            <button
-                                className="btn btn-primary"
-                                type="button"
-                                onClick={() => this.props.handleSubmit(this.state)}>
-                                Submit
-                            </button>
+                       {/* <div className="row justify-content-md-center" style={borderStyle}>
+                            <div className="col-md-12">
+                                <span aria-hidden={true} style={totStyle}>$ {tot(this.props.todoArr)}.00</span>
+                                <span aria-hidden={true} style={totStyle1}><b>Total :</b></span>
+
+                            </div>
                         </div>
-                    </form>
+*/}
+                    </div>
                 </div>
             </div>
         );
