@@ -22,9 +22,9 @@ var gtDateStringFromObject = function(dateObj,format,separator){
 	if(!separator){
 		separator = "/";
 	}
-	if(format=="MMDDYYYY"){
+	if(format==="MMDDYYYY"){
 		return (date.getMonth()+1)+separator+date.getDate()+separator+date.getFullYear();
-	}else if(format=="YYYYMMDD"){
+	}else if(format==="YYYYMMDD"){
 		return date.getFullYear()+separator+date.getMonth()+separator+date.getDate();
 	}
 	

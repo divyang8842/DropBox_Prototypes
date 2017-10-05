@@ -5,8 +5,8 @@ var GLOBAL_FILE_PATH = "./../public/uploads";
 
 var createDirectory = function(filepath,callback){
 	mkdirp(GLOBAL_FILE_PATH+'/'+filepath, function (err) {
-	    if (err)  callback(err,filepath);
-	    else  callback(err,filepath);
+	    if (err)  {callback(err,filepath);}
+	    else  {callback(err,filepath);}
 	});
 };
 

@@ -9,15 +9,14 @@ var pool = mysql.createPool({
 	port : 3306,
 	debug : false
 });
+//
+//var closeConnection = function(connection) {
+//	connection.release();
+//};
 
-var closeConnection = function(connection) {
-	connection.release();
-};
-
-var fetchData = function(callback, sqlQuery) {
-
+var fetchData = function(callback, sqlQuery,data) {
 	pool.getConnection(function(err, connection) {
-		connection.query(sqlQuery, function(err, rows) {
+		connection.query(sqlQuery,data, function(err, rows) {
 
 			if (err) {
 				console.log("ERROR: " + err.message);
@@ -29,11 +28,9 @@ var fetchData = function(callback, sqlQuery) {
 	});
 };
 
-var setData = function(callback, sqlQuery) {
-	
+var setData = function(callback, sqlQuery,data) {
 	pool.getConnection(function(err, connection) {
-		connection.query(sqlQuery, function(err, rows) {
-
+		connection.query(sqlQuery,data, function(err, rows) {
 			try {
 				if (err) {
 					console.log("ERROR: " + err.message);
@@ -42,8 +39,7 @@ var setData = function(callback, sqlQuery) {
 
 			} finally {
 				connection.release();
-			}
-			
+			}		
 		});
 	});
 

@@ -41,21 +41,21 @@ var DirectoryList=function (root,callback){
 			});
 };
 
-var listdir = function (req,res)
-{
-	var root = req.param('dir');
-	return DirectoryList(root,function(err,files){
-		if(err){
-			console.log(err);
-		}else{
-			res.send(files);
-		}
-	});
-	
-};
+//var listdir = function (req,res)
+//{
+//	var root = req.param('dir');
+//	return DirectoryList(root,function(err,files){
+//		if(err){
+//			console.log(err);
+//		}else{
+//			res.send(files);
+//		}
+//	});
+//	
+//};
 
 
 
 
 exports.DirectoryList = DirectoryList;
-exports.listdir = listdir;
+//exports.listdir = listdir;

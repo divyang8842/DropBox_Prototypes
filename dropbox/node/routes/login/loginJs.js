@@ -18,8 +18,8 @@ function renderUserResults(results){
 
 function signin(req,res)
 {
-	var getUser="select homedirectory as homedirectory from users where username='"+req.param("username")+"' and password='" + security.encrypt(req.param("password")) +"'";
-	console.log("Query is:"+getUser);
+	var getUser="select homedirectory as homedirectory,password as password from users where username=? and deleteflag='0'";
+	var data = [req.param("username")];
 	
 	mysql.fetchData(function(err,results){
 		if(err){
@@ -27,25 +27,23 @@ function signin(req,res)
 		}
 		else 
 		{
-			if(results.length > 0){
+			if(results.length > 0 && security.compareEncrypted(req.param("password"),results[0].password)){
 				console.log("valid Login");
-				
 				listdir.DirectoryList(results[0].homedirectory,function(err,filelist){
 					res.status(201).json({
 						status:'201',
 						message : "Valid Login.",
 						filelist:filelist
 					});
-				})
-			}
-			else {    
+				});
+			} else {    
 				res.status(401).json({
 					status:'401',
 					message : "Invalid Login."
 				});
 			}
 		}  
-	},getUser);
+	},getUser,data);
 }
 
 
