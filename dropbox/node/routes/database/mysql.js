@@ -2,13 +2,14 @@ var ejs = require('ejs');
 var mysql = require('mysql');
 var pool = mysql.createPool({
 	connectionLimit : 20,
-	host : 'localhost',
+	host : '127.0.0.1',
 	user : 'root',
-	password : 'root',
+	password : 'Keval#2812',
 	database : 'cmpe273',
 	port : 3306,
 	debug : false
 });
+
 //
 //var closeConnection = function(connection) {
 //	connection.release();

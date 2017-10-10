@@ -21,21 +21,29 @@ var fileUtils = require('./../utils/files');
  
  
  var afterSignUp = function(req,res){
- 	var signup="INSERT users (ulname,ufname,emailid,username,password) values ('"+req.param("firstname")+"','"+req.param("lastname")+"','"+req.param("email")+"','"+req.param("email")+"','"+security.encrypt(req.param("password"))+"')";
+ 	console.log(req.body.firstname);
+     console.log(req.body.lastname);
+     console.log(req.body.email);
+     console.log(req.body.password);
+
+
+     var signup="INSERT users (ufname,ulname,emailid,username,password) values ('"+req.body.firstname+"','"+req.body.lastname+"','"+req.body.email+"','"+req.body.email+"','"+security.encrypt(req.body.password)+"')";
  	console.log(signup);
  	mysql.setData(function(err,results){
  		if(!err && results.affectedRows > 0){
  		
  			console.log("valid Signup");
  			var path = results.insertId;
+            console.log(results);
+ 			console.log(path);
  			fileUtils.createDirectory(path,function(err,path){
  				mysql.setData(function(err,results){
  				},"UPDATE users SET homedirectory='"+path+"' WHERE uid='"+results.insertId+"'");
  				
  			});
  			
- 			res.status(201).json({
- 				status:'201',
+ 			res.status(200).json({
+ 				status:'200',
  				message : "Signup Successfull."
  			
  			});

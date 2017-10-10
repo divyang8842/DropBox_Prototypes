@@ -1,6 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { render } from 'react-dom';
+import App from './containers/App';
+import './styles/index.css';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+const AppMaterial = () => (
+    <MuiThemeProvider>
+        <App/>
+    </MuiThemeProvider>
+);
+
+render(
+  <AppMaterial />,
+  document.getElementById('root')
+);

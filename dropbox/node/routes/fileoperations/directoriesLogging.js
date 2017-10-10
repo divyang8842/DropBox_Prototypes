@@ -5,6 +5,13 @@ var UPDATED = "1";
 var DELETED = "2";
 var SHARED = "3";
 
+var createDirectoryEntry = function(filepath,userid,isFile,parentdir,name){
+	var createDirectoryEntry = "INSERT INTO Directories (name,relative_path,parentDir,createdby,isFile) VALUES(?,?,?,?,?)";
+	var data=[datajson.directoryid,datajson.operation,datajson.uid];
+	mysql.setData(function(err, results) {
+			callback(err, results);
+	}, setPermit,data);
+};
 
 var getOperation = function(operation){
 	if(operation === CREATED){
@@ -24,22 +31,6 @@ var logOperation = function(datajson,callback) {
 	mysql.setData(function(err, results) {
 			callback(err, results);
 	}, setPermit,data);
-};
-
-
-var createDirectoryEntry = function(datajson,callback){
-	var createDirectoryEntry = "INSERT INTO Directories (name,relative_path,parentDir,createdby,isFile) VALUES(?,?,?,?,?)";
-	var data=[datajson.name,datajson.filepath,datajson.parentdir,datajson.userid,datajson.isFile];
-	mysql.setData(function(err, results) {
-		if(err){
-			callback(err, results);
-		}else{
-			data = {directoryid:results.insertId,operation:CREATED,uid:datajson.userid};
-			logOperation(data,function(err,result){
-				callback(err, results);
-			});
-		}
-	}, createDirectoryEntry,data);
 };
 
 
@@ -83,6 +74,4 @@ var getAllFileOperationsForDir = function(dirid,callback){
 };
 
 exports.logOperation = logOperation;
-exports.getAllFileOperationsForUser = getAllFileOperationsForUser;
-exports.getAllFileOperationsForDir = getAllFileOperationsForDir;
-exports.createDirectoryEntry = createDirectoryEntry;
+exports.getAllFileOperations = getAllFileOperations;

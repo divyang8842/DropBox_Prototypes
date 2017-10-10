@@ -18,22 +18,30 @@ function renderUserResults(results){
 
 function signin(req,res)
 {
-	var getUser="select homedirectory as homedirectory,password as password from users where username=? and deleteflag='0'";
-	var data = [req.param("username")];
+	console.log(req.body.email);
+	var getUser="select uid as uid, ufname as ufname,homedirectory as homedirectory,password as password from users where username=? and deleteflag='0'";
+	var data = [req.body.email];
 	
 	mysql.fetchData(function(err,results){
+
+        var sess=req.session;
 		if(err){
 			throw err;
 		}
 		else 
 		{
-			if(results.length > 0 && security.compareEncrypted(req.param("password"),results[0].password)){
+			if(results.length > 0 && security.compareEncrypted(req.body.password,results[0].password)){
 				console.log("valid Login");
 				listdir.DirectoryList(results[0].homedirectory,function(err,filelist){
-					res.status(201).json({
-						status:'201',
+
+                    sess.userid = results[0].uid;
+					res.status(200).json({
+						status:'200',
 						message : "Valid Login.",
-						filelist:filelist
+						userid:results[0].uid,
+						filelist:filelist,
+						root:results[0].homedirectory,
+						username:results[0].ufname
 					});
 				});
 			} else {    
@@ -47,65 +55,6 @@ function signin(req,res)
 }
 
 
-
-//
-//function getAllUsers(req,res)
-//{
-//	var getAllUsers = "select * from users";
-//	console.log("Query is:"+getAllUsers);
-//	
-//	mysql.fetchData(function(err,results){
-//		if(err){
-//			throw err;
-//		}
-//		else 
-//		{
-//			if(results.length > 0){
-//				
-//				var rows = results;
-//				var jsonString = JSON.stringify(results);
-//				var jsonParse = JSON.parse(jsonString);
-//				
-////				console.log("Results Type: "+(typeof results));
-////				console.log("Result Element Type:"+(typeof rows[0].emailid));
-////				console.log("Results Stringify Type:"+(typeof jsonString));
-////				console.log("Results Parse Type:"+(typeof jsString));
-//				
-//				console.log("Results: "+(results));
-////				console.log("Result Element:"+(rows[0].emailid));
-////				console.log("Results Stringify:"+(jsonString));
-////				console.log("Results Parse:"+(jsonParse));
-//				
-//				ejs.renderFile('./views/successLogin.ejs',{data:jsonParse},function(err, result) {
-//			        // render on success
-//			        if (!err) {
-//			            res.end(result);
-//			        }
-//			        // render or error
-//			        else {
-//			            res.end('An error occurred');
-//			            console.log(err);
-//			        }
-//			    });
-//			}
-//			else {    
-//				
-//				console.log("No users found in database");
-//				ejs.renderFile('./views/failLogin.ejs',function(err, result) {
-//			        // render on success
-//			        if (!err) {
-//			            res.end(result);
-//			        }
-//			        // render or error
-//			        else {
-//			            res.end('An error occurred');
-//			            console.log(err);
-//			        }
-//			    });
-//			}
-//		}  
-//	},getAllUsers);
-//}
 
 exports.signin=signin;
 //exports.afterSignIn=afterSignIn;

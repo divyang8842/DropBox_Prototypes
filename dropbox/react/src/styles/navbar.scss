@@ -1,0 +1,57 @@
+/*---------
+Styling for the top navbar
+------------*/
+#top-bar{
+    padding:0;
+    margin: 5px;
+}
+
+/**/
+#search-container{
+    display: inline-block;
+    text-align: left;
+}
+
+#search-icon{
+    display:inline-block;
+}
+
+#search-text{
+    font-family: Cormorant Upright,cursive;
+    display:inline-block;
+}
+
+#user-nav {
+    text-align: right;
+    a {
+        text-decoration: none;
+        font-family: Raleway;
+        text-transform: uppercase;
+        color: #767676;
+
+      &:hover{
+        color:#FF5252;
+        cursor: pointer;
+      }
+
+    }
+}
+
+#option-items{
+    padding:12px;
+}
+
+.file-opt{
+    margin: 10px;
+}
+
+
+#option-buttons{
+    text-align: right;
+
+    .option-btn{
+        margin: 12px;
+    }
+}
+
+

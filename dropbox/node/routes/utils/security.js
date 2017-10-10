@@ -15,6 +15,19 @@ var compareEncrypted = function(pwd,hash){
 	return bcrypt.compareSync(pwd, hash); 
 };
 
+
+// Define authentication middleware BEFORE your routes
+var authenticate = function (req, res, next) {
+    // your validation code goes here.
+    var isAuthenticated = true;
+    if (isAuthenticated) {
+        next();
+    }
+    else {
+        // redirect user to authentication page or throw error or whatever
+    }
+}
+
 exports.encrypt=encrypt;
 exports.compareEncrypted=compareEncrypted;
 	

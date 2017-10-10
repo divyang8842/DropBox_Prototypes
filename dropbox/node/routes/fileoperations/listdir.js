@@ -16,7 +16,9 @@ var checkFileIsFolder = function (filename){
 
 
 
+
 var DirectoryList=function (root,callback){
+	console.log(root);
 	fs.readdir(fileUtils.GLOBAL_FILE_PATH +"/"+root, function (err, files) 
 			{
 		if(err){
@@ -37,25 +39,29 @@ var DirectoryList=function (root,callback){
 					}
 					sendFiles.push(file);
 				}
+
+                console.log(JSON.stringify(sendFiles));
 				callback(err,sendFiles);
 			});
 };
 
-//var listdir = function (req,res)
-//{
-//	var root = req.param('dir');
-//	return DirectoryList(root,function(err,files){
-//		if(err){
-//			console.log(err);
-//		}else{
-//			res.send(files);
-//		}
-//	});
-//	
-//};
+var listdir = function (req,res)
+{
+	var root = req.param('dir');
+	var sess= req.session;
+
+	return DirectoryList(root,function(err,files){
+		if(err){
+			console.log(err);
+		}else{
+			res.json(files);
+		}
+	});
+
+};
 
 
 
 
 exports.DirectoryList = DirectoryList;
-//exports.listdir = listdir;
+exports.listdir = listdir;
