@@ -3,14 +3,26 @@ var router = express.Router();
 var multer = require('multer');
 var glob = require('glob');
 
+var files = require('./../utils/files');
+
+var fs = require('fs');
+
+var path = "";
+var copy = function(from,to){
+
+    fs.createReadStream(from).pipe(to);
+}
+
 
 
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/uploads');
+        files.createDirectory(files.GLOBAL_TEMP_PATH,function(){});
+        cb(null, files.GLOBAL_TEMP_PATH);
     },
     filename: function (req, file, cb) {
+        path = file.originalname;
         cb(null, file.originalname);
     }
 });
@@ -18,6 +30,10 @@ var storage = multer.diskStorage({
 var upload = multer({storage:storage});
 
 router.post('/uploadFile', upload.single('myFile'), function (req, res, next) {
+
+    fs.createReadStream(files.GLOBAL_TEMP_PATH+'/'+path).pipe(fs.createWriteStream(files.GLOBAL_FILE_PATH+'/'+req.body.path+'/'+path));
+    fs.unlinkSync(files.GLOBAL_TEMP_PATH+'/'+path);
+
     res.status(204).end();
 });
 

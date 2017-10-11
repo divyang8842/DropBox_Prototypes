@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import * as API from '../api/API';
 
 
+
 import Files from 'react-files'
 
 import { Button, Form, FormControl, FormGroup, Col, ControlLabel, Checkbox } from 'react-bootstrap';
@@ -32,8 +33,6 @@ class Welcome extends Component {
 
 
     componentWillMount(){
-        debugger;
-
         var userid = localStorage.getItem("token");
         var root = localStorage.getItem("root");
 
@@ -50,8 +49,7 @@ class Welcome extends Component {
     }
 
     getBack = () =>{
-        console.log('aya kaka');
-        debugger;
+
         if(this.state.pathTrack.length>1){
             this.getChildDir(this.state.pathTrack[this.state.pathTrack.length-2]);
             this.state.pathTrack.splice(this.state.pathTrack.length-2, 2);
@@ -67,12 +65,24 @@ class Welcome extends Component {
 
         const payload = new FormData();
 
-        payload.append('myFile', this.ref.myFile);
+
+
+        var pathToUpload = "";
+
+        if(this.state.pathTrack.length>0){
+            pathToUpload = (this.state.pathTrack[this.state.pathTrack.length-1]);
+        }else{
+            pathToUpload = (this.state.root);
+        }
+
+
+        payload.append('myFile', this.refs.myFile.files[0]);
+        payload.append('path',pathToUpload);
 
         API.doUpload(payload)
             .then((status) => {
                 if (status === 204) {
-
+                        this.getChildDir(pathToUpload);
                 }
             });
         };
@@ -106,10 +116,10 @@ class Welcome extends Component {
                 <span className="alert alert-warning" role="alert"> {username}, Welcome to Dropbox..!!</span>
                         <div>
                         <input type="file"
-                               ref="myFile"
-                           name="myFile"
+                               ref= "myFile" name="myFile"
+
                            />
-                            <Button  onClick={() => this.handleFile} bsSize="Small" bsStyle="success" block>Signup</Button>
+                            <Button  onClick={() => this.handleFile()} > Upload</Button>
                          </div>
                 <Button onClick={() => this.getBack()}>
                    back

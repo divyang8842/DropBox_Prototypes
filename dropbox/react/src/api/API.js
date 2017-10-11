@@ -28,7 +28,8 @@ export const doSignUp = (payload) =>
             ...headers,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+    credentials:'include'
     }).then(res => {
         return res.status;
     })
@@ -60,7 +61,7 @@ export const getChildDirs =(payload) =>
         headers: {
             ...headers,
             'Content-Type': 'application/json'
-        },
+        },credentials:'include',
         body: JSON.stringify(payload)
     }).then(res => res.json())
         .then(res =>{

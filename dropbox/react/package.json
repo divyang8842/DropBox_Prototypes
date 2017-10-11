@@ -31,8 +31,8 @@
     "glob": "^7.1.2",
     "isomorphic-style-loader": "1.0.0",
     "jquery": "^3.1.1",
-    "material-ui": "^0.17.1"
-
+    "material-ui": "^0.17.1",
+    "react-get-element":"^0.9.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -8,7 +8,9 @@ var express = require('express')
   , filelist = require('./routes/fileoperations/listdir')
   , login = require('./routes/login/loginJS')
   ,	signup = require('./routes/login/Signup'),
-    uploadFile=require('./routes/fileoperations/uploadfile')
+    uploadFile=require('./routes/fileoperations/uploadfile'),
+    security = require('./routes/utils/security')
+    , session = require('client-sessions');
 
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -42,16 +44,11 @@ var corsOptions = {
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));
-
-app.use(expressSessions({
-    secret: "Dropbox",
-    resave: false,
-    saveUninitialized: false,
-    duration: 30 * 60 * 1000,
-    activeDuration: 5 * 6 * 1000,
-
-}));
-
+app.use(session({
+    cookieName: 'session',
+    secret: 'cmpe273_test_string',
+    duration: 30 * 60 * 1000,    //setting the time for active session
+    activeDuration: 5 * 60 * 1000,  }));
 
 app.get('/', routes.index);
 app.get('/users', user.list);
@@ -61,7 +58,8 @@ app.get('/users', user.list);
 app.get('/signup', signup.signup);
 app.post('/afterSignUp', signup.afterSignUp);
 
-app.post('/getDir', filelist.listdir);
+app.post('/getDir',security.authenticate, filelist.listdir);
+app.get('/getDir',security.authenticate, filelist.listdir);
 app.post('/signin', login.signin);
 
 app.post('/uploadFile',uploadFile);

@@ -6,7 +6,7 @@ var DELETED = "2";
 var SHARED = "3";
 
 var createDirectoryEntry = function(filepath,userid,isFile,parentdir,name){
-	var createDirectoryEntry = "INSERT INTO Directories (name,relative_path,parentDir,createdby,isFile) VALUES(?,?,?,?,?)";
+	var createDirectoryEntry = "INSERT INTO Directories (name,relative_path,parent,createdby,isFile) VALUES(?,?,?,?,?)";
 	var data=[datajson.directoryid,datajson.operation,datajson.uid];
 	mysql.setData(function(err, results) {
 			callback(err, results);

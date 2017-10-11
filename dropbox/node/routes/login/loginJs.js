@@ -18,7 +18,7 @@ function renderUserResults(results){
 
 function signin(req,res)
 {
-	console.log(req.body.email);
+
 	var getUser="select uid as uid, ufname as ufname,homedirectory as homedirectory,password as password from users where username=? and deleteflag='0'";
 	var data = [req.body.email];
 	

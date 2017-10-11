@@ -1,13 +1,8 @@
-//var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
 var encrypt = function(pwd) {
-	// Generate a salt
 	var salt = bcrypt.genSaltSync(10);
-	// Hash the password with the salt
 	var hash = bcrypt.hashSync(pwd, salt);
-//	var sha256 = crypto.createHash('sha256');
-//	var hash =sha256.update(pwd).digest('base64');
 	return hash;
 };
 
@@ -18,16 +13,20 @@ var compareEncrypted = function(pwd,hash){
 
 // Define authentication middleware BEFORE your routes
 var authenticate = function (req, res, next) {
-    // your validation code goes here.
-    var isAuthenticated = true;
+    var session = req.session;
+
+    if(session && session.userid && session.userid>0){
+        var isAuthenticated = true;
+    }
     if (isAuthenticated) {
         next();
     }
     else {
-        // redirect user to authentication page or throw error or whatever
+        res.status(401).json({message:'invalid try.'});
     }
 }
 
 exports.encrypt=encrypt;
+exports.authenticate=authenticate;
 exports.compareEncrypted=compareEncrypted;
 	

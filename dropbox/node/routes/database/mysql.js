@@ -4,7 +4,7 @@ var pool = mysql.createPool({
 	connectionLimit : 20,
 	host : '127.0.0.1',
 	user : 'root',
-	password : 'Keval#2812',
+	password : 'root',
 	database : 'cmpe273',
 	port : 3306,
 	debug : false
