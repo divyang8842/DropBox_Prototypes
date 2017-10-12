@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withRouter } from 'react-router-dom';
 import FormErrors from "./FormErrors";
+import logo from '../images/dropbox_logo740.png'
 
 /*
 import { Panel, Input, Button } from 'react-bootstrap';
@@ -27,7 +28,7 @@ class Login extends Component {
     };
 
     state = {
-        email: 'kns@gmail.com',
+        email: 'a@b.cd',
         password: '123456',
         formErrors: {email: '', password: ''},
         emailValid: false,
@@ -38,7 +39,7 @@ class Login extends Component {
 
     componentWillMount(){
         this.setState({
-            email: 'kns@gmail.com',
+            email: 'a@b.cd',
             password: '123456',
             formErrors: {email: '', password: ''},
             emailValid: false,
@@ -89,9 +90,8 @@ class Login extends Component {
     render() {
         return (
             <div className="col-md-4 col-md-offset-4">
-                <div className="text-center">
-                    <h1 className="login-brand-text">Dropbox</h1>
-                    <h3 className="text-muted">Created by <a href="https://www.linkedin.com/in/keval-shah-192a935a/">Keval Shah</a></h3>
+                <div className="text-center"><img src={logo}  height="100" width="200"/>
+
                 </div>
                 <div className="row justify-content-md-center">
                     <Panel>

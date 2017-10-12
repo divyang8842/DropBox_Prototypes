@@ -7,7 +7,6 @@ import '../styles/font-awesome/css/font-awesome.min.css';
 import '../styles/foundation.min.css';*/
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import NewerHomePage from "../components/NewerHomePage";
-
 import {BrowserRouter} from 'react-router-dom';
 
 export default class App extends Component{
@@ -23,7 +22,7 @@ export default class App extends Component{
     render(){
         return(
 
-        <BrowserRouter>
+        <BrowserRouter >
             {/*<section>
             <NavBar />
             <hr id="divider"></hr>

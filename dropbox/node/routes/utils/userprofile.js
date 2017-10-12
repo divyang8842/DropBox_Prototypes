@@ -30,6 +30,11 @@ var gtDateStringFromObject = function(dateObj,format,separator){
 	
 };
 
+var shareFile = function(emailId){
+
+    console.log(emailId);
+};
+
 
 
 

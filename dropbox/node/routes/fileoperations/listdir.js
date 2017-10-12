@@ -18,11 +18,10 @@ var checkFileIsFolder = function (filename){
 
 
 var DirectoryList=function (root,callback){
-	console.log(root);
-	fs.readdir(fileUtils.GLOBAL_FILE_PATH +"/"+root, function (err, files) 
+	fs.readdir(fileUtils.GLOBAL_FILE_PATH +"/"+root, function (err, files)
 			{
 		if(err){
-			throw err;
+			callback(err,{});
 		}
 		var sendFiles=[];
 		
@@ -31,6 +30,7 @@ var DirectoryList=function (root,callback){
 					var file = {};
 					file.name = files[i];
 					file.path = root+"/"+files[i];
+                    file.fullPath =fileUtils.GLOBAL_FILE_PATH +"/"+root+"/"+files[i];
 					if(checkFileIsFolder(fileUtils.GLOBAL_FILE_PATH +"/"+root+"/"+files[i])){
 						
 						file.isFolder = true;
@@ -40,7 +40,6 @@ var DirectoryList=function (root,callback){
 					sendFiles.push(file);
 				}
 
-                console.log(JSON.stringify(sendFiles));
 				callback(err,sendFiles);
 			});
 };
@@ -54,7 +53,7 @@ var listdir = function (req,res)
 		if(err){
 			console.log(err);
 		}else{
-			res.json(files);
+			res.json({status:'201',fileLst:files});
 		}
 	});
 

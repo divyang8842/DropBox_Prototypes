@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import FormErrors from "./FormErrors";
 import Button from 'react-bootstrap/lib/Button';
 import Panel from 'react-bootstrap/lib/Panel';
+import Welcome from "./Welcome";
 
 import { FormControl, Checkbox } from 'react-bootstrap';
 
@@ -115,7 +116,7 @@ class SignUp extends  Component{
             <div className="col-md-4 col-md-offset-4">
                 <div className="text-center">
                     <h1 className="login-brand-text">Dropbox</h1>
-                    <h3 className="text-muted">Created by <a href="https://www.linkedin.com/in/keval-shah-192a935a/">Keval Shah</a></h3>
+
                 </div>
                 <div className="row justify-content-md-center">
                     <Panel>

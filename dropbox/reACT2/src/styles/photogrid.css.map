@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA;;oBAEoB;AACpB,gBAAgB;EACZ,KAAK,EAAC,GAAG;EACT,OAAO,EAAC,YAAY;EACpB,MAAM,EAAC,IAAI;EACX,OAAO,EAAC,IAAI;EACZ,cAAc,EAAE,GAAG",
+"sources": ["photogrid.scss"],
+"names": [],
+"file": "photogrid.css"
+}

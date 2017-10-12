@@ -1,10 +1,29 @@
 import React, {Component} from 'react';
 import { Route, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import * as API from '../api/API';
 import Login from "./Login";
 import Message from "./Message";
 import Welcome from "./Welcome";
 import SignUp from "./SignUp";
+import logo from '../images/dropbox_logo740.png';
+import ErrorBoundary from "./ErrorHandler"
+
+var link={
+    marginRight:-100,
+paddingTop:'-80',
+outline: 'none',
+background: 'none',
+color: 'rgb(105, 11, 224)',
+fontSize: '18px',
+fontWeight: '800',
+border: 'none',
+
+}
+var pqr={display:'inline-block',textAlign:'left',width:'50%'}
+
+var list={listStyleType:'none',float:'right'}
+
 
 
 class NewerHomePage extends Component {
@@ -21,17 +40,22 @@ class NewerHomePage extends Component {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="mast-head__container container">
+
                 <Route exact path="/" render={() => (
-                    <div>
-                        <Message message="Welcome to my App !!"/>
-                        <button className="btn btn-success" onClick={() => {
-                            this.props.history.push("/login");
-                        }}>
-                            Click to Login
-                        </button>
+                    <div className="text-center">
+                        <img src={logo}  height="100" width="200"/>
+                        <nav>
+                            <ul style={list} className="nav-list">
+                                <li  style={link}  onClick={() => {
+                                    this.props.history.push("/login");
+                                }}>
+                                    Login
+                                </li></ul>
+                        </nav>
                     </div>
                 )}/>
+
 
                 <Route exact path="/login" render={() => (
                     <div>
@@ -40,7 +64,9 @@ class NewerHomePage extends Component {
                     </div>
                 )}/>
                 <Route exact path="/welcome" render={() => (
+                    <ErrorBoundary>
                     <Welcome data={this.state}/>
+                    </ErrorBoundary>
                 )}/>
 
                 <Route exact path="/signUp" render={() => (
@@ -55,12 +81,11 @@ class NewerHomePage extends Component {
     }
 
     handleSubmit = (userdata) => {
-        //alert(JSON.stringify(userdata));
         API.doLogin(userdata)
             .then((status) => {
             console.log(JSON.stringify(status));
                 if (status.status == 200) {
-                    alert(JSON.stringify(status));
+
                     localStorage.setItem("token", status.userid);
                     localStorage.setItem("root", status.root);
                     this.setState({
@@ -83,10 +108,9 @@ class NewerHomePage extends Component {
     };
 
     handleSignUp = (userdata) => {
-        //alert(JSON.stringify(userdata));
         API.doSignUp(userdata)
             .then((status) => {
-            alert(JSON.stringify(status));
+
                 if (status === 200) {
                     this.setState({
                         isLoggedIn: false,

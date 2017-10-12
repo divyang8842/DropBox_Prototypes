@@ -7,9 +7,11 @@ var express = require('express')
   , path = require('path')
   , filelist = require('./routes/fileoperations/listdir')
   , login = require('./routes/login/loginJS')
-  ,	signup = require('./routes/login/Signup'),
-    uploadFile=require('./routes/fileoperations/uploadfile'),
-    security = require('./routes/utils/security')
+  ,	signup = require('./routes/login/Signup')
+    ,uploadFile=require('./routes/fileoperations/uploadfile')
+    ,security = require('./routes/utils/security')
+    ,files = require('./routes/utils/files')
+
     , session = require('client-sessions');
 
 var logger = require('morgan');
@@ -62,7 +64,11 @@ app.post('/getDir',security.authenticate, filelist.listdir);
 app.get('/getDir',security.authenticate, filelist.listdir);
 app.post('/signin', login.signin);
 
-app.post('/uploadFile',uploadFile);
+app.post('/uploadFile',security.authenticate,uploadFile);
+app.post('/mkdir',security.authenticate,files.mkdir);
+app.post('/delDir',security.authenticate,files.delDir);
+app.post('/logout',security.authenticate,login.signout);
+app.post('/download',files.download );
 //
 //app.get('/getAllUsers', login.getAllUsers);
 

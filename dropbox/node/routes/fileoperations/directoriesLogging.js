@@ -5,13 +5,48 @@ var UPDATED = "1";
 var DELETED = "2";
 var SHARED = "3";
 
-var createDirectoryEntry = function(filepath,userid,isFile,parentdir,name){
-	var createDirectoryEntry = "INSERT INTO Directories (name,relative_path,parent,createdby,isFile) VALUES(?,?,?,?,?)";
-	var data=[datajson.directoryid,datajson.operation,datajson.uid];
+var createDirectoryEntry = function(filepath,userid,isFile,parentdir,name,callback){
+	var createDirectoryEntrySql = "INSERT INTO Directories (name,relative_path,parent,createdby,isFile) VALUES(?,?,?,?,?)";
+	var data=[name,filepath,parentdir,userid,isFile];
 	mysql.setData(function(err, results) {
-			callback(err, results);
-	}, setPermit,data);
+		if(err){
+			throw err;
+		}
+
+        logOperation({'directoryid':results.insertId,'operation':CREATED,'uid':userid},callback);
+
+	}, createDirectoryEntrySql,data);
 };
+
+var deleteDirEntry = function(filepath,userid,callback){
+    var deleteDir = "UPDATE Directories SET deleteflag = 1 WHERE relative_path=?";
+    var data=[filepath];
+    mysql.setData(function(err, results) {
+        if(err){
+            throw err;
+        }
+        var getDirId =  "SELECT id  FROM Directories WHERE relative_path=?";
+        var data=[filepath];
+
+        mysql.fetchData(function(err, results) {
+            logOperation({'directoryid':results[0].id,'operation':DELETED,'uid':userid},callback);
+            callback(err,results);
+        }, getDirId,data);
+
+
+
+    }, deleteDir,data);
+};
+
+var getDirectoryId = function(filepath,callback){
+
+    var getDirectoryIdSql = "SELECT id FROM Directories WHERE relative_path=?";
+    var data=[filepath];
+    mysql.setData(function(err, results) {
+        callback(err, results);
+    }, getDirectoryIdSql,data);
+};
+
 
 var getOperation = function(operation){
 	if(operation === CREATED){
@@ -74,4 +109,8 @@ var getAllFileOperationsForDir = function(dirid,callback){
 };
 
 exports.logOperation = logOperation;
-exports.getAllFileOperations = getAllFileOperations;
+exports.getAllFileOperationsForUser = getAllFileOperationsForUser;
+exports.createDirectoryEntry = createDirectoryEntry;
+exports.getAllFileOperationsForDir = getAllFileOperationsForDir;
+exports.getDirectoryId = getDirectoryId;
+exports.deleteDirEntry = deleteDirEntry;

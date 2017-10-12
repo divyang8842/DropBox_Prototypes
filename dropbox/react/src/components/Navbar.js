@@ -13,64 +13,81 @@ import FileCloudDownload from 'material-ui/svg-icons/file/cloud-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import TrashBin from 'material-ui/svg-icons/action/delete';
 import RaisedButton from 'material-ui/RaisedButton';
+import * as API from '../api/API';
 
-/**
- * Logged in component
- * for displaying overflow menu options
- * */
-const Logged = (props) => (
-    <IconMenu
-        {...props}
-        iconButtonElement={
-            <IconButton><MoreVertIcon /></IconButton>
-        }
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
-
-        <MenuItem primaryText="Refresh" />
-        <MenuItem primaryText="Help" />
-        <MenuItem primaryText="Sign out" />
-    </IconMenu>
-);
 
 export default class NavBar extends Component{
     constructor(){
         super();
         this.state = {
-            user : "DropBox",
-            open: false
+            open: false,
+            filename :'',
+            email:''
         };
 
         this._toggleDrawer = this._toggleDrawer.bind(this);
     }
 
-    /**
-     * Toggle the drawer */
+
+    signout = () =>
+    {
+
+        API.doLogout()
+            .then((status) => {
+                if (status.status == 201) {
+                    this.props.signout();
+                }
+            })
+    }
+
     _toggleDrawer = (open) => this.setState({open: !this.state.open});
 
-    render(){
 
+
+
+    render(){
         return(
+
             <section id="detailed-view">
                 <AppBar
                     title={this.state.user}
                     iconElementLeft={<IconButton><NavigationOpen /></IconButton>}
-                    iconElementRight={<Logged />}
+                    iconElementRight={ <IconMenu
+                        iconButtonElement={
+                            <IconButton><MoreVertIcon /></IconButton>
+                        }
+                        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                        anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
+
+                        <MenuItem primaryText="Refresh" />
+                        <MenuItem primaryText="Help" />
+                        <MenuItem primaryText="Sign out" onClick={() =>  this.signout()} />
+
+                    </IconMenu>}
                     onLeftIconButtonTouchTap={this._toggleDrawer}
                 />
-                
+
                 <section id="options-section" className="row">
                     <section id="option-items" className="row">
-                        <nav id="file-options" className="small-6 columns">
-                            <Avatar className="file-opt" icon={<FileFolder />}/>
-                            <Avatar className="file-opt" icon={<FileCloudDownload />} />
-                            <Avatar className="file-opt" icon={<FileCloudUpload />} />
-                            <Avatar className="file-opt" icon={<TrashBin />} />
-                        </nav>
+
                 
                         <nav id="option-buttons" className="small-6 columns">
-                            <RaisedButton className="option-btn" label="Name"/>
-                            <RaisedButton className="option-btn" secondary={true} label="Size"/>
+                            <input type='text' onChange={(event) => {
+                                const value=event.target.value
+                                this.setState({
+                                    filename: event.target.value
+                                });
+                            }}/>
+
+                            <RaisedButton className="option-btn" onClick={() =>this.props.createDir(this.state.filename)} label="New Directory"/>
+                            <input type='email' onChange={(event) => {
+                                const value=event.target.value
+                                this.setState({
+                                    email: event.target.value
+                                });
+                            }}/>
+
+                            <RaisedButton className="option-btn" onClick={() =>this.props.shareFile(this.state.email)} secondary={true} label="Share"/>
                             <RaisedButton className="option-btn" primary={true} label="Modified"/>
                         </nav>
                     </section>

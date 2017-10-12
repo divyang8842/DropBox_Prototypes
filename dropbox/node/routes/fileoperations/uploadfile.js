@@ -3,6 +3,7 @@ var router = express.Router();
 var multer = require('multer');
 var glob = require('glob');
 
+var dirlog = require('./../fileoperations/directoriesLogging');
 var files = require('./../utils/files');
 
 var fs = require('fs');
@@ -34,8 +35,17 @@ router.post('/uploadFile', upload.single('myFile'), function (req, res, next) {
     fs.createReadStream(files.GLOBAL_TEMP_PATH+'/'+path).pipe(fs.createWriteStream(files.GLOBAL_FILE_PATH+'/'+req.body.path+'/'+path));
     fs.unlinkSync(files.GLOBAL_TEMP_PATH+'/'+path);
 
-    res.status(204).end();
+    dirlog.getDirectoryId(req.body.path,function (err,results) {
+        dirlog.createDirectoryEntry(req.body.path+'/'+path, req.session.userid, 1, results[0].id, path,function(){
+            res.status(201).json({status:'201'});
+        });
+    });
+
+
 });
 
+
+
 module.exports = router;
+
 

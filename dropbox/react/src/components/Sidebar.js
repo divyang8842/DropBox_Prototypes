@@ -2,19 +2,33 @@ import React, { Component, PropTypes } from 'react';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import '../styles/sidebar.css'
+import Profile from "./Profile";
+import { Route, withRouter } from 'react-router-dom';
+
 
 /**
  * Sidebar for the drop box site
  * */
 export default class Sidebar extends Component{
 
+    handleClick= (name) =>{
+        alert(name);
+        if(name="Edit Profile")
+        {
+        }
+
+
+    };
+
     render(){
+
         let article = [
+           {cName:"fa fa-calender", menuName:"Edit Profile"},
             {cName:"fa fa-file", menuName:"Files"},
-            {cName:"fa fa-picture-o", menuName:"Photos"},
-            {cName:"fa fa-share-square-o", menuName:"Sharing"},
-            {cName:"fa fa-link", menuName:"Links"},
-            {cName:"fa fa-calender", menuName:"Events"},
+            {cName:"fa fa-picture-o", menuName:"About"},
+            {cName:"fa fa-share-square-o", menuName:"Interests"},
+            {cName:"fa fa-link", menuName:"Links"}
+
         ];
 
         let items = article.map((item, index) => {
@@ -22,13 +36,15 @@ export default class Sidebar extends Component{
                 <article key={index} className="menu-item">
                     <MenuItem onTouchTap={(open) => this.props.onToggleDrawer(open)}>
                         <i className={item.cName}></i>
-                        <p className="menu-name">{item.menuName}</p>
+                        <p className="menu-name" onClick={() => {
+                            this.props.history.push("/profile");
+                        }}>{item.menuName}</p>
                     </MenuItem>
                 </article>
             )
         });
 
-        return(
+        return(<div>
             <Drawer
                 docked={false}
                 width={300}
@@ -59,6 +75,13 @@ export default class Sidebar extends Component{
                     </p>
                 </article>
             </Drawer>
+                <Route exact path="/profile" render={() => (
+                    <div>
+                        <Profile />
+
+                    </div>
+                )}/>
+            </div>
         )
     }
 }

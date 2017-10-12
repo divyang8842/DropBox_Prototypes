@@ -31,7 +31,6 @@ function signin(req,res)
 		else 
 		{
 			if(results.length > 0 && security.compareEncrypted(req.body.password,results[0].password)){
-				console.log("valid Login");
 				listdir.DirectoryList(results[0].homedirectory,function(err,filelist){
 
                     sess.userid = results[0].uid;
@@ -53,9 +52,17 @@ function signin(req,res)
 		}  
 	},getUser,data);
 }
-
+var signout = function(req,res){
+    var session=req.session;
+    session.userid = null;
+    session.destroy();
+    res.status(201).json({
+        status:'201',
+        message : "Logged Out."
+    });
+};
 
 
 exports.signin=signin;
-//exports.afterSignIn=afterSignIn;
+exports.signout=signout;
 //exports.getAllUsers=getAllUsers;
