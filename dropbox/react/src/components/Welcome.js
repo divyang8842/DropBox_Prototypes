@@ -39,12 +39,24 @@ fontWeight :'500',
 border: 'none',
 color: '#FFF',
 backgroundColor: '#0070E0',
-    marginTop:60,
+
     float:'right',
 }
 
-var choose={position:'fixed',top:200,right:0}
-var uploadDiv={ position:'relative',top:1,right:180}
+var uploadButton1={
+    lineHeight: '1',
+    padding: '0 16',
+    fontWeight :'500',
+    border: 'none',
+    color: '#FFF',
+    backgroundColor: 'grey',
+
+    float:'right',
+}
+
+
+var choose={position:'relative',top:-5,right:220}
+var uploadDiv={ position:'relative',top:20,right:100}
 
 var fileListItems={color:'#0070E0'}
 
@@ -67,6 +79,7 @@ class Welcome extends Component {
         type:'',
         data_uri:'',
         filelist:[],
+        staredList:[],
         pathTrack:[],
         isSelfCall:false,
         root:'',
@@ -88,7 +101,7 @@ class Welcome extends Component {
             });
         this.getChildDir(root);
 
-            document.title = `Welcome, ${this.props.username} !!`;
+            document.title = `DropBox !!`;
 
     }
 
@@ -187,7 +200,9 @@ class Welcome extends Component {
     };
 
     getChildDir= (filepath) =>{
-        console.log('data = '+filepath);
+
+      
+
         var data = {'dir':filepath};
         API.getChildDirs(data)
             .then((res) => {
@@ -196,6 +211,7 @@ class Welcome extends Component {
                     this.state.pathTrack.push(filepath);
                     this.setState({
                         filelist: res.fileLst,
+                        staredList : res.stared,
                         isSelfCall: true
                     });
                 }else if(res.status==='501'){
@@ -222,19 +238,24 @@ class Welcome extends Component {
         this.props.history.push("/login");
     };
 
-    handleChange(checked,filePath) {
+    handleChange(evt,filePath) {
+        var pathToUpload = "";
+        if(this.state.pathTrack.length>0){
+            pathToUpload = (this.state.pathTrack[this.state.pathTrack.length-1]);
+        }else{
+            pathToUpload = (this.state.root);
+        }
 
-       /* var filePath = evt.target.value();*/
+        var checked = evt.target.checked;
         var data = {'filepath':filePath};
         if(checked){
             API.doStar(data) .then((res) => {
-
+                this.getChildDir(pathToUpload);
 
             });
         }else{
             API.doUnStar(data) .then((res) => {
-
-
+                this.getChildDir(pathToUpload);
             });
         }};
 
@@ -244,8 +265,11 @@ class Welcome extends Component {
     render(){
 
         var filelist1 = [];
+        var staredList =[];
         if(this.state.filelist && this.state.filelist!=''){
             filelist1 = this.state.filelist;
+
+            staredList = this.state.staredList;
         }
         var username = this.state.userid;
 
@@ -256,6 +280,7 @@ class Welcome extends Component {
 
                         <div style={choose}>
                         <input
+                            style={uploadButton1}
                                 type="file"
                                ref="myFile"
                                name="myFile"
@@ -272,44 +297,51 @@ class Welcome extends Component {
                     </Button>
 
 
-                    <ListGroup style={list}> {filelist1.map((file, i) =>
-                        <ListGroupItem style={fileListItems}  key={i}>{file.isFolder==true ?
+
+                    <ListGroup style={list}> {staredList.map((file, i) =>
+                        <ListGroupItem style={fileListItems}  key={i}>{ file.isFolder ?
                             (   <div>
                                     <Avatar  className="file-opt" icon={<FileFolder />}
                                              color={orange200}
                                              backgroundColor={blue300}
                                              size={30}
                                              style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox style={{ marginLeft: '15px' }} value={file.path} onChange={this.handleChange(this.checked,file.path)} >Star</Checkbox> <Button style={del} onClick={() => this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  bsStyle="danger">Delete</Button>
                                 </div>
+
                             ):
                             (<div><Avatar  className="file-opt" icon={<FileFolder />}
                                            color={orange200}
                                            backgroundColor={purple500}
                                            size={30}
-                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
                     )}
                     </ListGroup>
 
 
                     <ListGroup style={list}> {filelist1.map((file, i) =>
-                        <ListGroupItem style={fileListItems}  key={i}>{file.isFolder==true ?
+                        <ListGroupItem style={fileListItems}  key={i}>{ file.isFolder ?
                             (   <div>
-                                <Avatar  className="file-opt" icon={<FileFolder />}
-                                         color={orange200}
-                                         backgroundColor={blue300}
-                                         size={30}
-                                         style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  value={file.path} onChange={this.handleChange} >Star</Checkbox> <Button style={del} onClick={() => this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
+                                    <Avatar  className="file-opt" icon={<FileFolder />}
+                                             color={orange200}
+                                             backgroundColor={blue300}
+                                             size={30}
+                                             style={style}/>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox><Button style={del}  bsStyle="danger">Delete</Button>
                                 </div>
-                           ):
+
+                            ):
                             (<div><Avatar  className="file-opt" icon={<FileFolder />}
-                                      color={orange200}
-                                      backgroundColor={purple500}
-                                      size={30}
-                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                                           color={orange200}
+                                           backgroundColor={purple500}
+                                           size={30}
+                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
                     )}
                     </ListGroup>
+
+
+
+
 
 
 

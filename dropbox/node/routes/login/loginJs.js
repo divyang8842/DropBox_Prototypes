@@ -31,18 +31,16 @@ function signin(req,res)
 		else 
 		{
 			if(results.length > 0 && security.compareEncrypted(req.body.password,results[0].password)){
-				listdir.DirectoryList(results[0].homedirectory,function(err,filelist){
-
-                    sess.userid = results[0].uid;
+				    sess.userid = results[0].uid;
 					res.status(200).json({
 						status:'200',
 						message : "Valid Login.",
 						userid:results[0].uid,
-						filelist:filelist,
+						filelist:[],
 						root:results[0].homedirectory,
 						username:results[0].ufname
 					});
-				});
+
 			} else {    
 				res.status(401).json({
 					status:'401',

@@ -124,3 +124,4 @@ exports.checkFileIsFolder1 = checkFileIsFolder1;
 exports.mkdir= mkdir;
 exports.delDir= delDir;
 exports.download= download;
+

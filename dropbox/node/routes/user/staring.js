@@ -15,8 +15,25 @@ var setStaredDir = function(req,res) {
             }
         }, setStar,data);
 	});
+};
 
-
+var isDirStared = function(filepath,userid) {
+    var setStar = "SELECT * from staredDir WHERE userid=? AND directoryid=? and deleteflag=0";
+    dirlog.getDirectoryId(filepath,function(err, results){
+        if(results.length<=0){
+            return false;
+        }
+        var data=[userid,results[0].id];
+        mysql.fetchData(function(err, results) {
+            if (err) {
+                console.log(false);
+                return( false);
+            } else {
+                console.log(true);
+                return( results.length>0?true:false);
+            }
+        }, setStar,data);
+    });
 };
 
 
@@ -52,7 +69,10 @@ var getAllStaredDirectories = function(userid,callback){
                 filedata.name = results[length].name;
                 filedata.path = results[length].path;
                 filedata.fullPath =fileUtils.GLOBAL_FILE_PATH +"/"+filedata.path;
-				filedata.isFolder = (results[length].isFile == 0)?true:false;
+                console.log(results[length].isFile);
+                console.log(JSON.stringify(results[length]));
+
+				filedata.isFolder = (results[length].isfile == 0)?true:false;
 
                 returnData.push(filedata);
 
@@ -68,3 +88,4 @@ var getAllStaredDirectories = function(userid,callback){
 exports.setStaredDir = setStaredDir;
 exports.UnStarDir = UnStarDir;
 exports.getAllStaredDirectories = getAllStaredDirectories;
+exports.isDirStared = isDirStared;
