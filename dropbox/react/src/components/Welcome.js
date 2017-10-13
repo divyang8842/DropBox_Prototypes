@@ -7,7 +7,6 @@ import NavBar from "../components/Navbar"
 import Avatar from 'material-ui/Avatar';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import FileDownload from 'react-file-download';
-import fs from 'fs';
 
 import {
     blue300,
@@ -120,7 +119,7 @@ class Welcome extends Component {
         API.doUpload(payload)
             .then((res) => {
 
-            debugger;
+
                if(res.status=='501'){
                     localStorage.removeItem("token");
                     localStorage.removeItem("root");
@@ -193,7 +192,6 @@ class Welcome extends Component {
         API.getChildDirs(data)
             .then((res) => {
 
-            debugger;
                 if (res.status === '201') {
                     this.state.pathTrack.push(filepath);
                     this.setState({
@@ -223,6 +221,23 @@ class Welcome extends Component {
     signout = () => {
         this.props.history.push("/login");
     };
+
+    handleChange(checked,filePath) {
+
+       /* var filePath = evt.target.value();*/
+        var data = {'filepath':filePath};
+        if(checked){
+            API.doStar(data) .then((res) => {
+
+
+            });
+        }else{
+            API.doUnStar(data) .then((res) => {
+
+
+            });
+        }};
+
 
 
 
@@ -256,6 +271,27 @@ class Welcome extends Component {
                         Back
                     </Button>
 
+
+                    <ListGroup style={list}> {filelist1.map((file, i) =>
+                        <ListGroupItem style={fileListItems}  key={i}>{file.isFolder==true ?
+                            (   <div>
+                                    <Avatar  className="file-opt" icon={<FileFolder />}
+                                             color={orange200}
+                                             backgroundColor={blue300}
+                                             size={30}
+                                             style={style}/>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox style={{ marginLeft: '15px' }} value={file.path} onChange={this.handleChange(this.checked,file.path)} >Star</Checkbox> <Button style={del} onClick={() => this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
+                                </div>
+                            ):
+                            (<div><Avatar  className="file-opt" icon={<FileFolder />}
+                                           color={orange200}
+                                           backgroundColor={purple500}
+                                           size={30}
+                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                    )}
+                    </ListGroup>
+
+
                     <ListGroup style={list}> {filelist1.map((file, i) =>
                         <ListGroupItem style={fileListItems}  key={i}>{file.isFolder==true ?
                             (   <div>
@@ -264,7 +300,7 @@ class Welcome extends Component {
                                          backgroundColor={blue300}
                                          size={30}
                                          style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Button style={del} onClick={() => this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  value={file.path} onChange={this.handleChange} >Star</Checkbox> <Button style={del} onClick={() => this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
                                 </div>
                            ):
                             (<div><Avatar  className="file-opt" icon={<FileFolder />}

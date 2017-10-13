@@ -2,6 +2,7 @@ var fs = require('fs');
 var ejs = require('ejs');
 var testFolder = './routes/';
 var fileUtils = require('./../utils/files');
+var star = require('./../user/staring');
 
 var checkFileIsFolder = function (filename){
 	try{
@@ -53,7 +54,18 @@ var listdir = function (req,res)
 		if(err){
 			console.log(err);
 		}else{
-			res.json({status:'201',fileLst:files});
+            star.getAllStaredDirectories(req.session.userid,function (err1,results1) {
+
+            	if(err1){
+                    res.json({status:'201',fileLst:files,stared:[]});
+				}else{
+                    res.json({status:'201',fileLst:files,stared:results1});
+
+                }
+
+            })
+
+
 		}
 	});
 

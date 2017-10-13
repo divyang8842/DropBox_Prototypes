@@ -11,6 +11,7 @@ var express = require('express')
     ,uploadFile=require('./routes/fileoperations/uploadfile')
     ,security = require('./routes/utils/security')
     ,files = require('./routes/utils/files')
+    ,star =  require('./routes/user/staring')
 
     , session = require('client-sessions');
 
@@ -67,6 +68,8 @@ app.post('/signin', login.signin);
 app.post('/uploadFile',security.authenticate,uploadFile);
 app.post('/mkdir',security.authenticate,files.mkdir);
 app.post('/delDir',security.authenticate,files.delDir);
+app.post('/unstar',security.authenticate,star.UnStarDir);
+app.post('/star',security.authenticate,star.setStaredDir);
 app.post('/logout',security.authenticate,login.signout);
 app.post('/download',files.download );
 //

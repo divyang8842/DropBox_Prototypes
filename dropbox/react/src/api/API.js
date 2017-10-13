@@ -173,3 +173,37 @@ export const doDownload = (payload) =>
         });
 
 
+export const doStar = (payload) =>
+    fetch(`${api}/star`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        credentials:'include',
+        body: JSON.stringify(payload)
+    }).then(res => res.json())
+        .then(res =>{
+            return res;
+        })
+        .catch(error => {
+            console.log("This is error");
+            return error;
+        });
+export const doUnStar = (payload) =>
+    fetch(`${api}/unstar`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        credentials:'include',
+        body: JSON.stringify(payload)
+    }).then(res => res.json())
+        .then(res =>{
+            return res;
+        })
+        .catch(error => {
+            console.log("This is error");
+            return error;
+        });
