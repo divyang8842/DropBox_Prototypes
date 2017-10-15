@@ -10,6 +10,7 @@ var express = require('express')
   ,	signup = require('./routes/login/Signup')
     ,uploadFile=require('./routes/fileoperations/uploadfile')
     ,dirLogs=require('./routes/fileoperations/directoriesLogging')
+    ,permission=require('./routes/fileoperations/permissions')
     ,security = require('./routes/utils/security')
     ,files = require('./routes/utils/files')
     ,star =  require('./routes/user/staring')
@@ -75,6 +76,7 @@ app.post('/logout',security.authenticate,login.signout);
 app.post('/getUserLogs',security.authenticate,dirLogs.getUserLoggings);
 app.post('/setUserProfile',security.authenticate,userprofile.updateUserProfileDataReq);
 app.post('/getUserProfile',security.authenticate,userprofile.getUserProfileDataReq);
+app.post('/validateEmails',security.authenticate,permission.validateEmails);
 app.post('/download',files.download );
 
 

@@ -5,10 +5,18 @@ import Button from 'react-bootstrap/lib/Button';
 import Panel from 'react-bootstrap/lib/Panel';
 import * as API from '../api/API';
 
+import NavBar from "../components/Navbar";
+
 
 import { FormControl, Checkbox } from 'react-bootstrap';
 
-
+var fullscreen={position: 'fixed',
+    top: '0',
+    left: '0',
+    bottom: '0',
+    right:'0',
+    overflow: 'auto',
+    background: 'white'}
 
 class SignUp extends  Component{
 
@@ -23,6 +31,26 @@ class SignUp extends  Component{
         sports:''
 
     };
+
+
+    getHome =() =>{
+
+        this.props.getToHome();
+    }
+
+    getUserProfile =()=>{
+        this.props.goToPath('/userprofile');
+        // this.props.history.push('/userprofile');
+    }
+
+    getUserLogs =() =>{
+        this.props.goToPath('/useractivity');
+    }
+
+    signout = () => {
+        this.props.signout();
+    };
+
 
 
     componentWillMount(){
@@ -67,7 +95,12 @@ class SignUp extends  Component{
 
 
         return(
-            <div className="col-md-8 col-md-8">
+            <div style={fullscreen}>
+                <NavBar page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
+
+                <div className="col-md-8 col-md-8">
+
+
                 <div className="text-center">
                     <h1 className="login-brand-text">Dropbox</h1>
                 </div>
@@ -184,7 +217,7 @@ class SignUp extends  Component{
 
             </div>
 
-
+            </div>
         )
     }
 }

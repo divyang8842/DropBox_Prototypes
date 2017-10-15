@@ -60,7 +60,7 @@ class NewerHomePage extends Component {
                 )}/>
                 <Route exact path="/welcome" render={() => (
                     <ErrorBoundary>
-                    <Welcome data={this.state}/>
+                    <Welcome goToPath={this.goToPath} signout={this.signout}  getToHome={this.getToHome}  data={this.state}/>
                     </ErrorBoundary>
                 )}/>
 
@@ -74,14 +74,14 @@ class NewerHomePage extends Component {
 
                 <Route exact path="/userprofile" render={() => (
                     <ErrorBoundary>
-                        <UserProfile getToHome={this.getToHome} data={this.state} />
+                        <UserProfile goToPath={this.goToPath} signout={this.signout} getToHome={this.getToHome} data={this.state} />
                     </ErrorBoundary>
 
                 )}/>
 
                 <Route exact path="/useractivity" render={() => (
                     <ErrorBoundary>
-                        <UserActivity getToHome={this.getToHome} data={this.state} />
+                        <UserActivity goToPath={this.goToPath} signout={this.signout} getToHome={this.getToHome} data={this.state} />
                     </ErrorBoundary>
 
                 )}/>
@@ -123,6 +123,17 @@ class NewerHomePage extends Component {
         this.props.history.push('/welcome');
     }
 
+    goToPath = (path) =>{
+        this.props.history.push(path);
+    }
+
+
+
+    signout = () =>{
+        localStorage.removeItem('token');
+        localStorage.removeItem('root');
+        this.props.history.push('/login');
+    }
     handleSignUp = (userdata) => {
         API.doSignUp(userdata)
             .then((status) => {

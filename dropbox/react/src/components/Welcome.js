@@ -109,16 +109,11 @@ class Welcome extends Component {
             document.title = `DropBox !!`;
 
     }
-    getUserProfile =()=>{
-        this.props.history.push('/userprofile');
-    }
 
-    getUserLogs =() =>{
-        this.props.history.push('/useractivity');
-    }
 
     getHome =() =>{
-        this.props.history.push('/welcome');
+        this.props.goToPath('/welcome');
+       // this.props.history.push('/welcome');
     }
     getBack = () =>{
 
@@ -148,16 +143,14 @@ class Welcome extends Component {
 
 
                if(res.status=='501'){
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("root");
-                    this.props.history.push('/login');
+                    this.signout();
                 }else{
                    this.getChildDir(pathToUpload);
                }
             });
     };
 
-    shareFile= (emailId) =>{
+   /* shareFile= (emailId) =>{
 
         var data = {'emailId':emailId};
         API.doShareFile(data)
@@ -170,7 +163,7 @@ class Welcome extends Component {
                     this.props.history.push('/login');
                 }
             });
-    };
+    };*/
 
     createDir= (dirname) =>{
         var pathToUpload = "";
@@ -185,9 +178,7 @@ class Welcome extends Component {
                 if (status === 201) {
                     this.getChildDir(pathToUpload);
                 }else if(status==501){
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("root");
-                    this.props.history.push('/login');
+                    this.signout();
                 }
             });
     };
@@ -195,15 +186,20 @@ class Welcome extends Component {
     shareFile = (emails) =>{
         API.validateEmails({'emails':emails})
             .then((res) =>{
+            var proceed = false;
                 if(res.status=='201'){
                     if(res.linkShare=='true'){
+                        if(window.confirm("Some of the email provided are not registered with DropBox.\n The file will be shared as a link?")){
+                            proceed=true;
+                        }
+                    }else{
+                        proceed = true;
+                    }
+                   if(proceed){
 
 
-                        alert("Some of the email provided are not registered with DropBox.\n <br> The file will be shared as a link?");
-
-
+                   }
                 }
-            }
     });
 }
     deleteDir= (filename) =>{
@@ -220,9 +216,7 @@ class Welcome extends Component {
                 if (status === 201) {
                     this.getChildDir(pathToUpload);
                 }else if(status==501){
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("root");
-                    this.props.history.push('/login');
+                    this.signout();
                 }
             });
     };
@@ -268,8 +262,25 @@ class Welcome extends Component {
             })
     };
 
+   /* getUserProfile =()=>{
+        this.props.history.push('/userprofile');
+    }
+
+    getUserLogs =() =>{
+        this.props.history.push('/useractivity');
+    }
+*/
+    getUserProfile =()=>{
+        this.props.goToPath('/userprofile');
+        // this.props.history.push('/userprofile');
+    }
+
+    getUserLogs =() =>{
+        this.props.goToPath('/useractivity');
+    }
+
     signout = () => {
-        this.props.history.push("/login");
+        this.props.signout();
     };
 
     handleChange(evt,filePath) {
@@ -308,7 +319,7 @@ class Welcome extends Component {
         var username = this.state.userid;
 
         return(<div style={fullscreen}>
-                <NavBar createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  signout= {this.signout}  ></NavBar>
+                <NavBar shareFile={this.shareFile} createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  signout= {this.signout}  ></NavBar>
                 <hr id="divider"></hr>
                 <div >
 

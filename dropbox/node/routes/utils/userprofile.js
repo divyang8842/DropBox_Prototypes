@@ -110,6 +110,20 @@ var getUserProfileData = function(userid,callback){
     },getData,data);
 };
 
+var checkValidUserEmails = function(emails,callback){
+
+    var getData = "SELECT uid FROM users WHERE emailid in (?) AND deleteflag=0";
+    var data =[emails];
+
+    mysql.fetchData(function(err,results){
+        if(err){
+            console.log(err);
+        }else{
+            callback(err,results);
+        }
+    },getData,data);
+};
+
 var getUserIDFromEmailAddress = function(email,callback){
 
     var getData = "SELECT uid FROM users WHERE emailid=? AND deleteflag=0";
@@ -131,5 +145,5 @@ exports.updateUserProfileDataReq = updateUserProfileDataReq;
 exports.getUserProfileDataReq = getUserProfileDataReq;
 exports.setUserProfileData = setUserProfileData;
 exports.getUserIDFromEmailAddress = getUserIDFromEmailAddress;
-
+exports.checkValidUserEmails = checkValidUserEmails;
 

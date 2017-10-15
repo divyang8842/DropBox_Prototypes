@@ -32,15 +32,16 @@ class UserActivity extends Component {
     }
 
     getUserProfile =()=>{
-        this.props.history.push('/userprofile');
+        this.props.goToPath('/userprofile');
+       // this.props.history.push('/userprofile');
     }
 
     getUserLogs =() =>{
-        this.props.history.push('/useractivity');
+        this.props.goToPath('/useractivity');
     }
 
     signout = () => {
-       this.getHome();
+        this.props.signout();
     };
 
     componentWillMount(){
@@ -78,7 +79,7 @@ class UserActivity extends Component {
 
         return (
             <div style={fullscreen}>
-                <NavBar page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome}   signout= {this.signout}></NavBar>
+                <NavBar page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
 
                 <div className="container-fluid" >
                     <div className="row justify-content-md-center">

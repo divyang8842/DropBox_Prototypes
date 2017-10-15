@@ -7,23 +7,15 @@ var link = 2;
 
 var validateEmails = function(req,res){
 var emailAddress = req.body.emails;
-
 var emails = emailAddress.split(',');
-var length = emails.length;
-var linkShare= false;
-while(length-->0 && !linkShare){
-    utils.getUserIDFromEmailAddress(emails[length],function(err,results){
-		if(results.length==0){
-            linkShare = true;
-            res.status(201).json({status:'201',linkShare:'true'});
 
+    utils.checkValidUserEmails(emailAddress,function(err,results){
+		if(results.length!= emails.length){
+            res.status(201).json({status:'201',linkShare:'true'});
+		}else{
+            res.status(201).json({status:'201',linkShare:'false'});
 		}
 	});
-}
-if(!linkShare){
-    res.status(201).json({status:'201',linkShare:'false'});
-}
-
 
 }
 
