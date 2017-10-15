@@ -49,8 +49,6 @@ export const doUpload = (payload) =>
 
     }).then(res => res.json())
         .then(res =>{
-            debugger;
-            console.log(res);
             return res;
         })
         .catch(error => {
@@ -207,3 +205,23 @@ export const doUnStar = (payload) =>
             console.log("This is error");
             return error;
         });
+
+export const getUserLogs = (payload) =>
+    fetch(`${api}/getUserLogs`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        credentials:'include',
+        body: JSON.stringify(payload)
+    }).then(res => res.json())
+        .then(res =>{
+            return res;
+        })
+        .catch(error => {
+            console.log("This is error");
+            return error;
+        });
+
+

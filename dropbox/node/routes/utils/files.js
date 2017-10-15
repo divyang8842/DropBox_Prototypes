@@ -25,7 +25,8 @@ var deleteFolderRecursive = function(path,userid) {
             if(fs.statSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath,userid);
             } else { // delete file
-                dirlog.deleteDirEntry(filepath,userid,function(){});
+
+                dirlog.deleteDirEntry(curPath.replace(new RegExp(GLOBAL_FILE_PATH+'/', 'g'), ''),userid,function(){});
                 fs.unlinkSync(curPath);
             }
         });
@@ -53,11 +54,11 @@ var delDir = function(req,res,next){
         var parent = req.body.path;
         var filepath = parent + "/" + path;
         deleteDir(filepath, req.session.userid, function () {
-            /*dirlog.deleteDirEntry(filepath,req.session.userid,function(){*/
+
             res.status(201).json({
                 message: 'Successfully deleted File'
             });
-            /* });*/
+
         });
     }catch (ex){
         res.status(201).json({

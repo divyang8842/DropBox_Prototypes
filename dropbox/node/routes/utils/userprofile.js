@@ -1,3 +1,6 @@
+var mysql = require('./../database/mysql');
+
+
 
 //gender constants
 var MALE = 1;
@@ -5,6 +8,11 @@ var FEMALE = 2;
 var OTHER = 0;
 //End
 
+
+var getUserIdFromEmail = function(userid,callback){
+
+
+}
 
 var getGender = function(gender){
 	gender = parseInt(gender);

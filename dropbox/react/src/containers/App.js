@@ -1,10 +1,8 @@
-import NavBar from '../components/Navbar';
+
 import React, { Component } from 'react';
 import '../styles/App.css';
 import '../styles/main.css';
-/*import '../styles/normalize.css';
-import '../styles/font-awesome/css/font-awesome.min.css';
-import '../styles/foundation.min.css';*/
+
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import NewerHomePage from "../components/NewerHomePage";
 import {BrowserRouter} from 'react-router-dom';

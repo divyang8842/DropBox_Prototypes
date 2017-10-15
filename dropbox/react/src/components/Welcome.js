@@ -105,7 +105,13 @@ class Welcome extends Component {
 
     }
 
+    getUserLogs =() =>{
+        this.props.history.push('/userprofile');
+    }
 
+    getHome =() =>{
+        this.props.history.push('/welcome');
+    }
     getBack = () =>{
 
         if(this.state.pathTrack.length>1){
@@ -179,6 +185,7 @@ class Welcome extends Component {
     };
 
     deleteDir= (filename) =>{
+        debugger;
         var pathToUpload = "";
         if(this.state.pathTrack.length>0){
             pathToUpload = (this.state.pathTrack[this.state.pathTrack.length-1]);
@@ -208,7 +215,10 @@ class Welcome extends Component {
             .then((res) => {
 
                 if (res.status === '201') {
-                    this.state.pathTrack.push(filepath);
+                    if(filepath!=this.state.pathTrack[this.state.pathTrack.length-1]){
+                        this.state.pathTrack.push(filepath);
+                    }
+
                     this.setState({
                         filelist: res.fileLst,
                         staredList : res.stared,
@@ -274,7 +284,7 @@ class Welcome extends Component {
         var username = this.state.userid;
 
         return(<div style={fullscreen}>
-                <NavBar createDir = {this.createDir}   signout= {this.signout}></NavBar>
+                <NavBar createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs}  signout= {this.signout}  ></NavBar>
                 <hr id="divider"></hr>
                 <div >
 
@@ -306,7 +316,7 @@ class Welcome extends Component {
                                              backgroundColor={blue300}
                                              size={30}
                                              style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  bsStyle="danger">Delete</Button>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  onClick={()=>this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
                                 </div>
 
                             ):
@@ -314,7 +324,7 @@ class Welcome extends Component {
                                            color={orange200}
                                            backgroundColor={purple500}
                                            size={30}
-                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
                     )}
                     </ListGroup>
 
@@ -327,7 +337,7 @@ class Welcome extends Component {
                                              backgroundColor={blue300}
                                              size={30}
                                              style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox><Button style={del}  bsStyle="danger">Delete</Button>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox><Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
                                 </div>
 
                             ):
@@ -335,7 +345,7 @@ class Welcome extends Component {
                                            color={orange200}
                                            backgroundColor={purple500}
                                            size={30}
-                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
                     )}
                     </ListGroup>
 

@@ -6,6 +6,7 @@ import Login from "./Login";
 import Message from "./Message";
 import Welcome from "./Welcome";
 import SignUp from "./SignUp";
+import UserProfile from "./UserProfile";
 import logo from '../images/dropbox_logo740.png';
 import ErrorBoundary from "./ErrorHandler"
 
@@ -76,6 +77,13 @@ class NewerHomePage extends Component {
                     </div>
 
                     )}/>
+
+                <Route exact path="/userprofile" render={() => (
+                    <ErrorBoundary>
+                        <UserProfile getToHome={this.getToHome} data={this.state} />
+                    </ErrorBoundary>
+
+                )}/>
             </div>
         );
     }
@@ -106,6 +114,10 @@ class NewerHomePage extends Component {
                 }
             });
     };
+
+    getToHome = () =>{
+        this.props.history.push('/welcome');
+    }
 
     handleSignUp = (userdata) => {
         API.doSignUp(userdata)

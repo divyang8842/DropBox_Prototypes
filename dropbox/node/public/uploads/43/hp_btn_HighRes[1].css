@@ -1,0 +1,71 @@
+﻿.btn {
+    padding: 0.625em 1.125em;
+    font-family: HP Simplified, Helvetica, Arial, sans-serif;
+    margin: 0.625em;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: inset 0 0.063em 0 rgba(255,255,255,0.2),0 0.063em 0.125em rgba(0,0,0,0.05);
+    cursor: pointer;
+    background-image: none;
+    border: none;
+    font-weight: bold;
+    font-size: 1em;
+    -moz-border-radius: 0 0.625em 0 0.625em;
+    -webkit-border-radius: 0 0.625em 0 0.625em;
+    border-radius: 0 0.625em 0 0.625em;
+    color: #fff;
+    text-shadow: 0 -0.063em 0 rgba(0,0,0,0.25);
+    text-decoration: none;
+}
+
+.btn-critical {
+    background-color: #d7410b; /*hp orange*/
+}
+
+    .btn-critical:hover {
+        background-color: #c1401a;
+    }
+
+.btn-primary {
+    background-color: #0096d6; /*hp blue*/
+}
+
+    .btn-primary:hover {
+        background-color: #006699;
+    }
+
+.btn-secondary {
+    background-color: #767676; /*hp dark grey*/
+}
+
+    .btn-secondary:hover {
+        background-color: #5A5A5A;
+    }
+
+.btn-disabled {
+    background-color: #cccccc; /*hp light grey*/
+}
+
+
+@media screen and (-ms-high-contrast: active) {
+    /* All high contrast styling rules */
+    .btn {
+        border: 0.063em solid;
+    }
+
+    #Information {
+        border: 0.063em solid;
+    }
+
+    #Information_close {
+        background-image: url('close_high_contrast.png');
+    }
+
+    #Information_shadow {
+        border: 0.063em solid;
+    }
+
+    .helptopic {
+        text-decoration: underline !important;
+    }
+}

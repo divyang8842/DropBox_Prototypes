@@ -17,7 +17,7 @@ var checkFileIsFolder = function (filename){
 };
 
 var getAllChildDirectories=function(root,userid,callback){
-    var getDirId =  "SELECT d.id as id,d.name as name,d.isfile as isfile,d.relative_path as path,s.id as staredId FROM directories d LEFT OUTER JOIN stareddir s on (s.deleteflag=0 AND s.directoryid = d.id) where parent=(SELECT id FROM directories where relative_path=?) AND d.deleteflag=0";
+    var getDirId =  "SELECT d.id as id,d.name as name,d.isfile as isfile,d.relative_path as path,s.id as staredId FROM directories d LEFT OUTER JOIN stareddir s on (s.deleteflag=0 AND s.directoryid = d.id) where parent=(SELECT id FROM directories where relative_path=? AND deleteflag=0) AND d.deleteflag=0";
     var data=[root];
 
    	 mysql.fetchData(function(err, results) {
@@ -41,7 +41,7 @@ var getAllChildDirectories=function(root,userid,callback){
                  file.isStared = results[i].staredId>0;
 
 
-             console.log(JSON.stringify(file));
+             //console.log(JSON.stringify(file));
 
              sendFiles.push(file);
 

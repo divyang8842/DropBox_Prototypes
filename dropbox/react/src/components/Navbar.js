@@ -22,10 +22,35 @@ export default class NavBar extends Component{
         this.state = {
             open: false,
             filename :'',
-            email:''
+            email:'',
+            page:''
         };
 
+
+
         this._toggleDrawer = this._toggleDrawer.bind(this);
+    }
+
+    componentWillMount(){
+
+
+        this.setState({
+            page:this.props.page
+        });
+
+
+        document.title = `DropBox - UserProfile!!`;
+
+    }
+
+
+    getHome = () =>{
+
+        this.props.getHome();
+    }
+
+    getUserLogs =()=>{
+        this.props.getUserLogs();
     }
 
 
@@ -59,7 +84,9 @@ export default class NavBar extends Component{
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
 
-                        <MenuItem primaryText="Refresh" />
+                        {this.state.page!="userprofile"?(
+                        <MenuItem primaryText="UserLogs" onClick={() =>  this.getUserLogs()} />
+                            ):(<MenuItem primaryText="Home" onClick={() =>  this.getHome()} />)}
                         <MenuItem primaryText="Help" />
                         <MenuItem primaryText="Sign out" onClick={() =>  this.signout()} />
 
@@ -67,6 +94,7 @@ export default class NavBar extends Component{
                     onLeftIconButtonTouchTap={this._toggleDrawer}
                 />
 
+                {this.state.page!="userprofile"?(
                 <section id="options-section" className="row">
                     <section id="option-items" className="row">
 
@@ -92,7 +120,7 @@ export default class NavBar extends Component{
                         </nav>
                     </section>
                 </section>
-
+                    ):""}
                 <Sidebar
                     open={this.state.open}
                     onToggleDrawer={this._toggleDrawer}/>;

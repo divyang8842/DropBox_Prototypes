@@ -40,8 +40,6 @@ router.post('/uploadFile', upload.single('myFile'), function (req, res, next) {
             res.status(201).json({status:'201'});
         });
     });
-
-
 });
 
 

@@ -9,6 +9,7 @@ var express = require('express')
   , login = require('./routes/login/loginJS')
   ,	signup = require('./routes/login/Signup')
     ,uploadFile=require('./routes/fileoperations/uploadfile')
+    ,dirLogs=require('./routes/fileoperations/directoriesLogging')
     ,security = require('./routes/utils/security')
     ,files = require('./routes/utils/files')
     ,star =  require('./routes/user/staring')
@@ -71,9 +72,9 @@ app.post('/delDir',security.authenticate,files.delDir);
 app.post('/unstar',security.authenticate,star.UnStarDir);
 app.post('/star',security.authenticate,star.setStaredDir);
 app.post('/logout',security.authenticate,login.signout);
+app.post('/getUserLogs',security.authenticate,dirLogs.getUserLoggings);
 app.post('/download',files.download );
-//
-//app.get('/getAllUsers', login.getAllUsers);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

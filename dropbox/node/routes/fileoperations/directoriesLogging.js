@@ -1,9 +1,10 @@
 var mysql = require('./../database/mysql');
+var userprofile = require('./../utils/userprofile');
 
-var CREATED = "0";
-var UPDATED = "1";
-var DELETED = "2";
-var SHARED = "3";
+var CREATED = 0;
+var UPDATED = 1;
+var DELETED = 2;
+var SHARED = 3;
 
 var createDirectoryEntry = function(filepath,userid,isFile,parentdir,name,callback){
 	var createDirectoryEntrySql = "INSERT INTO Directories (name,relative_path,parent,createdby,isFile) VALUES(?,?,?,?,?)";
@@ -40,7 +41,7 @@ var deleteDirEntry = function(filepath,userid,callback){
 
 var getDirectoryId = function(filepath,callback){
 
-    var getDirectoryIdSql = "SELECT id FROM Directories WHERE relative_path=?";
+    var getDirectoryIdSql = "SELECT id FROM Directories WHERE relative_path=? AND deleteflag=0";
     var data=[filepath];
     mysql.setData(function(err, results) {
         callback(err, results);
@@ -68,12 +69,19 @@ var logOperation = function(datajson,callback) {
 	}, setPermit,data);
 };
 
+var getUserLoggings = function(req,res){
+
+    getAllFileOperationsForUser(req.body.userid, function (err,logs) {
+		res.status(201).json({status:'201',logs:logs});
+    });
+}
 
 var getAllFileOperationsForUser = function(userid,callback){
-	var getDirectories ="SELECT operation as operation,datetime as datetime FROM directory_logging WHERE userid = ?";
+	var getDirectories ="SELECT d.name AS name,dl.operation AS operation,d.relative_path as path,dl.datetime AS operationtime FROM directories d JOIN directory_logging dl ON d.id = dl.directoryid AND  dl.userid = ? AND dl.deleteflag=0 order by dl.id desc";
 	var data=[userid];
 	
 	mysql.fetchData(function(err, results) {
+		var sendData = [];
 		if (err) {
 			console.log(err);
 		} else {
@@ -81,10 +89,21 @@ var getAllFileOperationsForUser = function(userid,callback){
 			var result = {};
 			while(length>0){
 				result = results[--length];
+
+				var path = (result.path).split('/');
+				result.path = "home";
+				for(var i=1;i<path.length;i++){
+                    result.path += "/"+path[i];
+				}
+
 				result.operation = getOperation(result.operation);
+                result.operationtime = userprofile.gtDateStringFromObject(result.operationtime,"MMDDYYYY",'/');
+                sendData.push(result);
+
+                console.log(JSON.stringify(result));
 			}
 		}
-		callback(err,results);
+		callback(err,sendData);
 	}, getDirectories,data);
 };
 
@@ -102,6 +121,7 @@ var getAllFileOperationsForDir = function(dirid,callback){
 			while(length>0){
 				result = results[--length];
 				result.operation = getOperation(result.operation);
+
 			}
 		}
 		callback(err,results);
@@ -109,7 +129,7 @@ var getAllFileOperationsForDir = function(dirid,callback){
 };
 
 exports.logOperation = logOperation;
-exports.getAllFileOperationsForUser = getAllFileOperationsForUser;
+exports.getUserLoggings = getUserLoggings;
 exports.createDirectoryEntry = createDirectoryEntry;
 exports.getAllFileOperationsForDir = getAllFileOperationsForDir;
 exports.getDirectoryId = getDirectoryId;
