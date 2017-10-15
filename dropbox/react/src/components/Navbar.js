@@ -6,12 +6,6 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationOpen from 'material-ui/svg-icons/navigation/menu'
 import '../styles/navbar.css';
-import  Sidebar  from './Sidebar';
-import Avatar from 'material-ui/Avatar';
-import FileFolder from 'material-ui/svg-icons/file/folder';
-import FileCloudDownload from 'material-ui/svg-icons/file/cloud-download';
-import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
-import TrashBin from 'material-ui/svg-icons/action/delete';
 import RaisedButton from 'material-ui/RaisedButton';
 import * as API from '../api/API';
 
@@ -91,7 +85,7 @@ export default class NavBar extends Component{
 
                         <MenuItem primaryText="UserLogs" onClick={() =>  this.getUserLogs()} />
                         <MenuItem primaryText="UserProfile" onClick={() =>  this.getUserProfile()} />
-                        <MenuItem primaryText="Help" />
+
                         <MenuItem primaryText="Sign out" onClick={() =>  this.signout()} />
 
                     </IconMenu>}
@@ -112,22 +106,24 @@ export default class NavBar extends Component{
                             }}/>
 
                             <RaisedButton className="option-btn" onClick={() =>this.props.createDir(this.state.filename)} label="New Directory"/>
-                            <input type='email' onChange={(event) => {
+
+
+
+
+                            <input style={{display: this.props.fileToShare=='' ? 'none' : 'inline-block' }} type='email' onChange={(event) => {
                                 const value=event.target.value
                                 this.setState({
                                     emails: event.target.value
                                 });
                             }}/>
 
-                            <RaisedButton className="option-btn" onClick={() =>this.props.shareFile(this.state.emails)} secondary={true} label="Share"/>
+                            <RaisedButton style={{display: this.props.fileToShare=='' ? 'none' : 'inline-block' }} className="option-btn" onClick={() =>this.props.shareFile(this.state.emails)} secondary={true} label="Share"/>
                             {/*<RaisedButton className="option-btn" primary={true} label="Modified"/>*/}
                         </nav>
                     </section>
                 </section>
                     ):""}
-                <Sidebar
-                    open={this.state.open}
-                    onToggleDrawer={this._toggleDrawer}/>;
+
 
             </section>
         )

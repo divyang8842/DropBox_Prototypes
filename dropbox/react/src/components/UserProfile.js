@@ -55,7 +55,6 @@ class SignUp extends  Component{
 
     componentWillMount(){
         API.getUserProfile({}).then((response) => {
-
             this.setState({
             work: response.data.work,
             education: response.data.education,
@@ -77,13 +76,13 @@ class SignUp extends  Component{
                 if (status === 200) {
                     this.setState({
                         isLoggedIn: false,
-                        message: "Signup Successfull..!!",
+                        message: "Data updated Successfully!!",
                     });
                     this.props.history.push("/login");
                 } else if (status === 401) {
                     this.setState({
                         isLoggedIn: false,
-                        message: "SignUp Failed"
+                        message: "Error while updarting user profile."
                     });
                 }
             });
@@ -102,7 +101,7 @@ class SignUp extends  Component{
 
 
                 <div className="text-center">
-                    <h1 className="login-brand-text">Dropbox</h1>
+                    <h1 className="login-brand-text">User Profile</h1>
                 </div>
 
                 <Panel header={<h3>User Profile</h3>} className="login-panel">
@@ -208,7 +207,7 @@ class SignUp extends  Component{
                             </div>
 
 
-                            <Button onClick={() => this.setUserProfile(this.state)} bsSize="large" bsStyle="success" block>Signup</Button>
+                            <Button onClick={() => this.setUserProfile(this.state)} bsSize="large" bsStyle="success" block>Update</Button>
 
                         </fieldset>
                     </form>

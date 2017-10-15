@@ -77,6 +77,8 @@ app.post('/getUserLogs',security.authenticate,dirLogs.getUserLoggings);
 app.post('/setUserProfile',security.authenticate,userprofile.updateUserProfileDataReq);
 app.post('/getUserProfile',security.authenticate,userprofile.getUserProfileDataReq);
 app.post('/validateEmails',security.authenticate,permission.validateEmails);
+app.post('/shareFile',security.authenticate,permission.shareFile);
+
 app.post('/download',files.download );
 
 

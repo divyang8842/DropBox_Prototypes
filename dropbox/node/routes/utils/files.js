@@ -2,6 +2,10 @@ var fs = require("fs");
 var path = require('path');
 var mime = require('mime');
 
+var zipFolder = require('zip-folder');
+
+
+
 var mkdirp = require('mkdirp');
 var dirlog = require('./../fileoperations/directoriesLogging');
 
@@ -106,11 +110,23 @@ var download = function(req, res){
     var filename = path.basename(file);
     var mimetype = mime.lookup(file);
 
+
     res.setHeader('Content-disposition', 'attachment; filename=' + filename);
     res.setHeader('Content-type', mimetype);
     res.download(file);
 
 };
+
+var ZipFile = function(from,to){
+    zipFolder(from, to, function(err) {
+        if(err) {
+
+        } else {
+
+        }
+    });
+}
+
 
 
 exports.GLOBAL_TEMP_PATH = GLOBAL_TEMP_PATH;

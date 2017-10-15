@@ -1,5 +1,8 @@
 var mysql = require('./../database/mysql');
 var utils = require('./../utils/userprofile');
+var email = require('./../utils/email');
+var dirlog = require('./../fileoperations/directoriesLogging');
+
 
 var GROUP = 1;
 var USER = 0;
@@ -18,6 +21,42 @@ var emails = emailAddress.split(',');
 	});
 
 }
+
+var shareFile = function(req,res){
+	var fileToShare = req.body.fileToShare;
+    var emailAddress = req.body.emails;
+    var emails = emailAddress.split(',');
+
+    dirlog.getDirectoryId(fileToShare,function (err,results1) {
+        var dirId =  results1[0].id;
+
+        utils.checkValidUserEmails(emailAddress,function(err,results){
+            if(results.length!= emails.length){
+				setPermission({'dirid':dirId,'type':link,'pid':'-1'},function(){
+                    res.status(201).json({status:'201',linkShare:'true'});
+				});
+            }else{
+                var length = results.length;
+                    while(length-->0){
+                        setPermission({'dirid':dirId,'type':USER,'pid':results[length].uid},function(){
+                        });
+                    }
+                res.status(201).json({status:'201',linkShare:'false'});
+            }
+            email.setMailOptions(emailAddress,"File is shared with you.")
+            email.sendEmail();
+        });
+
+    });
+
+
+}
+var setMessage = function(dirid,type){
+		var data = "A File is shared with you by a Dropbox User.";
+		if(type==li)
+		data += "";
+}
+
 
 var setPermission = function(dataJson,callback) {
 	var setPermit = "INSERT INTO Directory_Permission (directoryid,permissiontype,permit_id) VALUES(?,?,?)";
@@ -54,7 +93,6 @@ var getAllPermittedDirectories = function(userid,callback){
 	}, getDirectories,data);
 };
 
-
-
 exports.setPermission = setPermission;
 exports.validateEmails = validateEmails;
+exports.shareFile = shareFile;

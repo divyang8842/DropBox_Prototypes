@@ -40,7 +40,7 @@ var deleteDirEntry = function(filepath,userid,callback){
 };
 
 var getDirectoryId = function(filepath,callback){
-
+	console.log("path is : "+filepath);
     var getDirectoryIdSql = "SELECT id FROM Directories WHERE relative_path=? AND deleteflag=0";
     var data=[filepath];
     mysql.setData(function(err, results) {

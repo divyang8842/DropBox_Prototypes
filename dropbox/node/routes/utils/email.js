@@ -1,23 +1,35 @@
 var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport({
+var smtpTransport = require('nodemailer-smtp-transport');
+
+var transport = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     auth: {
-        user: 'divyang.soni@sjsu.edu',
-        pass: 'Sjsu@1992'
+        user: 'divyang8842@gmail.com',
+        pass: 'G00gle@1992'
     }
-});
+}));
 
-var mailOptions = {
-    from: 'divyang.soni@sjsu.edu',
-    to: 'divyang8842@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-};
 
-transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-        console.log(error);
-    } else {
-        console.log('Email sent: ' + info.response);
-    }
-});
+var mailOptions = {};
+
+var setMailOptions = function(to,message){
+    mailOptions = {
+        from: 'divyang8842@gmail.com',
+        to: to,
+        subject: 'Dropbox File Shared',
+        text: message
+    };
+}
+
+var sendEmail=function(){
+    transport.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+exports.setMailOptions = setMailOptions;
+exports.sendEmail = sendEmail;

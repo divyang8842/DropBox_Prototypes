@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Route, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import * as API from '../api/API';
 import Login from "./Login";
 import Message from "./Message";
