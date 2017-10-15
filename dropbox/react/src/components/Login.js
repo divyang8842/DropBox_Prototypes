@@ -76,6 +76,9 @@ class Login extends Component {
 
 
     render() {
+        var bgcolor = {backgroundColor:'dodgerblue'};
+        var panelBg = {backgroundColor:'lightblue'};
+        var color = {color:'blue'};
         return (
             <div className="col-md-4 col-md-offset-4">
                 <div className="text-center"><img src={logo}  height="100" width="200"/>
@@ -90,7 +93,7 @@ class Login extends Component {
                         }
                     </Panel>
                 </div>
-                <Panel header={<h3>Please Sign In</h3>} className="login-panel">
+                <Panel header={<h3 >Please Sign In</h3>} style={panelBg} className="login-panel">
 
                     <form  >
                         <fieldset>
@@ -128,9 +131,9 @@ class Login extends Component {
                                     }} required
                                 />
                             </div>
-                            <Checkbox label="Remember Me" > Remember Me </Checkbox>
-                            <Button disabled={!this.state.formValid} onClick={() => this.props.handleSubmit(this.state)} bsSize="large" bsStyle="success" block>Login</Button>
-                            <Button onClick={() => { this.props.history.push("/signUp");}} bsSize="large" bsStyle="success" block>Sign Up</Button>
+
+                            <Button style={bgcolor} disabled={!this.state.formValid} onClick={() => this.props.handleSubmit(this.state)} bsSize="large" bsStyle="success" block>Login</Button>
+                            <Button style={bgcolor} onClick={() => { this.props.history.push("/signUp");}} bsSize="large" bsStyle="success" block>Sign Up</Button>
                         </fieldset>
                     </form>
                 </Panel>

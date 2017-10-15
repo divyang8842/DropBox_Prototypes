@@ -65,11 +65,13 @@ export default class NavBar extends Component{
 
 
     render(){
-        var ml30 = {marginLeft:'30px'};
+        var bgcolor = {backgroundColor:'dodgerblue'};
+        var ml30 = {marginLeft:'50px'};
         return(
 
             <section id="detailed-view">
                 <AppBar
+                    style={bgcolor}
                     title={this.state.user}
                     iconElementLeft={<IconButton><NavigationOpen /></IconButton>}
                     iconElementRight={ <IconMenu

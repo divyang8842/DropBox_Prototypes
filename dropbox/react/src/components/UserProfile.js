@@ -6,6 +6,7 @@ import Panel from 'react-bootstrap/lib/Panel';
 import * as API from '../api/API';
 
 import NavBar from "../components/Navbar";
+import logo from '../images/dropbox_logo740.png';
 
 
 import { FormControl, Checkbox } from 'react-bootstrap';
@@ -92,6 +93,10 @@ class SignUp extends  Component{
 
     render(){
 
+        var bgcolor = {backgroundColor:'dodgerblue'};
+        var panelBg = {backgroundColor:'lightblue'};
+        var color = {color:'blue'};
+        
 
         return(
             <div style={fullscreen}>
@@ -104,7 +109,7 @@ class SignUp extends  Component{
                     <h1 className="login-brand-text">User Profile</h1>
                 </div>
 
-                <Panel header={<h3>User Profile</h3>} className="login-panel">
+                <Panel style={panelBg} header={<h3>User Profile</h3>} className="login-panel">
 
                     <form  >
                         <fieldset>
@@ -207,7 +212,7 @@ class SignUp extends  Component{
                             </div>
 
 
-                            <Button onClick={() => this.setUserProfile(this.state)} bsSize="large" bsStyle="success" block>Update</Button>
+                            <Button style={bgcolor} onClick={() => this.setUserProfile(this.state)} bsSize="large" bsStyle="success" block>Update</Button>
 
                         </fieldset>
                     </form>

@@ -55,7 +55,7 @@ var UnStarDir = function(req,res) {
 
 
 var getAllStaredDirectories = function(userid,callback){
-	var getDirectories ="SELECT d.id as id,d.name as name,d.isfile as isfile,d.relative_path as path FROM staredDir sd JOIN directories d ON d.id= sd.directoryid WHERE sd.userid=? AND sd.deleteflag=0 AND d.deleteflag = 0";
+	var getDirectories ="SELECT DISTINCT d.id as id,d.name as name,d.isfile as isfile,d.relative_path as path FROM staredDir sd JOIN directories d ON d.id= sd.directoryid WHERE sd.userid=? AND sd.deleteflag=0 AND d.deleteflag = 0";
 	var data=[userid];
 	
 	mysql.fetchData(function(err, results) {

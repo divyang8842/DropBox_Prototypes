@@ -2,6 +2,7 @@ var fs = require('fs');
 var ejs = require('ejs');
 var testFolder = './routes/';
 var fileUtils = require('./../utils/files');
+var permission = require('./../fileoperations/permissions');
 var star = require('./../user/staring');
 var mysql = require('./../database/mysql');
 
@@ -17,7 +18,7 @@ var checkFileIsFolder = function (filename){
 };
 
 var getAllChildDirectories=function(root,userid,callback){
-    var getDirId =  "SELECT d.id as id,d.name as name,d.isfile as isfile,d.relative_path as path,s.id as staredId FROM directories d LEFT OUTER JOIN stareddir s on (s.deleteflag=0 AND s.directoryid = d.id) where parent=(SELECT id FROM directories where relative_path=? AND deleteflag=0) AND d.deleteflag=0";
+    var getDirId =  "SELECT DISTINCT d.id as id,d.name as name,d.isfile as isfile,d.relative_path as path,s.id as staredId FROM directories d LEFT OUTER JOIN stareddir s on (s.deleteflag=0 AND s.directoryid = d.id) where parent=(SELECT id FROM directories where relative_path=? AND deleteflag=0) AND d.deleteflag=0";
     var data=[root];
 
    	 mysql.fetchData(function(err, results) {
@@ -53,43 +54,6 @@ var getAllChildDirectories=function(root,userid,callback){
 
 }
 
-/*
-var DirectoryList=function (root,userid,callback){
-	fs.readdir(fileUtils.GLOBAL_FILE_PATH +"/"+root, function (err, files)
-			{
-		if(err){
-			callback(err,{});
-		}
-		var sendFiles=[];
-		
-				for(var i=0;i<files.length;i++)
-				{
-					var file = {};
-					file.name = files[i];
-					file.path = root+"/"+files[i];
-                    file.fullPath =fileUtils.GLOBAL_FILE_PATH +"/"+root+"/"+files[i];
-					if(checkFileIsFolder(fileUtils.GLOBAL_FILE_PATH +"/"+root+"/"+files[i])){
-						
-						file.isFolder = true;
-					}else{
-						file.isFolder = false;
-					}
-                     if(star.isDirStared(root+"/"+files[i], userid)){
-                         file.isStared = true;
-                     }else{
-                         file.isStared = false;
-                     }
-
-					console.log(JSON.stringify(file));
-
-                        sendFiles.push(file);
-
-
-				}
-
-				callback(err,sendFiles);
-			});
-};*/
 
 var listdir = function (req,res)
 {
@@ -102,15 +66,14 @@ var listdir = function (req,res)
 			console.log(err);
 		}else{
             star.getAllStaredDirectories(req.session.userid,function (err1,results1) {
-
             	if(err1){
                     res.json({status:'201',fileLst:files,stared:[]});
 				}else{
-            		//console.log(JSON.stringify({status:'201',fileLst:files,stared:results1}));
-                    res.json({status:'201',fileLst:files,stared:results1});
 
+                    permission.getAllPermittedDirectories(req.session.userid,function(err,results2){
+                        res.json({status:'201',fileLst:files,stared:results1,shared:results2});
+                    });
                 }
-
             });
 
 
@@ -124,3 +87,4 @@ var listdir = function (req,res)
 exports.DirectoryList = DirectoryList;*/
 exports.getAllChildDirectories = getAllChildDirectories;
 exports.listdir = listdir;
+exports.checkFileIsFolder = checkFileIsFolder;

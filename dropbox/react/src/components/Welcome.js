@@ -60,7 +60,7 @@ var uploadDiv={ position:'relative',top:20,right:100}
 
 var fileListItems={color:'#0070E0'}
 
-var list={marginTop:80, paddingLeft:40, paddingRight:270}
+var list={marginTop:20, paddingLeft:40, paddingRight:270}
 
 var del={float:'right',color:'white',marginRight:'10px'}
 var fll ={float:'left'};
@@ -68,7 +68,7 @@ var flr =  {float:'right'};
 var star = {float:'right',marginRight:'50px'}
 var mr30 = {marginRight:'30px'}
 
-var backButton={position:'relative',top:70,left:45}
+var backButton={position:'relative',marginLeft:40}
 class Welcome extends Component {
 
     static propTypes = {
@@ -80,6 +80,7 @@ class Welcome extends Component {
 
         filelist:[],
         staredList:[],
+        sharedList:{},
         pathTrack:[],
         root:'',
         userId:'',
@@ -229,6 +230,7 @@ class Welcome extends Component {
                     this.setState({
                         filelist: res.fileLst,
                         staredList : res.stared,
+                        sharedList: res.shared,
                         isSelfCall: true
                     });
                 }else if(res.status==='501'){
@@ -297,10 +299,12 @@ class Welcome extends Component {
 
         var filelist1 = [];
         var staredList =[];
+        var sharedList = [];
         if(this.state.filelist && this.state.filelist!=''){
             filelist1 = this.state.filelist;
 
             staredList = this.state.staredList;
+            sharedList = this.state.sharedList;
         }
         var username = this.state.userid;
 
@@ -323,12 +327,15 @@ class Welcome extends Component {
                             </Button>
                         </div>
 
-                    <Button style={backButton} onClick={() => this.getBack()}>
+                    <div> <Button style={backButton} onClick={() => this.getBack()}>
                         Back
-                    </Button>
+                    </Button></div>
 
 
 
+                    <div style={list}>
+                        Stared files
+                    </div>
                     <ListGroup style={list}> {staredList.map((file, i) =>
                         <ListGroupItem style={fileListItems}  key={i}>{ file.isFolder ?
                             (   <div>
@@ -339,7 +346,7 @@ class Welcome extends Component {
                                              style={style}/>
                                     <a onClick={() => this.getChildDir(file.path)}> {file.name} </a>
                                     <Button style={del}  onClick={()=>this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
-                                    <Button style={del}  onClick={()=>this.getChildDir(file.path)}   bsStyle="danger">Lookup</Button>
+                                    <Button style={del}  onClick={()=>this.getChildDir(file.path)}   bsStyle="danger">Lookup--> </Button>
                                     <Button style={del}  onClick={()=>this.shareFileData(file.path,file.name)}   bsStyle="danger">Share</Button>
                                     <Checkbox  checked={true} style={star} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
 
@@ -361,7 +368,44 @@ class Welcome extends Component {
                     )}
                     </ListGroup>
 
+                    <div style={list}>
+                        Shared files
+                    </div>
+                    <ListGroup style={list}> {sharedList.map((file, i) =>
+                        <ListGroupItem style={fileListItems}  key={i}>{ file.isFolder ?
+                            (   <div>
+                                    <Avatar  className="file-opt" icon={<FileFolder />}
+                                             color={orange200}
+                                             backgroundColor={blue300}
+                                             size={30}
+                                             style={style}/>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a>
+                                    <Button style={del}  onClick={()=>this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
+                                    <Button style={del}  onClick={()=>this.getChildDir(file.path)}   bsStyle="danger">Lookup--></Button>
+                                    <Button style={del}  onClick={()=>this.shareFileData(file.path,file.name)}   bsStyle="danger">Share</Button>
+                                    <Checkbox  checked={true} style={star} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
 
+                                </div>
+
+                            ):
+                            (<div><Avatar  className="file-opt" icon={<FileFolder />}
+                                           color={orange200}
+                                           backgroundColor={purple500}
+                                           size={30}
+                                           style={style}/>
+                                <a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a>
+
+                                <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
+                                <Button style={del}  onClick={()=>this.download(file.path,file.name)}   bsStyle="danger">Download</Button>
+                                <Button style={del}  onClick={()=>this.shareFileData(file.path,file.name)}   bsStyle="danger">Share</Button>
+                                <Checkbox  checked={true} style={star}  value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
+                            </div> )}</ListGroupItem>
+                    )}
+                    </ListGroup>
+
+                    <div style={list}>
+                        Your files
+                    </div>
                     <ListGroup style={list}> {filelist1.map((file, i) =>
                         <ListGroupItem style={fileListItems}  key={i}>{ file.isFolder ?
                             (   <div>
@@ -372,7 +416,7 @@ class Welcome extends Component {
                                              style={style}/>
                                     <a onClick={() => this.getChildDir(file.path)}> {file.name} </a>
                                     <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
-                                    <Button style={del}  onClick={()=>this.getChildDir(file.path)}   bsStyle="danger">Lookup  </Button>
+                                    <Button style={del}  onClick={()=>this.getChildDir(file.path)}   bsStyle="danger">Lookup-->  </Button>
                                     <Button style={del}  onClick={()=>this.shareFileData(file.path,file.name)}   bsStyle="danger">Share</Button>
                                     <Checkbox  style={star}   checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
 

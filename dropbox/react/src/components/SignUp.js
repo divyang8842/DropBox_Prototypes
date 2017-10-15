@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import FormErrors from "./FormErrors";
 import Button from 'react-bootstrap/lib/Button';
 import Panel from 'react-bootstrap/lib/Panel';
+import logo from '../images/dropbox_logo740.png';
 
 
 import { FormControl, Checkbox } from 'react-bootstrap';
@@ -110,14 +111,15 @@ class SignUp extends  Component{
 
 
     render(){
-
-
+        var bgcolor = {backgroundColor:'dodgerblue'};
+        var panelBg = {backgroundColor:'lightblue'};
+        var color = {color:'blue'};
         return(
             <div className="col-md-4 col-md-offset-4">
-                <div className="text-center">
-                    <h1 className="login-brand-text">Dropbox</h1>
+                <div className="text-center"><img src={logo}  height="100" width="200"/>
 
                 </div>
+
                 <div className="row justify-content-md-center">
                     <Panel>
                         { this.state.type && this.state.formErrors &&(
@@ -127,7 +129,7 @@ class SignUp extends  Component{
                         }
                     </Panel>
                 </div>
-                <Panel header={<h3>Please Sign Up</h3>} className="login-panel">
+                <Panel header={<h3 >Please Sign Up</h3>} style={panelBg} className="login-panel">
 
                     <form  >
                         <fieldset>
@@ -219,7 +221,8 @@ class SignUp extends  Component{
                                              required
                                 />
                             </div>
-                            <Button disabled={!this.state.formValid} onClick={() => this.props.handleSignUp(this.state)} bsSize="large" bsStyle="success" block>Signup</Button>
+                            <Button style={bgcolor} disabled={!this.state.formValid} onClick={() => this.props.handleSignUp(this.state)} bsSize="large" bsStyle="success" block>Signup</Button>
+                            <Button style={bgcolor}  onClick={() => { this.props.history.push("/login");}} bsSize="large" bsStyle="success" block>SignIn</Button>
 
                         </fieldset>
                     </form>

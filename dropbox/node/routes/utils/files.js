@@ -117,7 +117,7 @@ var download = function(req, res){
 
 };
 
-var ZipFile = function(from,to){
+var ZipFile = function(from,to,callback){
     zipFolder(from, to, function(err) {
         if(err) {
 
@@ -125,7 +125,9 @@ var ZipFile = function(from,to){
 
         }
     });
-}
+};
+
+
 
 
 
