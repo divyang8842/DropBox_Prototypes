@@ -22,7 +22,7 @@ export default class NavBar extends Component{
         this.state = {
             open: false,
             filename :'',
-            email:'',
+            emails:'',
             page:''
         };
 
@@ -37,10 +37,7 @@ export default class NavBar extends Component{
         this.setState({
             page:this.props.page
         });
-
-
-        document.title = `DropBox - UserProfile!!`;
-
+        document.title = `DropBox !!`;
     }
 
 
@@ -53,6 +50,9 @@ export default class NavBar extends Component{
         this.props.getUserLogs();
     }
 
+    getUserProfile =()=>{
+        this.props.getUserProfile();
+    }
 
     signout = () =>
     {
@@ -71,6 +71,7 @@ export default class NavBar extends Component{
 
 
     render(){
+        var ml30 = {marginLeft:'30px'};
         return(
 
             <section id="detailed-view">
@@ -84,9 +85,12 @@ export default class NavBar extends Component{
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
 
-                        {this.state.page!="userprofile"?(
+                        {(this.state.page=="userprofile" || this.state.page=="useractivity")?(
+                            <MenuItem primaryText="Home" onClick={() =>  this.getHome()} />
+                            ):''}
+
                         <MenuItem primaryText="UserLogs" onClick={() =>  this.getUserLogs()} />
-                            ):(<MenuItem primaryText="Home" onClick={() =>  this.getHome()} />)}
+                        <MenuItem primaryText="UserProfile" onClick={() =>  this.getUserProfile()} />
                         <MenuItem primaryText="Help" />
                         <MenuItem primaryText="Sign out" onClick={() =>  this.signout()} />
 
@@ -94,13 +98,13 @@ export default class NavBar extends Component{
                     onLeftIconButtonTouchTap={this._toggleDrawer}
                 />
 
-                {this.state.page!="userprofile"?(
+                {(this.state.page!="userprofile" && this.state.page!="useractivity" )?(
                 <section id="options-section" className="row">
                     <section id="option-items" className="row">
 
                 
                         <nav id="option-buttons" className="small-6 columns">
-                            <input type='text' onChange={(event) => {
+                            <input type='text' style={ml30} onChange={(event) => {
                                 const value=event.target.value
                                 this.setState({
                                     filename: event.target.value
@@ -111,12 +115,12 @@ export default class NavBar extends Component{
                             <input type='email' onChange={(event) => {
                                 const value=event.target.value
                                 this.setState({
-                                    email: event.target.value
+                                    emails: event.target.value
                                 });
                             }}/>
 
-                            <RaisedButton className="option-btn" onClick={() =>this.props.shareFile(this.state.email)} secondary={true} label="Share"/>
-                            <RaisedButton className="option-btn" primary={true} label="Modified"/>
+                            <RaisedButton className="option-btn" onClick={() =>this.props.shareFile(this.state.emails)} secondary={true} label="Share"/>
+                            {/*<RaisedButton className="option-btn" primary={true} label="Modified"/>*/}
                         </nav>
                     </section>
                 </section>

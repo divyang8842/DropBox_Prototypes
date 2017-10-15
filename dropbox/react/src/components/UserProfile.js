@@ -1,122 +1,192 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 
+import Button from 'react-bootstrap/lib/Button';
+import Panel from 'react-bootstrap/lib/Panel';
 import * as API from '../api/API';
-import NavBar from "../components/Navbar";
 
 
-var fullscreen={position: 'fixed',
-    top: '0',
-    left: '0',
-    bottom: '0',
-    right:'0',
-    overflow: 'auto',
-    background: 'white'}
+import { FormControl, Checkbox } from 'react-bootstrap';
 
-class UserProfile extends Component {
 
-    static propTypes = {
-        userid: PropTypes.string.isRequired,
-        logs: PropTypes.string.isRequired
-    };
+
+class SignUp extends  Component{
+
+
 
     state = {
-        userid: '',
-        logs: []
+        work: '',
+        education: '',
+        music:'',
+        mobile:'',
+        show:'',
+        sports:''
+
     };
 
-
-    getHome =() =>{
-
-        this.props.getToHome();
-    }
-
-    getUserLogs =() =>{
-        this.props.history.push('/userprofile');
-    }
-
-    signout = () => {
-        this.props.history.push("/login");
-    };
 
     componentWillMount(){
-        var userid = localStorage.getItem('token');
-        var data = {'userid':userid};
-        API.getUserLogs(data).then((resData) => {
-            debugger;
-            if (resData.status == 201) {
-                this.setState({
-                    logs: resData.logs
-                });
-            }else if(resData.status==501){
-                localStorage.removeItem("token");
-                localStorage.removeItem("root");
-                this.props.history.push('/login');
-            }
+        API.getUserProfile({}).then((response) => {
+
+            this.setState({
+            work: response.data.work,
+            education: response.data.education,
+            music:response.data.music,
+            mobile:response.data.mobile,
+            show:response.data.shows,
+            sports:response.data.sports
+
+        })
         });
 
-    }
-
-    render() {
-
-        console.log(JSON.stringify(this.state.logs));
-
-        var totStyle={float:'right',fontSize:25};
-        var totStyle1={float:'left', fontSize:25};
-        var borderStyle={borderStyle: 'inset', backgroundColor:'lightBlue'};
-        var flr={float:'right'};
-        var mr80={marginRight:100};
-        var bgcolor={backgroundColor:'lightgrey'};
-
-        var pt15={paddingTop:15};
-        const todoClass = `alert `;
+    };
 
 
-        return (
-            <div style={fullscreen}>
-                <NavBar page = {"userprofile"} getUserLogs={this.getUserLogs}  getHome={this.getHome}   signout= {this.signout}></NavBar>
+    setUserProfile = (userdata) => {
+        API.setUserProfile(userdata)
+            .then((status) => {
 
-            <div className="container-fluid" >
-                <div className="row justify-content-md-center">
-                    <div className="col-md-6">
-                        <h2 className="text-center">User Profile</h2>
-                    </div>
+                if (status === 200) {
+                    this.setState({
+                        isLoggedIn: false,
+                        message: "Signup Successfull..!!",
+                    });
+                    this.props.history.push("/login");
+                } else if (status === 401) {
+                    this.setState({
+                        isLoggedIn: false,
+                        message: "SignUp Failed"
+                    });
+                }
+            });
+    };
 
+
+
+    render(){
+
+
+        return(
+            <div className="col-md-8 col-md-8">
+                <div className="text-center">
+                    <h1 className="login-brand-text">Dropbox</h1>
                 </div>
-                <hr/>
 
-                <hr/>
-                <div className="row justify-content-md-center" >
+                <Panel header={<h3>User Profile</h3>} className="login-panel">
 
-                    <div className="card col-sm-4"  >
-                        <div className="card-body">
-                            <h4>User Logs</h4>
-                            {
-                                this.state.logs.map((log,index) => {
-                                        return (
-                                            <div className="row justify-content-md-center">
-                                                <div className="col-md-12">
-                                                    <div className={todoClass} style={bgcolor} role="alert">
-                                                        <div style={mr80}>File Name : { log.name } </div>
-                                                        <div style={mr80}>File Path : { log.path } </div>
-                                                        <div>  <span>Operation : {log.operation}</span></div>
-                                                        <div>
-                                                                <span aria-hidden={true}>Date Time : {log.operationtime}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                })
-                            }
-                        </div>
-                        
-                    </div>
-                </div>
+                    <form  >
+                        <fieldset>
+                            <div className="form-group" controlId="formHorizontalPassword">
+                                Work  <FormControl className={`form-group `}
+                                                   controlId="work"
+                                                   placeholder="Work"
+                                                   type="text"
+                                                   value={this.state.work}
+                                                   onChange={(event)=>{
+                                                       this.setState({
+                                                           work:event.target.value
+                                                       });
+                                                   }}
+                                                   required
+                                                   autoFocus
+                            />
+                            </div>
+
+                            <div className="form-group" controlId="formHorizontalPassword">
+                                Educarion  <FormControl className={`form-group `}
+                                                        controlId="education"
+                                                        placeholder="Eduction"
+                                                        type="text"
+                                                        value={this.state.education}
+                                                        onChange={(event)=>{
+                                                            this.setState({
+                                                                education:event.target.value
+                                                            });
+                                                        }}
+                                                        required
+                                                        autoFocus
+                            />
+                            </div>
+
+                            <div className="form-group" controlId="formHorizontalPassword">
+                                Sprots   <FormControl className={`form-group `}
+                                                      controlId="Sports"
+                                                      placeholder="Sports"
+                                                      type="text"
+                                                      value={this.state.sports}
+                                                      onChange={(event)=>{
+                                                          this.setState({
+                                                              sports:event.target.value
+                                                          });
+                                                      }}
+                                                      required
+                                                      autoFocus
+                            />
+                            </div>
+
+
+                            <div className="form-group" controlId="formHorizontalPassword">
+                                Music  <FormControl className={`form-group `}
+                                                    controlId="music"
+                                                    placeholder="Music"
+                                                    type="text"
+                                                    value={this.state.music}
+                                                    onChange={(event)=>{
+                                                        this.setState({
+                                                            music:event.target.value
+                                                        });
+                                                    }}
+                                                    required
+                                                    autoFocus
+                            />
+                            </div>
+
+                            <div className="form-group" controlId="formHorizontalPassword">
+                                Mobile  <FormControl className={`form-group `}
+                                                     controlId="mobile"
+                                                     placeholder="Mobile"
+                                                     type="text"
+                                                     value={this.state.mobile}
+                                                     onChange={(event)=>{
+                                                         this.setState({
+                                                             mobile:event.target.value
+                                                         });
+                                                     }}
+                                                     required
+                                                     autoFocus
+                            />
+                            </div>
+
+
+                            <div className="form-group" controlId="formHorizontalPassword">
+                                Shows  <FormControl className={`form-group `}
+                                                    controlId="show"
+                                                    placeholder="Show"
+                                                    type="text"
+                                                    value={this.state.show}
+                                                    onChange={(event)=>{
+                                                        this.setState({
+                                                            show:event.target.value
+                                                        });
+                                                    }}
+                                                    required
+                                                    autoFocus
+                            />
+                            </div>
+
+
+                            <Button onClick={() => this.setUserProfile(this.state)} bsSize="large" bsStyle="success" block>Signup</Button>
+
+                        </fieldset>
+                    </form>
+
+                </Panel>
+
             </div>
-            </div>
-        );
+
+
+        )
     }
 }
 
-export default UserProfile;
+export default withRouter(SignUp);

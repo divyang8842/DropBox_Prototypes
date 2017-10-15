@@ -1,8 +1,31 @@
 var mysql = require('./../database/mysql');
+var utils = require('./../utils/userprofile');
 
 var GROUP = 1;
 var USER = 0;
 var link = 2;
+
+var validateEmails = function(req,res){
+var emailAddress = req.body.emails;
+
+var emails = emailAddress.split(',');
+var length = emails.length;
+var linkShare= false;
+while(length-->0 && !linkShare){
+    utils.getUserIDFromEmailAddress(emails[length],function(err,results){
+		if(results.length==0){
+            linkShare = true;
+            res.status(201).json({status:'201',linkShare:'true'});
+
+		}
+	});
+}
+if(!linkShare){
+    res.status(201).json({status:'201',linkShare:'false'});
+}
+
+
+}
 
 var setPermission = function(dataJson,callback) {
 	var setPermit = "INSERT INTO Directory_Permission (directoryid,permissiontype,permit_id) VALUES(?,?,?)";
@@ -16,6 +39,8 @@ var setPermission = function(dataJson,callback) {
 		}
 	}, setPermit,data);
 };
+
+
 
 
 var getAllPermittedDirectories = function(userid,callback){
@@ -40,3 +65,4 @@ var getAllPermittedDirectories = function(userid,callback){
 
 
 exports.setPermission = setPermission;
+exports.validateEmails = validateEmails;

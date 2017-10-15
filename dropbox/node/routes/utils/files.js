@@ -105,10 +105,6 @@ var download = function(req, res){
     var file = GLOBAL_FILE_PATH + '/'+req.body.path;
     var filename = path.basename(file);
     var mimetype = mime.lookup(file);
-    console.log(file)
-    console.log(filename)
-    console.log(mimetype)
-
 
     res.setHeader('Content-disposition', 'attachment; filename=' + filename);
     res.setHeader('Content-type', mimetype);

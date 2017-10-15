@@ -4,23 +4,11 @@ import {withRouter } from 'react-router-dom';
 import FormErrors from "./FormErrors";
 import logo from '../images/dropbox_logo740.png'
 
-/*
-import { Panel, Input, Button } from 'react-bootstrap';
-*/
 import Button from 'react-bootstrap/lib/Button';
 import Panel from 'react-bootstrap/lib/Panel';
 import { FormControl, Checkbox } from 'react-bootstrap';
-/*import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './Login.css';
-import history from '../../core/history';*/
-/*
-import { Button, Form, FormControl, FormGroup, Col, ControlLabel, Checkbox } from 'react-bootstrap';
-*/
 
 
-/*var formstyle= {marginTop: 10, marginLeft:250};
-var checkbox={marginRight:400};
-var buttonstyle={marginRight:400};*/
 class Login extends Component {
 
     static propTypes = {
@@ -28,8 +16,8 @@ class Login extends Component {
     };
 
     state = {
-        email: 'a@b.cd',
-        password: '123456',
+        email: '',
+        password: '',
         formErrors: {email: '', password: ''},
         emailValid: false,
         passwordValid: false,
@@ -39,8 +27,8 @@ class Login extends Component {
 
     componentWillMount(){
         this.setState({
-            email: 'a@b.cd',
-            password: '123456',
+            email: '',
+            password: '',
             formErrors: {email: '', password: ''},
             emailValid: false,
             passwordValid: false,
@@ -143,90 +131,10 @@ class Login extends Component {
                             <Checkbox label="Remember Me" > Remember Me </Checkbox>
                             <Button disabled={!this.state.formValid} onClick={() => this.props.handleSubmit(this.state)} bsSize="large" bsStyle="success" block>Login</Button>
                             <Button onClick={() => { this.props.history.push("/signUp");}} bsSize="large" bsStyle="success" block>Sign Up</Button>
-
                         </fieldset>
                     </form>
-
                 </Panel>
-
             </div>
-
-       /*     <span>
-    <img src={"/Dropbox_logo.jpg"}/>
-                <h2>Login</h2>
-                 <div className="row justify-content-md-center">
-                <div className="col-md-3">
-                    { this.state.formErrors &&(
-                        <div className="alert alert-warning" role="alert">
-                            <FormErrors formErrors={this.state.formErrors} />
-                        </div>)
-                    }
-                </div>
-            </div>
-            <Form style={formstyle} horizontal>
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.email)}`} controlId="formHorizontalEmail">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Email
-                    </Col>
-                    <Col sm={5}>
-                        <FormControl type="text"
-                                     name="email"
-                                     placeholder="Email"
-                                     value={this.state.email}
-                                     onChange={(event) => {
-                                         const name="email"
-                                         const value=event.target.value
-                                         this.setState({
-                                             email: event.target.value
-                                         }, () => { this.validateField(name, value) });
-                                     }} required autofocus/>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.password)}`} controlId="formHorizontalPassword">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Password
-                    </Col>
-                    <Col sm={5}>
-                        <FormControl type="password"
-                                     name="password"
-                                     placeholder="Password"
-                                     onChange={(event) => {
-                                         const name="password"
-                                         const value=event.target.value
-                                         this.setState({
-                                             password: event.target.value
-                                         }, () => { this.validateField(name, value) });
-                                     }} required/>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup>
-                    <Col smOffset={2} sm={10}>
-                        <Checkbox style={checkbox}>Remember me</Checkbox>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup inline>
-                    <Col smOffset={2} sm={10} >
-                        <Button disabled={!this.state.formValid}  style={buttonstyle} onClick={() => this.props.handleSubmit(this.state)}>
-                            Sign in
-                        </Button>
-
-                        <Button style={buttonstyle} onClick={() => {
-                            this.props.history.push("/signUp");
-                        }}>
-                            Sign up
-                        </Button>
-                    </Col>
-
-                </FormGroup>
-
-            </Form>
-            </span>*/
-
-
-
         );
 
 

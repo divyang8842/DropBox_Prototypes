@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import FormErrors from "./FormErrors";
 import Button from 'react-bootstrap/lib/Button';
 import Panel from 'react-bootstrap/lib/Panel';
-import Welcome from "./Welcome";
+
 
 import { FormControl, Checkbox } from 'react-bootstrap';
 
@@ -228,121 +228,7 @@ class SignUp extends  Component{
 
             </div>
 
-            /*<span><h2>SignUp</h2>
-                <div className="row justify-content-md-center">
-                <div className="col-md-3">
-                    { this.state.formErrors &&(
-                        <div className="alert alert-warning" role="alert">
-                            <FormErrors formErrors={this.state.formErrors} />
-                        </div>)
-                    }
-                </div>
-            </div>
 
-            <Form style={formstyle} horizontal>
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.firstname)}`} controlId="firstname" bsSize="large">
-                    <Col componentClass={ControlLabel} sm={2}>
-                    First Name
-                    </Col>
-                    <Col sm={5}>
-                    <FormControl
-                        type="text"
-                        value={this.state.firstname}
-                        onChange={(event)=>{
-                            const name="firstname"
-                            const value=event.target.value
-                            this.setState({
-                                firstname:event.target.value
-                            }, () => { this.validateField(name, value) });
-                        }}
-                        required
-                        autoFocus
-                        />
-                    </Col>
-                </FormGroup>
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.lastname)}`} controlId="lastname" bsSize="large">
-                    <Col componentClass={ControlLabel} sm={2}>Last Name</Col>
-                    <Col sm={5}>
-                    <FormControl
-                        type="text"
-                        value={this.state.lastname}
-                        onChange={(event)=>{
-                            const name="lastname"
-                            const value=event.target.value
-                            this.setState({
-                                lastname:event.target.value
-                            }, () => { this.validateField(name, value) });
-                        }}
-                        required
-                    />
-                    </Col>
-                </FormGroup>
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.email)}`} controlId="email" bsSize="large">
-                    <Col componentClass={ControlLabel} sm={2}>Email</Col>
-                    <Col sm={5}>
-                    <FormControl
-                        type="email"
-                        name="lastName"
-                        value={this.state.email}
-                        onChange={(event)=>{
-                            const name="email"
-                            const value=event.target.value
-                            this.setState({
-                                email:event.target.value
-                            }, () => { this.validateField(name, value) });
-                        }}
-                        required
-                    />
-                    </Col>
-                </FormGroup>
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.password)}`} controlId="password" bsSize="large">
-                    <Col componentClass={ControlLabel} sm={2}>Password</Col>
-                    <Col sm={5}>
-                    <FormControl
-                        type="password"
-                        name="password"
-                        value={this.state.password}
-                        onChange={(event)=>{
-                            const name="password"
-                            const value=event.target.value
-                            this.setState({
-                                password:event.target.value
-                            }, () => { this.validateField(name, value) });
-                        }}
-                        required
-                    />
-                    </Col>
-                </FormGroup>
-                <FormGroup className={`form-group ${this.errorClass(this.state.formErrors.confirmPassword)}`}  controlId="confirmPassword" bsSize="large">
-                    <Col componentClass={ControlLabel} sm={2}>Confirm Password</Col>
-                    <Col sm={5}>
-                    <FormControl
-                        type="password"
-                        name="confirmPassword"
-                        value={this.state.confirmPassword}
-                        onChange={(event)=>{
-                            const name="confirmPassword"
-                            const value=event.target.value
-                            this.setState({
-                                confirmPassword:event.target.value
-                            }, () => { this.validateField(name, value) });
-                        }}
-                        required
-                    /></Col>
-                </FormGroup>
-
-                 <FormGroup inline>
-                    <Col smOffset={2} sm={10} >
-                        <Button style={buttonstyle} disabled={!this.state.formValid} onClick={() => this.props.handleSignUp(this.state)}>
-                            Submit
-                        </Button>
-
-                    </Col>
-
-                </FormGroup>
-
-            </Form>
-            </span>*/
         )
     }
 }

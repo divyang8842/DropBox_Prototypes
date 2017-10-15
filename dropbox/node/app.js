@@ -13,7 +13,7 @@ var express = require('express')
     ,security = require('./routes/utils/security')
     ,files = require('./routes/utils/files')
     ,star =  require('./routes/user/staring')
-
+    ,userprofile = require('./routes/utils/userprofile')
     , session = require('client-sessions');
 
 var logger = require('morgan');
@@ -73,6 +73,8 @@ app.post('/unstar',security.authenticate,star.UnStarDir);
 app.post('/star',security.authenticate,star.setStaredDir);
 app.post('/logout',security.authenticate,login.signout);
 app.post('/getUserLogs',security.authenticate,dirLogs.getUserLoggings);
+app.post('/setUserProfile',security.authenticate,userprofile.updateUserProfileDataReq);
+app.post('/getUserProfile',security.authenticate,userprofile.getUserProfileDataReq);
 app.post('/download',files.download );
 
 

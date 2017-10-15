@@ -8,6 +8,7 @@ import Welcome from "./Welcome";
 import SignUp from "./SignUp";
 import UserProfile from "./UserProfile";
 import logo from '../images/dropbox_logo740.png';
+import UserActivity from  './UserActivity'
 import ErrorBoundary from "./ErrorHandler"
 
 var link={
@@ -23,7 +24,7 @@ border: 'none',
 }
 var pqr={display:'inline-block',textAlign:'left',width:'50%'}
 
-var list={listStyleType:'none',float:'right'}
+var list={listStyleType:'none',float:'left'}
 
 
 
@@ -44,16 +45,9 @@ class NewerHomePage extends Component {
             <div className="mast-head__container container">
 
                 <Route exact path="/" render={() => (
-                    <div className="text-center">
-                        <img src={logo}  height="100" width="200"/>
-                        <nav>
-                            <ul style={list} className="nav-list">
-                                <li  style={link}  onClick={() => {
-                                    this.props.history.push("/login");
-                                }}>
-                                    Login
-                                </li></ul>
-                        </nav>
+                    <div>
+                        <Login handleSubmit={this.handleSubmit}/>
+                        <Message message={this.state.message}/>
                     </div>
                 )}/>
 
@@ -84,6 +78,16 @@ class NewerHomePage extends Component {
                     </ErrorBoundary>
 
                 )}/>
+
+                <Route exact path="/useractivity" render={() => (
+                    <ErrorBoundary>
+                        <UserActivity getToHome={this.getToHome} data={this.state} />
+                    </ErrorBoundary>
+
+                )}/>
+
+
+
             </div>
         );
     }

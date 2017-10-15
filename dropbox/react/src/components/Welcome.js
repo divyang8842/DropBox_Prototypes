@@ -62,7 +62,11 @@ var fileListItems={color:'#0070E0'}
 
 var list={marginTop:80, paddingLeft:40, paddingRight:270}
 
-var del={float:'right',color:'white'}
+var del={float:'right',color:'white',marginRight:'10px'}
+var fll ={float:'left'};
+var flr =  {float:'right'};
+var star = {float:'right',marginRight:'50px'}
+var mr30 = {marginRight:'30px'}
 
 var backButton={position:'relative',top:70,left:45}
 class Welcome extends Component {
@@ -84,7 +88,8 @@ class Welcome extends Component {
         isSelfCall:false,
         root:'',
         userId:'',
-        rootDir:''
+        rootDir:'',
+        message:''
 
     };
 
@@ -104,9 +109,12 @@ class Welcome extends Component {
             document.title = `DropBox !!`;
 
     }
+    getUserProfile =()=>{
+        this.props.history.push('/userprofile');
+    }
 
     getUserLogs =() =>{
-        this.props.history.push('/userprofile');
+        this.props.history.push('/useractivity');
     }
 
     getHome =() =>{
@@ -184,8 +192,21 @@ class Welcome extends Component {
             });
     };
 
+    shareFile = (emails) =>{
+        API.validateEmails({'emails':emails})
+            .then((res) =>{
+                if(res.status=='201'){
+                    if(res.linkShare=='true'){
+
+
+                        alert("Some of the email provided are not registered with DropBox.\n <br> The file will be shared as a link?");
+
+
+                }
+            }
+    });
+}
     deleteDir= (filename) =>{
-        debugger;
         var pathToUpload = "";
         if(this.state.pathTrack.length>0){
             pathToUpload = (this.state.pathTrack[this.state.pathTrack.length-1]);
@@ -206,9 +227,12 @@ class Welcome extends Component {
             });
     };
 
+
+
+
     getChildDir= (filepath) =>{
 
-      
+
 
         var data = {'dir':filepath};
         API.getChildDirs(data)
@@ -284,7 +308,7 @@ class Welcome extends Component {
         var username = this.state.userid;
 
         return(<div style={fullscreen}>
-                <NavBar createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs}  signout= {this.signout}  ></NavBar>
+                <NavBar createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  signout= {this.signout}  ></NavBar>
                 <hr id="divider"></hr>
                 <div >
 
@@ -316,7 +340,9 @@ class Welcome extends Component {
                                              backgroundColor={blue300}
                                              size={30}
                                              style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del}  onClick={()=>this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a>
+                                    <Checkbox  checked={true} style={star} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
+                                    <Button style={del}  onClick={()=>this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
                                 </div>
 
                             ):
@@ -324,7 +350,12 @@ class Welcome extends Component {
                                            color={orange200}
                                            backgroundColor={purple500}
                                            size={30}
-                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={true} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                                           style={style}/>
+                                    <a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a>
+
+                                    <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
+                                <Checkbox  checked={true} style={star}  value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
+                            </div> )}</ListGroupItem>
                     )}
                     </ListGroup>
 
@@ -337,7 +368,10 @@ class Welcome extends Component {
                                              backgroundColor={blue300}
                                              size={30}
                                              style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a> <Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox><Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
+                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a>
+                                    <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
+                                    <Checkbox  style={star}   checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
+
                                 </div>
 
                             ):
@@ -345,7 +379,13 @@ class Welcome extends Component {
                                            color={orange200}
                                            backgroundColor={purple500}
                                            size={30}
-                                           style={style}/><a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a><Checkbox  checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox> <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button></div>)}</ListGroupItem>
+                                           style={style}/>
+                                <a  >{file.name}</a>
+                                <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
+                                <Button style={del}  onClick={()=>this.download(file.path,file.name)}   bsStyle="danger">Download</Button>
+                                <Checkbox  style={star} checked={file.isStared} value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
+                            </div>)
+                        }</ListGroupItem>
                     )}
                     </ListGroup>
 

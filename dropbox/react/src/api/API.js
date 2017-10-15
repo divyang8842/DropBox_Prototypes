@@ -224,4 +224,58 @@ export const getUserLogs = (payload) =>
             return error;
         });
 
+export const setUserProfile = (payload) =>
+    fetch(`${api}/setUserProfile`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        credentials:'include'
+    }).then(res => {
+        return res.status;
+    })
+        .catch(error => {
+            console.log("This is error");
+            return error;
+        });
+
+
+export const getUserProfile = (payload) =>
+    fetch(`${api}/getUserProfile`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        credentials:'include'
+    }).then(res => res.json())
+        .then(res =>{
+            return res;
+        })
+        .catch(error => {
+            console.log("This is error");
+            return error;
+        });
+
+export const validateEmails = (payload) =>
+    fetch(`${api}/validateEmails`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        credentials:'include'
+    }).then(res => res.json())
+        .then(res =>{
+            return res;
+        })
+        .catch(error => {
+            console.log("This is error");
+            return error;
+        });
+
 
