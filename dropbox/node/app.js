@@ -57,8 +57,7 @@ app.use(session({
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-//app.get('/listdir',listdir.loadDirPage);
-//app.post('/listdir',listdir.listdir);
+
 
 app.get('/signup', signup.signup);
 app.post('/afterSignUp', signup.afterSignUp);
