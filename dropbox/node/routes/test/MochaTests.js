@@ -19,6 +19,58 @@ describe('http tests', function() {
         })
     });
 
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/mkdir', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/getDir', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/delDir', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/unstar', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/star', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/getUserLogs', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+    it('should return 501', function(done) {
+        http.get('http://localhost:3004/validateEmails', function(res) {
+            assert.equal(501, res.statusCode);
+            done();
+        })
+    });
+
+
+
     it('should login', function(done) {
         request.post('http://localhost:3004/signin', {
             form : {
