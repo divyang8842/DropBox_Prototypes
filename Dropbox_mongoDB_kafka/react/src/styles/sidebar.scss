@@ -1,0 +1,131 @@
+/*-----------
+MENU SECTION
+-----------------*/
+$dropbox: #00B5F9;
+
+#menu-section{
+    display:inline-block;
+    background-color:#444C63;
+}
+
+.logo{
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /**Drop-box logo*/
+  #drop-box-logo{
+    color: $dropbox;
+    animation: float 3s ease infinite;
+  }
+}
+
+/*Floating animation*/
+@keyframes float {
+  0%{
+    transform:translateY(-5px);
+  }
+
+  50%{
+    transform:translateY(5px);
+  }
+
+  100%{
+    transform:translateY(-5px);
+  }
+}
+
+.menu-item{
+    display: block;
+    padding:5px;
+
+  .menu-name{
+    font-family: Poiret One, cursive;
+    color:#747F9D;
+    font-size: 13px;
+    display:inline-block;
+    width:50%;
+    padding:5px;
+    font-weight:700;
+  }
+
+}
+
+.menu-logo{
+    display:inline-block;
+    width:10%;
+    padding:10px;
+    i{
+        font-size:25px;
+    }
+}
+
+
+#menu-item-name{
+    width:50%
+}
+
+#menu-item-logo{
+    width:30%    
+}
+
+#menu-item-3{
+    width:10%;
+    display: inline-block;    
+}
+
+/*storage space details at bottom*/
+#storage-space{
+    color:black;
+    display: inline-block;
+    padding:2px;
+}
+
+#plus-icon{
+    display: inline-block;
+    padding:10px;
+    text-align: center;
+    margin: 10px;
+}
+
+.storage-item{
+    color:#747F9D;
+    display:block;
+    font-weight:700;
+    text-align: center;
+
+  #storage-bar{
+    display: flex;
+    padding:20px;
+    margin-top:-40px;
+
+    #blue, #navy{
+      border:0;
+      width:50%;
+      padding:2px;
+    }
+    #navy{
+      background-color:#363E54;
+    }
+
+    #blue{
+      background-color:$dropbox;
+    }
+
+  }
+}
+
+#up-ac-btn{
+    display:flex;
+    text-align: center;
+    border:2px solid $dropbox;
+    padding:10px;
+    margin:20px;
+    color:$dropbox;
+    i {
+        margin-right: 30px;
+        color:#00B5F9;
+    }
+}

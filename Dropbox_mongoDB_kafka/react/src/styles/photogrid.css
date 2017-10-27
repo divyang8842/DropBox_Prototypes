@@ -1,0 +1,11 @@
+/*-------------------
+PHOTO GRID SECTION
+------------------*/
+.photo-container {
+  width: 15%;
+  display: inline-block;
+  margin: 15px;
+  padding: 25px;
+  vertical-align: top; }
+
+/*# sourceMappingURL=photogrid.css.map */

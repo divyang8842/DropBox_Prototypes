@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Successful Login</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/js/utils.js"></script>
+  </head>
+  <body>
+    <h1>Welcome to the Demo website.</h1>
+    <div>
+	       <% for(var i in data) 
+	            {                     
+            %>
+           		    <p><strong>EmailId: </strong><%= data[i].username %></p>
+                	<p><strong>Last Name: </strong><%= data[i].ulname %></p>
+                	<p><strong>First Name: </strong><%= data[i].ufname %></p>
+                	
+                	<p><strong>Gender: </strong><%= data[i].gender %></p>
+                	<p><strong>DOBssword: </strong><%= data[i].dob %></p>
+            		<br>       
+           <% 
+	            }  
+	       %>
+	</div>
+  </body>
+  <script>
+  
+  <script>
+</html>
