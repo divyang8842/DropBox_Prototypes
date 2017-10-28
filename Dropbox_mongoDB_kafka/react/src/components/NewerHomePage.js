@@ -133,9 +133,14 @@ class NewerHomePage extends Component {
 
 
     signout = () =>{
+        API.doLogout({"data":""}).then((status) =>{
+
+        }) ;
+
         localStorage.removeItem('token');
         localStorage.removeItem('root');
         this.props.history.push('/login');
+
     }
     handleSignUp = (userdata) => {
         API.doSignUp(userdata)

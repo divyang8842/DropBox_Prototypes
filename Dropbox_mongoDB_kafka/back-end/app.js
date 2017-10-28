@@ -9,6 +9,11 @@ require('./routes/passport')(passport);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+
+var security = require('./routes/utils/security');
+var filelist = require('./routes/fileoperations');
+var signup = require('./routes/signup');
+
 var mongoSessionURL = "mongodb://localhost:27017/sessions";
 var expressSessions = require("express-session");
 var mongoStore = require("connect-mongo/es5")(expressSessions);
@@ -48,12 +53,15 @@ app.use(passport.initialize());
 
 app.use('/', routes);
 app.use('/users', users);
+app.post('/getDir',security.authenticate, filelist.listdir);
+app.post('/afterSignUp',security.authenticate, signup.afterSignUp);
+app.post('/uploadFile',security.authenticate,uploadFile);
 
 app.post('/logout', function(req,res) {
     console.log(req.session.user);
     req.session.destroy();
     console.log('Session Destroyed');
-    res.status(200).send();
+    res.status(201).json({status:201});
 });
 
 app.post('/login', function(req, res) {
@@ -61,14 +69,15 @@ app.post('/login', function(req, res) {
         if(err) {
             res.status(500).send();
         }
-
         if(!user) {
             res.status(401).send();
+        }else{
+            req.session.user = user;
+            console.log(req.session.user);
+            console.log("session initilized");
+            return res.status(201).send({username:user.username,userid:user.userid,root:user.root,status:'201'});
         }
-        req.session.user = user.username;
-        console.log(req.session.user);
-        console.log("session initilized");
-        return res.status(201).send({username:"test"});
+
     })(req, res);
 });
 

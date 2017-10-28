@@ -1,11 +1,20 @@
 var connection =  new require('./kafka/Connection');
-var login = require('./services/login');
+var login = require('./services/login/login');
+var signup = require('./services/login/Signup');
 
 var login_topic_name = 'login_topic';
 var consumer_login = connection.getConsumer(login_topic_name);
 
 var signup_topic_name = 'signup_topic';
 var consumer_signup = connection.getConsumer(signup_topic_name);
+
+var getdir_topic_name = 'getdir_topic';
+var consumer_getdir = connection.getConsumer(getdir_topic_name);
+
+
+var upload_dir_topic_name = 'upload_file';
+var consumer_uploadfile = connection.getConsumer(upload_dir_topic_name);
+
 var producer = connection.getProducer();
 
 
@@ -15,7 +24,7 @@ consumer_login.on('message', function (message) {
     var data = JSON.parse(message.value);
 
     login.handle_request(data.data, function(err,res){
-        console.log('after handle'+res);
+        console.log('after handle'+ JSON.stringify(res) );
         var payloads = [
             { topic: data.replyTo,
                 messages:JSON.stringify({
@@ -34,12 +43,12 @@ consumer_login.on('message', function (message) {
 
 
 consumer_signup.on('message', function (message) {
-    console.log('message received');
+    console.log('message received in signup');
     console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
-    login.handle_request(data.data, function(err,res){
-        console.log('after handle'+res);
+    signup.afterSignUp(data.data, function(err,res){
+        console.log('after handle 234 ',res);
         var payloads = [
             { topic: data.replyTo,
                 messages:JSON.stringify({
@@ -55,3 +64,29 @@ consumer_signup.on('message', function (message) {
         return;
     });
 });
+
+
+consumer_uploadfile.on('message', function (message) {
+    console.log('message received in signup');
+    console.log(JSON.stringify(message.value));
+    var data = JSON.parse(message.value);
+
+    signup.afterSignUp(data.data, function(err,res){
+        console.log('after handle 234 ',res);
+        var payloads = [
+            { topic: data.replyTo,
+                messages:JSON.stringify({
+                    correlationId:data.correlationId,
+                    data : res
+                }),
+                partition : 0
+            }
+        ];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+        });
+        return;
+    });
+});
+
+

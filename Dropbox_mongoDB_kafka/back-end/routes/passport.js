@@ -1,6 +1,5 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
-var mongoURL = "mongodb://localhost:27017/login";
 var kafka = require('./kafka/client');
 
 module.exports = function(passport) {
@@ -15,23 +14,13 @@ module.exports = function(passport) {
             else
             {
                 if(results.code == 200){
-                    done(null,{username:"bhavan@b.com",password:"a"});
+                    done(null,results);
                 }
                 else {
                     done(null,false);
                 }
             }
         });
-        /*try {
-            if(username == "bhavan@b.com" && password == "a"){
-                done(null,{username:"bhavan@b.com",password:"a"});
-            }
-            else
-                done(null,false);
-        }
-        catch (e){
-            done(e,{});
-        }*/
     }));
 };
 
