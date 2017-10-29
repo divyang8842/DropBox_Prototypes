@@ -4,17 +4,12 @@ var mime = require('mime');
 
 var zipFolder = require('zip-folder');
 
-
-
-var mkdirp = require('mkdirp');
-var dirlog = require('./../fileoperations/directoriesLogging');
-
 var GLOBAL_FILE_PATH = "./public/uploads";
 var GLOBAL_TEMP_PATH = "./public/uploads/temp";
 
 var createDirectory = function(filepath,callback){
 
-	mkdirp(GLOBAL_FILE_PATH+'/'+filepath, function (err) {
+	fs.mkdir(GLOBAL_FILE_PATH+'/'+filepath, function (err) {
 	    if (err)  {callback(err,filepath);}
 	    else  {callback(err,filepath);}
 	});
@@ -30,12 +25,11 @@ var deleteFolderRecursive = function(path,userid) {
                 deleteFolderRecursive(curPath,userid);
             } else { // delete file
 
-                dirlog.deleteDirEntry(curPath.replace(new RegExp(GLOBAL_FILE_PATH+'/', 'g'), ''),userid,function(){});
                 fs.unlinkSync(curPath);
             }
         });
         fs.rmdirSync(path);
-        dirlog.deleteDirEntry(filepath,userid,function(){});
+
     }
 };
 
@@ -45,7 +39,6 @@ var deleteDir = function(filepath,userid,callback){
     if(fs.statSync(GLOBAL_FILE_PATH+'/'+filepath).isDirectory()){
         deleteFolderRecursive(GLOBAL_FILE_PATH+'/'+filepath,userid);
     }else{
-        dirlog.deleteDirEntry(filepath,userid,function(){});
         fs.unlinkSync(GLOBAL_FILE_PATH+'/'+filepath);
     }
     callback(false,filepath);
@@ -91,17 +84,11 @@ var checkFileIsFolder1 = function (filename,callback){
     return false;
 };
 
-var mkdir = function (req, res) {
-    var path = req.body.dirName;
-    var parent = req.body.path;
-    createDirectory(parent+'/'+path,function(){
-        dirlog.getDirectoryId(parent,function (err,results) {
-            dirlog.createDirectoryEntry(parent+'/'+path, req.session.user.userid, 0, results.id, path,parent,function(err,data){
-                res.status(201).json({
-                    message: 'Successfully created Directory'
-                });
-            });
-        });
+var mkdir = function (data, callback) {
+    var path = data.path;
+    var parent = data.parent;
+    createDirectory(parent+'/'+path,function() {
+        callback(false, {status: 201});
     });
 };
 var download = function(req, res){

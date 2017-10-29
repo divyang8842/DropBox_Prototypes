@@ -1,3 +1,5 @@
+
+
 var mongo = require('./../database/mongoDB');
 
 //gender constants
@@ -7,10 +9,7 @@ var OTHER = 0;
 //End
 
 
-var getUserIdFromEmail = function(userid,callback){
-
-
-}
+var dirlog =  require('./../fileoperations/directoriesLogging');
 
 var getGender = function(gender){
 	gender = parseInt(gender);
@@ -68,35 +67,50 @@ var updateUserProfileData = function(dataJson,callback){
     mongo.update("user",query,data,function(err,results){
         if(err){
             console.log(err);
+            callback(err,{status:401});
         }else{
-            callback(err,results);
+
+            callback(err,{status:201});
         }
     });
 };
 
-
-var getUserProfileDataReq = function(req,res){
-    getUserProfileData(req.session.user.userid,function(err,results){
+/*
+var getUserProfileDataReq = function(data,callback){
+    getUserProfileData(data.userid,function(err,results){
 			if(err){
-				res.status(401).json({staus:'401'});
+				callback(err,[]);
 			}else{
-                res.status(201).json({staus:'201',data:results});
+                callback(false,results);
 			}
 
 	});
-};
+};*/
+
+var processUserData = function(data,callback){
+    if(data.type == 'get'){
+        getUserProfileData(data.userid,callback);
+    }else if(data.type == 'getLogs'){
+        dirlog.getAllFileOperationsForUser(data.userid,callback);
+    }else{
+        updateUserProfileData(data,callback);
+    }
+
+}
 
 var getUserProfileData = function(userid,callback){
 
     var query = {homedir:userid};
-//console.log("userid : "+userid);
+    //console.log("userid : "+userid);
     mongo.findOneDoc("user",query,function(err,results){
         if(err){
             console.log(err);
-
+            callback(err,{status:401});
         }else{
            // console.log(results);
-            callback(err,results.profile);
+            var result = results.profile;
+
+            callback(err,{data:result,status:201});
         }
     })
 };
@@ -143,9 +157,10 @@ var getUserIDFromEmailAddress = function(email,callback){
 
 exports.gtDateStringFromObject=gtDateStringFromObject;
 exports.getGender=getGender;
-exports.updateUserProfileDataReq = updateUserProfileDataReq;
-exports.getUserProfileDataReq = getUserProfileDataReq;
+exports.updateUserProfileData = updateUserProfileData;
+exports.getUserProfileData = getUserProfileData;
 /*exports.setUserProfileData = setUserProfileData;*/
 exports.getUserIDFromEmailAddress = getUserIDFromEmailAddress;
 exports.checkValidUserEmails = checkValidUserEmails;
+exports.processUserData = processUserData;
 

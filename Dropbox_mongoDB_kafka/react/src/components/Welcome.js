@@ -221,8 +221,7 @@ class Welcome extends Component {
         var data = {'dir':filepath};
         API.getChildDirs(data)
             .then((res) => {
-
-                if (res.status === '201') {
+                if (res.status === 201) {
                     if(filepath!=this.state.pathTrack[this.state.pathTrack.length-1]){
                         this.state.pathTrack.push(filepath);
                     }

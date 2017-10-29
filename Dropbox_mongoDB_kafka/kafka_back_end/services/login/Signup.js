@@ -10,10 +10,10 @@ if(false){
 
     console.log("data is :"+JSON.stringify(data));
     var data = {
-        "ufname":data.firstname,
-        "ulname":data.lastname,
-        "emailid":data.email,
-        "username":data.email,
+        "ufname":data.ufname,
+        "ulname":data.ulname,
+        "emailid":data.emailid,
+        "username":data.emailid,
         "password":security.encrypt(data.password),
         "homedir":"",
         "profile":{
@@ -31,7 +31,8 @@ if(false){
 
                             callback(null,{
                                 status:'201',
-                                message : "Signup Successfull."
+                                message : "Signup Successfull.",
+                                uid:path
                             });
 
                         })

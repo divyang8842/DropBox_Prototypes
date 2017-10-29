@@ -27,7 +27,7 @@ function handle_request(msg, callback){
                     callback(false, res);
                 }
             } else {
-                res.code = "401";
+                res.code = "402";
                 res.value = "Failed Login";
                 callback(false, res);
             }
@@ -35,7 +35,7 @@ function handle_request(msg, callback){
     }
     catch (e){
         console.log(e);
-        res.code = "401";
+        res.code = "403";
         res.value = "Failed Login";
         callback(false, res);
     }

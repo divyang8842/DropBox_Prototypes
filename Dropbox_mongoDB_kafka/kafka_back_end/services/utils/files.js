@@ -40,15 +40,10 @@ var deleteFolderRecursive = function(path,userid) {
 };
 
 var deleteDir = function(filepath,userid,callback){
+        dirlog.deleteDirEntry(filepath,userid,function(err, res){
 
-    console.log(filepath);
-    if(fs.statSync(GLOBAL_FILE_PATH+'/'+filepath).isDirectory()){
-        deleteFolderRecursive(GLOBAL_FILE_PATH+'/'+filepath,userid);
-    }else{
-        dirlog.deleteDirEntry(filepath,userid,function(){});
-        fs.unlinkSync(GLOBAL_FILE_PATH+'/'+filepath);
-    }
-    callback(false,filepath);
+            callback(false,res);
+        });
 };
 
 var delDir = function(req,res,next){
@@ -91,18 +86,21 @@ var checkFileIsFolder1 = function (filename,callback){
     return false;
 };
 
-var mkdir = function (req, res) {
-    var path = req.body.dirName;
-    var parent = req.body.path;
-    createDirectory(parent+'/'+path,function(){
+var mkdir = function (data, callback) {
+    var path = data.path;
+    var parent = data.parent;
+    var userid = data.userid;
+
         dirlog.getDirectoryId(parent,function (err,results) {
-            dirlog.createDirectoryEntry(parent+'/'+path, req.session.user.userid, 0, results.id, path,parent,function(err,data){
-                res.status(201).json({
-                    message: 'Successfully created Directory'
-                });
+            dirlog.createDirectoryEntry(parent+'/'+path, userid, 0, results.id, path,parent,function(err,data){
+                if(!err){
+                    callback(false,{status:201,message:'Successfully created Directory'})
+                }else{
+                    callback(false,{status:401,message:'Failed to creat Directory'})
+                }
             });
         });
-    });
+
 };
 var download = function(req, res){
 
@@ -139,4 +137,5 @@ exports.checkFileIsFolder1 = checkFileIsFolder1;
 exports.mkdir= mkdir;
 exports.delDir= delDir;
 exports.download= download;
+exports.deleteDir = deleteDir;
 

@@ -20,67 +20,85 @@ var createDirectoryEntry = function(filepath,userid,isFile,parentdir,name,parent
 };
 
 var deleteDirEntry = function(filepath,userid,callback){
-    var condition = {relative_path:filepath};
+    var condition = [{relative_path:filepath},{parentPath:filepath}];
+    condition = {$or: condition};
+
+    console.log("condition : ",condition);
+
     var data = {$set: {deleteflag:'1'}};
-    mongo.update("directory",condition,data,function(err,data){
+    getDirectoryId(filepath,function(err, results) {
+
+        mongo.update("directory",condition,data,function(err,data){
         if(err){
             throw err;
         }
-        getDirectoryId(filepath,function(err, results) {
-            logOperation({'path':filepath,'directoryid':results.id,'operation':DELETED,'uid':userid},callback);
-            callback(err,results);
-        }, getDirId,data);
-
-
-
-    }, deleteDir,data);
-};
-
-var getDirectoryId = function(filepath,callback){
-console.log(filepath);
-    if(filepath==fileutils.GLOBAL_FILE_PATH || filepath==''){
-        callback(false, 1);
-    }
-
-    var condition = {$and:[{relative_path:filepath},{deleteflag:0}]};
-    mongo.findOneDoc("directory",condition,function(err,data){
- 		var retData ={id:(data._id+'')};
-        callback(err, retData);
+        logOperation({'path':filepath,'directoryid':results.id,'operation':DELETED,'uid':userid},callback);
+        });
     });
 };
 
+var getDirectoryId = function(filepath,callback){
 
-var getOperation = function(operation){
-	if(operation === CREATED){
-		return "Created";
-	}else if(operation === UPDATED){
-		return "Updated";
-	}else if(operation === DELETED){
-		return "Deleted";
-	}else if(operation === SHARED){
-		return "Shared";
-	}
+    if(filepath==fileutils.GLOBAL_FILE_PATH || filepath==''){
+        callback(false, {id:'1'});
+    }
+
+
+    var condition = {$and:[{relative_path:filepath},{deleteflag:0}]};
+    mongo.findOneDoc("directory",condition,function(err,data){
+
+        var retData = {id:'0'};
+        if(data){
+            retData ={id:(data._id+'')};
+        }else{
+            console.log("in get dir id : file path not found : "+filepath);
+            console.log("the condition is  : ",condition)
+        }
+        callback(err, retData);
+    });
 };
-
+var getOperation = function(operation){
+    console.log(operation)
+    operation = parseInt(operation);
+	if(operation == CREATED){
+		return "Created";
+	}else if(operation == UPDATED){
+		return "Updated";
+	}else if(operation == DELETED){
+		return "Deleted";
+	}else if(operation == SHARED){
+		return "Shared";
+	}else{
+	    return "unknown";
+    }
+};
 var logOperation = function(datajson,callback) {
-	var data = {path:datajson.path, directoryid:datajson.directoryid,operation: datajson.operation,userid:datajson.uid,deleteflag:0};
+	var data = {path:datajson.path, directoryid:datajson.directoryid,operation: datajson.operation,userid:datajson.uid,deleteflag:0,operationtime:new Date()};
 	mongo.insertDoc("directory_logging",data,function(err, results) {
-			callback(err, results);
+	    if(err){
+            callback(err, {status:401});
+        }else{
+            callback(err, {status:201});
+        }
 	});
 };
-
 var getUserLoggings = function(req,res){
-
     getAllFileOperationsForUser(req.body.userid, function (err,logs) {
 		res.status(201).json({status:'201',logs:logs});
     });
 }
-
+var getOperaionFromArray = function(array,path){
+    array.forEach(function(data) {
+        console.log(data.path+"  "+path)
+        if(data.path == path){
+            console.log("found");
+            return data.operation;
+        }
+    });
+}
 var getAllFileOperationsForUser = function(userid,callback){
 	var query ={userid:userid} ;
-
 	mongo.findDoc("directory_logging",query,function(err,results){
-
 		var length = results.length;
         var result = {};
         query = [];
@@ -92,6 +110,7 @@ var getAllFileOperationsForUser = function(userid,callback){
             var sendData = [];
             if (err) {
                 console.log(err);
+                callback(err,{logs:[],status:401});
             } else {
                 var length = data.length;
                 var result = {};
@@ -100,18 +119,26 @@ var getAllFileOperationsForUser = function(userid,callback){
                     if(userid == result.relative_path){
                         continue;
                     }
+                    var path1 = result.relative_path;
                     var path = (result.relative_path).split('/');
                     result.path = "home";
                     for(var i=1;i<path.length;i++){
                         result.path += "/"+path[i];
                     }
-                    result.operation = getOperation(result.operation);
+
+                    results.forEach(function(data) {
+                        if(data.path == path){
+                            console.log("found");
+                            result.operation = data.operation;
+                            result.operationtime = data.operationtime;
+                        }
+                    });
+                    result.operation = getOperation(getOperaionFromArray(results,path1));
                     result.operationtime = userprofile.gtDateStringFromObject(result.operationtime,"MMDDYYYY",'/');
                     sendData.push(result);
                 }
+                callback(err,{logs:sendData,status:201});
             }
-
-            callback(err,sendData);
 		});
 	});
 };
@@ -140,7 +167,7 @@ var getAllFileOperationsForDir = function(dirid,callback){
 */
 
 exports.logOperation = logOperation;
-exports.getUserLoggings = getUserLoggings;
+exports.getAllFileOperationsForUser = getAllFileOperationsForUser;
 exports.createDirectoryEntry = createDirectoryEntry;
 /*exports.getAllFileOperationsForDir = getAllFileOperationsForDir;*/
 exports.getDirectoryId = getDirectoryId;

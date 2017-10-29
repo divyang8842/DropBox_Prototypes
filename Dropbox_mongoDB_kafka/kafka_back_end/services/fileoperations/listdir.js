@@ -35,29 +35,40 @@ var getAllChildDirectories=function(root,userid,callback){
 		}
 	})
 };
-var listdir = function (req,res)
+var listdir = function (data,callback)
 {
-	var root = req.body.dir;
+	var root = data.root;
+	var userid = data.userid;
+	var res = {};
 
-	var sess= req.session;
-	var userid = sess.user.userid;
-        return getAllChildDirectories(root,userid,function(err,files){
+    res.status=201;
+    res.fileLst=[];
+    res.stared=[];
+    res.shared=[];
+
+	getAllChildDirectories(root,userid,function(err,files){
 
 			//console.log("files : "+JSON.stringify(files));
             if(err){
                 console.log(err);
+                res.status = 401;
+                callback(null,res);
             }else{
+                res.fileLst=files;
                 star.getAllStaredDirectories(userid,function (err1,results1) {
-
                     if(err1){
-                        res.json({status:'201',fileLst:files,stared:[]});
+                        res.status = 401;
+                        callback(null,res);
                     }else{
+                        res.stared=results1;
                     	permission.getAllPermittedDirectories(userid,function(err,results2){
                     		if(!err){
-                                res.json({status:'201',fileLst:(files),stared:(results1),shared:(results2)});
+                                res.shared=results2;
 							}else{
-                                res.json({status:'201',fileLst:(files),stared:(results1),shared:[]});
-							}
+                                res.status = 401;
+                            }
+                            //console.log("res is ",res);
+                            callback(null,res);
 						})
                       }
 				});

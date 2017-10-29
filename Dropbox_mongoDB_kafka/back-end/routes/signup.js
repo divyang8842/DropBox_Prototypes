@@ -24,9 +24,10 @@ var afterSignUp = function(req,res) {
         }
         else
         {
+
             if(results.status == '201' || results.status == 201){
 
-                fileUtils.createDirectory(path,function(err,path){
+                fileUtils.createDirectory(results.uid,function(err,path){
                     res.status(201).json(results);
 
                 });

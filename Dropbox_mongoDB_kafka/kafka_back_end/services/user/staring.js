@@ -3,14 +3,14 @@ var mongo = require('./../database/mongoDB');
 var fileUtils = require('./../utils/files');
 var dirlog = require('./../fileoperations/directoriesLogging');
 
-var setStaredDir = function(req,res) {
-	dirlog.getDirectoryId(req.body.filepath,function(err, results){
-        var data = {"path":req.body.filepath,"userid":req.session.user.userid,"directoryid":results.id,"deleteflag":0};
-        mongo.insertDoc("staredDir",data,function(err, results) {
+var setStaredDir = function(data,callback) {
+	dirlog.getDirectoryId(data.filepath,function(err, results){
+        var data1 = {"path":data.filepath,"userid":data.userid,"directoryid":results.id,"deleteflag":0};
+        mongo.insertDoc("staredDir",data1,function(err, results) {
             if (err) {
-               res.status(401).json({status:'401'});
+               callback(err,{status:'401'});
             } else {
-                res.status(201).json({status:'201'});
+                callback(false,{status:'201'});
             }
         });
 	});
@@ -27,7 +27,7 @@ var isDirStared = function(filepath,userid) {
             }
         });
 };
-
+/*
 var UnStarDir = function(req,res) {
     var query = [{"path":filepath},{"userid":userid},{"deleteflag":0}];
     query = {$and:query};
@@ -40,7 +40,7 @@ var UnStarDir = function(req,res) {
         }
     })
 
-};
+};*/
 
 
 
@@ -87,6 +87,8 @@ var getAllStaredDirectories = function(userid,callback){
     });
 };
 exports.setStaredDir = setStaredDir;
-exports.UnStarDir = UnStarDir;
 exports.getAllStaredDirectories = getAllStaredDirectories;
-exports.isDirStared = isDirStared;
+/*
+exports.UnStarDir = UnStarDir;
+
+exports.isDirStared = isDirStared;*/

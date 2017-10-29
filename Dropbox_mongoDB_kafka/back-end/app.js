@@ -11,8 +11,12 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var security = require('./routes/utils/security');
-var filelist = require('./routes/fileoperations');
+var filelist = require('./routes/fileoperations/filelist');
 var signup = require('./routes/signup');
+var uploadFile=require('./routes/fileoperations/uploadfile');
+var star =  require('./routes/star');
+var files = require('./routes/fileoperations');
+var userprofile = require('./routes/utils/userprofile');
 
 var mongoSessionURL = "mongodb://localhost:27017/sessions";
 var expressSessions = require("express-session");
@@ -53,12 +57,20 @@ app.use(passport.initialize());
 
 app.use('/', routes);
 app.use('/users', users);
-app.post('/getDir',security.authenticate, filelist.listdir);
-app.post('/afterSignUp',security.authenticate, signup.afterSignUp);
+app.post('/getDir',security.authenticate, filelist.getFileList);
+app.post('/afterSignUp', signup.afterSignUp);
 app.post('/uploadFile',security.authenticate,uploadFile);
+app.post('/star',security.authenticate,star.stardir);
+app.post('/mkdir',security.authenticate,files.mkdir);
+app.post('/delDir',security.authenticate,files.delDir);
+app.post('/getUserProfile',security.authenticate,userprofile.getUserProfileDataReq);
+app.post('/setUserProfile',security.authenticate,userprofile.updateUserProfileDataReq);
+app.post('/getUserLogs',security.authenticate,userprofile.getuserlogs);
+
 
 app.post('/logout', function(req,res) {
     console.log(req.session.user);
+
     req.session.destroy();
     console.log('Session Destroyed');
     res.status(201).json({status:201});
