@@ -66,6 +66,10 @@ app.post('/delDir',security.authenticate,files.delDir);
 app.post('/getUserProfile',security.authenticate,userprofile.getUserProfileDataReq);
 app.post('/setUserProfile',security.authenticate,userprofile.updateUserProfileDataReq);
 app.post('/getUserLogs',security.authenticate,userprofile.getuserlogs);
+app.post('/download',files.download);
+app.post('/shareFile',security.authenticate,files.shareFile);
+app.post('/validateEmails',security.authenticate,files.validateEmails);
+
 
 
 app.post('/logout', function(req,res) {

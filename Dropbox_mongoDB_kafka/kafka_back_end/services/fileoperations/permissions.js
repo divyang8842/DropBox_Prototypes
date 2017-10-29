@@ -11,33 +11,42 @@ var GROUP = 1;
 var USER = 0;
 var link = 2;
 
-var validateEmails = function(req,res){
-var emailAddress = req.body.emails;
+var processData =  function(data,callback){
+    if(data.type=="emails"){
+        validateEmails(data,callback);
+    }else{
+        shareFile(data,callback);
+    }
+
+}
+
+var validateEmails = function(data,callback){
+var emailAddress = data.emailAddress;
 var emails = emailAddress.split(',');
 console.log(emailAddress);
     utils.checkValidUserEmails(emailAddress,function(err,results){
 		if(results.length!= emails.length){
-            res.status(201).json({status:'201',linkShare:'true'});
+            callback(false,{status:'201',linkShare:'true'});
 		}else{
-            res.status(201).json({status:'201',linkShare:'false'});
+            callback(false,{status:'201',linkShare:'false'});
 		}
 	});
 
 }
 
-var shareFile = function(req,res){
-	var fileToShare = req.body.fileToShare;
-    var emailAddress = req.body.emails;
+var shareFile = function(data,callback){
+	var fileToShare = data.fileToShare;
+    var emailAddress = data.emailAddress;
     var emails = emailAddress.split(',');
 
     dirlog.getDirectoryId(fileToShare,function (err,results1) {
         var dirId =  results1.id;
 	var type = link;
 	utils.checkValidUserEmails(emailAddress,function(err,results){
-	    console.log("results : "+JSON.stringify(results));
+	  //  console.log("results : "+JSON.stringify(results));
             if(results.length!= emails.length){
 				setPermission({'path':fileToShare,'dirid':dirId,'type':link,'pid':'-1'},function(){
-                    res.status(201).json({status:'201',linkShare:'true'});
+                    callback(false,{status:'201',linkShare:'true'});
 				});
             }else{
             	type= USER;
@@ -46,7 +55,8 @@ var shareFile = function(req,res){
                         setPermission({'path':fileToShare,'dirid':dirId,'type':USER,'pid':results[length].homedir},function(){
                         });
                     }
-                res.status(201).json({status:'201',linkShare:'false'});
+                    callback(false,{status:'201',linkShare:'false'});
+
             }
             email.setMailOptions(emailAddress,setMessage(dirId,type));
             email.sendEmail();
@@ -133,3 +143,4 @@ exports.setPermission = setPermission;
 exports.validateEmails = validateEmails;
 exports.shareFile = shareFile;
 exports.getAllPermittedDirectories = getAllPermittedDirectories;
+exports.processData = processData;

@@ -58,7 +58,6 @@ var getDirectoryId = function(filepath,callback){
     });
 };
 var getOperation = function(operation){
-    console.log(operation)
     operation = parseInt(operation);
 	if(operation == CREATED){
 		return "Created";
@@ -102,44 +101,20 @@ var getAllFileOperationsForUser = function(userid,callback){
 		var length = results.length;
         var result = {};
         query = [];
+        var sendData = [];
         while(length>0) {
             result = results[--length];
-            query.push({relative_path:result.path});
-        }
-        mongo.findDoc("directory",{$or :query},function(err,data){
-            var sendData = [];
-            if (err) {
-                console.log(err);
-                callback(err,{logs:[],status:401});
-            } else {
-                var length = data.length;
-                var result = {};
-                while(length>0){
-                    result = data[--length];
-                    if(userid == result.relative_path){
-                        continue;
-                    }
-                    var path1 = result.relative_path;
-                    var path = (result.relative_path).split('/');
-                    result.path = "home";
-                    for(var i=1;i<path.length;i++){
-                        result.path += "/"+path[i];
-                    }
-
-                    results.forEach(function(data) {
-                        if(data.path == path){
-                            console.log("found");
-                            result.operation = data.operation;
-                            result.operationtime = data.operationtime;
-                        }
-                    });
-                    result.operation = getOperation(getOperaionFromArray(results,path1));
-                    result.operationtime = userprofile.gtDateStringFromObject(result.operationtime,"MMDDYYYY",'/');
-                    sendData.push(result);
-                }
-                callback(err,{logs:sendData,status:201});
+            if(userid == result.path){
+                continue;
             }
-		});
+            result.operation = getOperation(result.operation );
+            result.operationtime = userprofile.gtDateStringFromObject(result.operationtime,"MMDDYYYY",'/');
+
+            var path = (result.path).split('/');
+            result.name  = path[path.length-1];
+            sendData.push(result);
+        }
+        callback(err,{logs:sendData,status:201});
 	});
 };
 
