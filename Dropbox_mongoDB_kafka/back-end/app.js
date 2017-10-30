@@ -69,6 +69,7 @@ app.post('/getUserLogs',security.authenticate,userprofile.getuserlogs);
 app.post('/download',files.download);
 app.post('/shareFile',security.authenticate,files.shareFile);
 app.post('/validateEmails',security.authenticate,files.validateEmails);
+app.post('/unstar',security.authenticate,star.unstardir);
 
 
 

@@ -164,8 +164,6 @@ var shareFile = function(req,res){
         else
         {
             if(results.status == 201 || results.status == '201'){
-
-
                     res.status(201).json({
                         status:201,
                         message: 'Successfully deleted File'

@@ -27,22 +27,29 @@ var isDirStared = function(filepath,userid) {
             }
         });
 };
-/*
-var UnStarDir = function(req,res) {
-    var query = [{"path":filepath},{"userid":userid},{"deleteflag":0}];
+
+
+
+var UnStarDir = function(data,callback) {
+    var query = [{"path":data.filepath},{"userid":data.userid},{"deleteflag":0}];
     query = {$and:query};
     data = {$set: {deleteflag:1}};
     mongo.update("staredDir",query,data,function(err,data){
         if (err) {
-            res.status(401).json({status:'401'});
+            callback(err,{status:'401'});
         } else {
-            res.status(201).json({status:'201'});
+            callback(false,{status:'201'});
         }
     })
+};
 
-};*/
-
-
+var processStaring = function (data,callback) {
+    if(data.type == 'star'){
+        setStaredDir(data,callback);
+    }else{
+        UnStarDir(data,callback);
+    }
+}
 
 var getAllStaredDirectories = function(userid,callback){
     var querydata = [{"userid":userid},{"deleteflag":0}];
@@ -88,6 +95,7 @@ var getAllStaredDirectories = function(userid,callback){
 };
 exports.setStaredDir = setStaredDir;
 exports.getAllStaredDirectories = getAllStaredDirectories;
+exports.processStaring = processStaring;
 /*
 exports.UnStarDir = UnStarDir;
 

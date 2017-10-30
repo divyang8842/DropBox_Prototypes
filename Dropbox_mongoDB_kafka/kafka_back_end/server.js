@@ -155,7 +155,7 @@ consumer_stardir.on('message', function (message) {
     //console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
-    starDir.setStaredDir(data.data, function(err,res){
+    starDir.processStaring(data.data, function(err,res){
             var payloads = [
                 { topic: data.replyTo,
                     messages:JSON.stringify({
