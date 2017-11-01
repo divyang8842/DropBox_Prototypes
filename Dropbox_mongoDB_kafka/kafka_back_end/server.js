@@ -8,6 +8,8 @@ var files = require('./services/utils/files');
 var userprofile = require('./services/utils/userprofile');
 var permissions = require('./services/fileoperations/permissions');
 
+var fs = require('fs');
+
 var login_topic_name = 'login_topic';
 var consumer_login = connection.getConsumer(login_topic_name);
 
@@ -95,8 +97,13 @@ consumer_uploadfile.on('message', function (message) {
    // console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
+
+    base64_decode(data.data.bufferdata,'./public/uploads/'+data.data.filename,function(){});
+
     directoriesLogging.getDirectoryId(data.data.parentpath, function(err,res){
        // console.log("res data : ",res);
+
+
         directoriesLogging.createDirectoryEntry(data.data.parentpath+'/'+data.data.filename,data.data.userid,1,res.id,data.data.filename,data.data.parentpath,function(err,response){
             var resData = {};
             if(err){
@@ -123,6 +130,18 @@ consumer_uploadfile.on('message', function (message) {
 
     });
 });
+
+
+// function to create file from base64 encoded string
+function base64_decode(base64str, file,callback) {
+    // create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+    var bitmap = new Buffer(base64str, 'base64');
+    // write buffer to file
+    fs.writeFileSync(file, bitmap);
+    console.log('******** File created from base64 encoded string ********');
+    callback(true)
+}
+
 
 
 consumer_getdir.on('message', function (message) {

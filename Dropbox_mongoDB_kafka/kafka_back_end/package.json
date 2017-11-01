@@ -16,6 +16,7 @@
     "express": "~4.15.2",
     "nodemailer": "4.2.0",
     "zip-folder": "1.0.0",
+    "buffer": "^5.0.8",
     "nodemailer-smtp-transport": "2.7.4"
   },
   "devDependencies": {},

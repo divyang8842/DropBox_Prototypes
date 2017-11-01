@@ -5,7 +5,7 @@ var url = "mongodb://localhost:27017/dropbox";
 var pool = require('./connectionPooling');
 
 
-pool.createpool(1000,function(){});
+pool.createpool(100,function(){});
 
 var connect = function(callback){
 
