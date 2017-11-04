@@ -25,9 +25,7 @@ var error = false;
                 free_pool.push(_db);
                 console.log("",free_pool.length);
                 createConnectionPool(poolingcount,function(err,result){
-                    if(result){
-                        getConnection(callback);
-                    }
+                   callback(true);
                 });
             }
         });

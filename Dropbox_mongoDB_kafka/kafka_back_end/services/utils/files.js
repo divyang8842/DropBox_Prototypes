@@ -14,14 +14,26 @@ var GLOBAL_TEMP_PATH = "./public/uploads/temp";
 
 var createDirectory = function(filepath,callback){
 
-	mkdirp(GLOBAL_FILE_PATH+'/'+filepath, function (err) {
-	    if (err)  {callback(err,filepath);}
-	    else  {callback(err,filepath);}
-	});
+    try{
+        if(fs.statSync(GLOBAL_FILE_PATH+'/'+filepath).isDirectory()){
+            console.log("File already exist");
+            callback(true,filepath);
+        }else{
+            mkdirp(GLOBAL_FILE_PATH+'/'+filepath, function (err) {
+                if (err)  {callback(err,filepath);}
+                else  {callback(err,filepath);}
+            });
+        }
+    }catch(err){
+        mkdirp(GLOBAL_FILE_PATH+'/'+filepath, function (err) {
+            if (err)  {callback(err,filepath);}
+            else  {callback(err,filepath);}
+        });
+    }
+
 };
 
 var deleteFolderRecursive = function(path,userid) {
-
     var filepath =  path.replace(new RegExp(GLOBAL_FILE_PATH+'/', 'g'), '');
     if( fs.existsSync(path) ) {
         fs.readdirSync(path).forEach(function(file) {
@@ -40,29 +52,39 @@ var deleteFolderRecursive = function(path,userid) {
 };
 
 var deleteDir = function(filepath,userid,callback){
-        dirlog.deleteDirEntry(filepath,userid,function(err, res){
+    try{
+        if(fs.statSync(GLOBAL_FILE_PATH+'/'+filepath).isDirectory()){
+            deleteFolderRecursive(GLOBAL_FILE_PATH+'/'+filepath,userid);
+        }else{
+            dirlog.deleteDirEntry(filepath,userid,function(){});
+            fs.unlinkSync(GLOBAL_FILE_PATH+'/'+filepath);
+        }
 
-            callback(false,res);
-        });
+    }catch(err){
+        dirlog.deleteDirEntry(filepath,userid,function(){});
+    }
+
+
+    callback(false,filepath);
 };
 
-var delDir = function(req,res,next){
+var delDir = function(data,callback){
 
     try {
-        var path = req.body.dirName;
-        var parent = req.body.path;
-        var filepath = parent + "/" + path;
-        deleteDir(filepath, req.session.userid, function () {
+        var filepath = data.filepath;
+        deleteDir(filepath, data.userid, function (err,data) {
 
-            res.status(201).json({
-                message: 'Successfully deleted File'
-            });
+            if(err){
+                callback(true,{status:401});
+            }else{
+                callback(false,{status:201});
+            }
+
+
 
         });
     }catch (ex){
-        res.status(201).json({
-            message: 'Successfully deleted File'
-        });
+        callback(true,{status:401});
     }
 };
 
@@ -86,48 +108,48 @@ var checkFileIsFolder1 = function (filename,callback){
     return false;
 };
 
-var mkdir = function (data, callback) {
+var mkdir = function (data,callback) {
+    console.log("data in mkdir : ",data);
     var path = data.path;
     var parent = data.parent;
-    var userid = data.userid;
-
-        dirlog.getDirectoryId(parent,function (err,results) {
-            dirlog.createDirectoryEntry(parent+'/'+path, userid, 0, results.id, path,parent,function(err,data){
-                if(!err){
-                    callback(false,{status:201,message:'Successfully created Directory'})
-                }else{
-                    callback(false,{status:401,message:'Failed to creat Directory'})
-                }
+    createDirectory(parent+'/'+path,function(err,data){
+        if(err){
+            callback(true,{status:401});
+        }else {
+            dirlog.getDirectoryId(parent, function (err, results) {
+                dirlog.createDirectoryEntry(parent + '/' + path, data.userid, 0, results.id, path, parent, function (err, data) {
+                    if (err) {
+                        callback(true, {status: 401});
+                    } else {
+                        callback(false, {status: 201});
+                    }
+                });
             });
-        });
-
-};
-var download = function(req, res){
-
-    var file = GLOBAL_FILE_PATH + '/'+req.body.path;
-    var filename = path.basename(file);
-    var mimetype = mime.lookup(file);
-
-
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    res.setHeader('Content-type', mimetype);
-    res.download(file);
-
-};
-
-var ZipFile = function(from,to,callback){
-    zipFolder(from, to, function(err) {
-        if(err) {
-
-        } else {
-
         }
     });
 };
 
+// function to encode file data to base64 encoded string
+function base64_encode(file,callback) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    var bufferData =  new Buffer(bitmap).toString('base64');
 
+    callback(bufferData);
+}
 
+var download = function(data,callback){
+    var file = GLOBAL_FILE_PATH + '/'+data.path;
+    var filename = file.split('/');
+    filename = filename[filename.length-1];
+    var mimetype = mime.lookup(file);
 
+    base64_encode(file,function(bufferdata){
+        var bitmap = new Buffer(bufferdata, 'base64');
+        callback(false,{bufferdata:bitmap,mimetype:mimetype,status:201,filename:filename});
+    });
+};
 
 exports.GLOBAL_TEMP_PATH = GLOBAL_TEMP_PATH;
 exports.GLOBAL_FILE_PATH = GLOBAL_FILE_PATH;
@@ -137,5 +159,4 @@ exports.checkFileIsFolder1 = checkFileIsFolder1;
 exports.mkdir= mkdir;
 exports.delDir= delDir;
 exports.download= download;
-exports.deleteDir = deleteDir;
 

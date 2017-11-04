@@ -245,9 +245,8 @@ class Welcome extends Component {
         var data = {'path':filepath,'name':filename};
         API.doDownload(data)
             .then((res) => {
-
-                    FileDownload(res.data, filename);
-
+            console.log("res.data : ",res.data);
+                    FileDownload(res.data,filename);
             })
     };
 

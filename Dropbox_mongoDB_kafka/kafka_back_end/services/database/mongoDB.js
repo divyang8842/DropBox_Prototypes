@@ -9,7 +9,7 @@ pool.createpool(100,function(){});
 
 var connect = function(callback){
 
-    pool.getConnection(callback)
+    pool.getConnection(callback);
    /* MongoClient.connect(url, function(err, _db){
         if (err) { throw new Error('Could not connect: '+err); }
         db = _db;

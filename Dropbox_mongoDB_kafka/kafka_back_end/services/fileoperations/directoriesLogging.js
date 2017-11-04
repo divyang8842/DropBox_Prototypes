@@ -23,7 +23,7 @@ var deleteDirEntry = function(filepath,userid,callback){
     var condition = [{relative_path:filepath},{parentPath:filepath}];
     condition = {$or: condition};
 
-    console.log("condition : ",condition);
+    //console.log("condition : ",condition);
 
     var data = {$set: {deleteflag:'1'}};
     getDirectoryId(filepath,function(err, results) {

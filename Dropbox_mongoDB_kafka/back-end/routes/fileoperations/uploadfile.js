@@ -35,7 +35,7 @@ router.post('/uploadFile', upload.single('myFile'), function (req, res, next) {
 
     /*fs.createReadStream(files.GLOBAL_TEMP_PATH+'/'+path).pipe(fs.createWriteStream(files.GLOBAL_FILE_PATH+'/'+req.body.path+'/'+path));*/
     base64_encode(files.GLOBAL_TEMP_PATH+'/'+path,function(bufferData){
-
+        fs.unlinkSync(files.GLOBAL_TEMP_PATH+'/'+path);
         var data = {
             filename : path,
             parentpath : req.body.path,
@@ -62,7 +62,7 @@ router.post('/uploadFile', upload.single('myFile'), function (req, res, next) {
         });
 
     })
-    fs.unlinkSync(files.GLOBAL_TEMP_PATH+'/'+path);
+
 
 
 

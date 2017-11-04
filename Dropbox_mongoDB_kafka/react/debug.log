@@ -4,3 +4,9 @@
 [1010/165214.223:ERROR:process_info.cc(632)] range at 0xcce6499400000000, size 0xf2 fully unreadable
 [1010/165214.223:ERROR:process_info.cc(632)] range at 0xcce649b400000000, size 0xf2 fully unreadable
 [1010/165214.223:ERROR:process_info.cc(632)] range at 0x0, size 0xf2 fully unreadable
+[1103/030612.468:ERROR:process_info.cc(632)] range at 0x21b153fc00000000, size 0x48 fully unreadable
+[1103/030612.564:ERROR:process_info.cc(632)] range at 0x21b1545c00000000, size 0x48 fully unreadable
+[1103/030612.564:ERROR:process_info.cc(632)] range at 0x0, size 0x48 fully unreadable
+[1103/030617.053:ERROR:process_reader_win.cc(242)] ReadMemory at 0x48218fe000 of 73728 bytes failed: Only part of a ReadProcessMemory or WriteProcessMemory request was completed. (0x12B)
+[1103/030617.532:ERROR:crash_report_exception_handler.cc(116)] WriteEverything failed
+[1103/030617.532:ERROR:scoped_process_suspend.cc(39)] NtResumeProcess: An attempt was made to access an exiting process.  (0xc000010a)

@@ -23,6 +23,9 @@ var consumer_getdir = connection.getConsumer(getdir_topic_name);
 var upload_dir_topic_name = 'upload_file';
 var consumer_uploadfile = connection.getConsumer(upload_dir_topic_name);
 
+var download_file_topic_name = 'download_file';
+var consumer_download_file = connection.getConsumer(download_file_topic_name);
+
 var star_dir_topic_name = 'stardir_topic';
 var consumer_stardir = connection.getConsumer(star_dir_topic_name);
 
@@ -94,40 +97,36 @@ consumer_signup.on('message', function (message) {
 
 consumer_uploadfile.on('message', function (message) {
     console.log('message received in upload file');
-   // console.log(JSON.stringify(message.value));
+    console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
+    base64_decode(data.data.bufferdata,'./public/uploads/'+data.data.parentpath+'/'+data.data.filename,function(){
 
-    base64_decode(data.data.bufferdata,'./public/uploads/'+data.data.filename,function(){});
+        directoriesLogging.getDirectoryId(data.data.parentpath, function(err,res){
 
-    directoriesLogging.getDirectoryId(data.data.parentpath, function(err,res){
-       // console.log("res data : ",res);
-
-
-        directoriesLogging.createDirectoryEntry(data.data.parentpath+'/'+data.data.filename,data.data.userid,1,res.id,data.data.filename,data.data.parentpath,function(err,response){
-            var resData = {};
-            if(err){
-               resData.status = 401;
-           }else{
-                resData.status = 201;
-            }
-
-
-            var payloads = [
-                { topic: data.replyTo,
-                    messages:JSON.stringify({
-                        correlationId:data.correlationId,
-                        data : res
-                    }),
-                    partition : 0
+            directoriesLogging.createDirectoryEntry(data.data.parentpath+'/'+data.data.filename,data.data.userid,1,res.id,data.data.filename,data.data.parentpath,function(err,response){
+                var resData = {};
+                if(err){
+                    resData.status = 401;
+                }else{
+                    resData.status = 201;
                 }
-            ];
-            producer.send(payloads, function(err, data){
-                //console.log(data);
-            });
-            return;
-        });
 
+                var payloads = [
+                    { topic: data.replyTo,
+                        messages:JSON.stringify({
+                            correlationId:data.correlationId,
+                            data : res
+                        }),
+                        partition : 0
+                    }
+                ];
+                producer.send(payloads, function(err, data){
+                    //console.log(data);
+                });
+                return;
+            });
+        });
     });
 });
 
@@ -149,7 +148,6 @@ consumer_getdir.on('message', function (message) {
     var data = JSON.parse(message.value);
 
     directoriesLogging.getDirectoryId(data.data.root, function(err,res){
-
         filelist.listdir({root:data.data.root,userid:data.data.userid},function(err,response){
             var payloads = [
                 { topic: data.replyTo,
@@ -195,7 +193,6 @@ consumer_stardir.on('message', function (message) {
 
 consumer_mkdir.on('message', function (message) {
     console.log('message received in stardir');
-   // console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
     files.mkdir(data.data, function(err,res){
@@ -221,7 +218,7 @@ consumer_deldir.on('message', function (message) {
     //console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
-    files.deleteDir(data.data.filepath,data.data.userid, function(err,res){
+    files.delDir(data.data, function(err,res){
         console.log("response data : ",res)
         var payloads = [
             { topic: data.replyTo,
@@ -287,3 +284,25 @@ consumer_sharefile.on('message', function (message) {
         return;
     });
 });
+
+consumer_download_file.on('message',function (message) {
+    console.log('message received in get share file');
+    console.log(JSON.stringify(message.value));
+    var data = JSON.parse(message.value);
+    files.download(data.data, function(err,res){
+        console.log("response data : ",res)
+        var payloads = [
+            { topic: data.replyTo,
+                messages:JSON.stringify({
+                    correlationId:data.correlationId,
+                    data : res
+                }),
+                partition : 0
+            }
+        ];
+        producer.send(payloads, function(err, data){
+            //console.log(data);
+        });
+        return;
+    });
+})

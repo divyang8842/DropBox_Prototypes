@@ -1,4 +1,4 @@
-import axios from 'axios';
+/*import axios from 'axios';*/
 
 const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://localhost:3004'
 
@@ -152,19 +152,18 @@ export const doLogout = (payload) =>
 
 
 export const doDownload = (payload) =>
-    axios({
-        method: 'post',
+    fetch(`${api}/download`, {
+        method: 'POST',
         headers: {
             ...headers,
             'Content-Type': 'application/json'
         },
-        url: `${api}/download`,
-        data: JSON.stringify(payload),
-        responseType:'stream'
+        credentials:'include',
+        body: JSON.stringify(payload)
     })
-        .then(function (response) {
 
-            return response
+        .then(res =>{
+            return res;
         })
         .catch(function (error) {
             console.log(error);

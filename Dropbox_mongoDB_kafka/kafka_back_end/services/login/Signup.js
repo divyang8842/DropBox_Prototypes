@@ -29,6 +29,7 @@ if(false){
                     if(!err){
                         dirlog.createDirectoryEntry(path,path,0,1,path,"",function(err,data1){
 
+                            fileUtils.createDirectory(path,function(err,path){});
                             callback(null,{
                                 status:'201',
                                 message : "Signup Successfull.",
