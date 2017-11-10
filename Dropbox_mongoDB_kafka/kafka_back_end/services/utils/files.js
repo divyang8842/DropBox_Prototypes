@@ -2,7 +2,6 @@ var fs = require("fs");
 var path = require('path');
 var mime = require('mime');
 
-var zipFolder = require('zip-folder');
 
 
 

@@ -43,7 +43,9 @@ class UserActivity extends Component {
     signout = () => {
         this.props.signout();
     };
-
+    goToPath = (path) =>{
+        this.props.goToPath(path);
+    }
     componentWillMount(){
         var userid = localStorage.getItem('token');
         var data = {'userid':userid};
@@ -79,7 +81,7 @@ class UserActivity extends Component {
 
         return (
             <div style={fullscreen}>
-                <NavBar page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
+                <NavBar goToPath={this.goToPath} page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
 
                 <div className="container-fluid" >
                     <div className="row justify-content-md-center">

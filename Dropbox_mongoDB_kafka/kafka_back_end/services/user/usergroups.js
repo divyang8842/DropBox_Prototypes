@@ -1,50 +1,67 @@
-var mysql = require('./../database/mysql');
+var mongo = require('./../database/mongoDB');
 
-var addUserInGroup = function(groupid,userid,callback){
+/*var addUserInGroup = function(groupid,userid,callback){
 	var getDirectories ="INSERT INTO user_group_mapping (groupid,userid) VALUES(?,?)";
 	var data=[groupid,userid];
+	
 	
 	mysql.setData(function(err, results) {
 		callback(err,results);
 	}, getDirectories,data);
-};
+};*/
+var getAllUserGroups = function(callback){
+	mongo.findDoc("usergroup",{},function (err,results) {
+	    var data = {status:201, groups : results};
+	    console.log("USer group search data is ",data);
+		callback(err,data);
+    })
+
+}
+
+var getBulkUserInfo = function(emailids,callback){
+    var query  =  [];
+    var length =  emailids.length;
+    while(length>0){
+        query.push({emailid:emailids[--length]});
+    }
+    query = {$or : query};
+    mongo.findDoc("user",query,callback);
+}
+
 
 var createUserGroup = function(groupname,userid,memberjson,callback) {
-	var setPermit = "INSERT INTO usergroups (groupname,createdby) VALUES(?,?)";
-	var data=[groupname,userid];
-	mysql.setData(function(err, results1) {
-		if(err){
-			callback(err,results1);
-		}else{
-			var length = memberjson.length;
-			while(length>0){
-				var groupid = results1.insertId;
-				addUserInGroup(groupid,memberjson[length-1].uid,function(err,result){
-					if(err){
-						callback(err,result);
-					}else{
-						length--;
-						if(length===0){
-							callback(err,results1);
-						}
-					}
-				});
-				
-			}
-		}
-	}, setPermit,data);
+
+	getBulkUserInfo(memberjson,function(err,data){
+        var data = {
+            groupname : groupname,
+            createdBy : userid,
+            users:data,
+            id:''
+        }
+
+        mongo.insertDoc("usergroup",data,function(err,results){
+            var id =  result["ops"][0]["_id"];
+            data = {$set: {id:(id+'')}};
+            var query = {_id:id};
+            mongo.update("usergroup",query,data,function(err,results){
+                callback(err,results);
+            });
+        });
+    })
+
+
+
 };
-
-
 
 var getAllUserInGroup = function(groupid,callback){
-	var getDirectories ="SELECT u.uid AS uid,(u.ulname+','+u.ufname) AS username,ugm.groupid AS groupid FROM user_group_mapping ugm JOIN users u ON u.uid = ugm.userid WHERE groupid=?";
-	var data=[groupid];
-	mysql.fetchData(function(err, results) {
+	var query = {
+		id : groupid
+	};
+	mongo.findOneDoc("usergroup",query,function(err,results){
 		callback(err,results);
-	}, getDirectories,data);
+	})
 };
-
+/*
 var getAllGroupForUser = function(userid,callback){
 	var getDirectories ="SELECT ug.groupname as groupname,ug.createdby as owner,ug.createdon as createdon FROM user_group_mapping ugm JOIN usergroups ug ON ugm.groupid = ug.id  WHERE ugm.userid = ?";
 	var data=[userid];
@@ -53,7 +70,6 @@ var getAllGroupForUser = function(userid,callback){
 	}, getDirectories,data);
 };
 
-
 var removeUserFromGroup = function(groupid,userid,callback){
 	var getDirectories ="UPDATE user_group_mapping SET deleteflag=1 WHERE groupid=? and userid=?";
 	var data=[groupid,userid];
@@ -61,10 +77,8 @@ var removeUserFromGroup = function(groupid,userid,callback){
 		callback(err,results);
 	}, getDirectories,data);
 };
-
-
-
+*/
 
 exports.createUserGroup = createUserGroup;
-exports.addUserInGroup = addUserInGroup;
-exports.createUserGroup = createUserGroup;
+exports.getAllUserInGroup = getAllUserInGroup;
+exports.getAllUserGroups = getAllUserGroups;

@@ -34,7 +34,10 @@ class SignUp extends  Component{
     }
     signout = () => {
         this.props.signout();
-    };
+    }
+    goToPath = (path) =>{
+        this.props.goToPath(path);
+    }
     componentWillMount(){
         API.getUserProfile({}).then((response) => {
             this.setState({
@@ -71,7 +74,7 @@ class SignUp extends  Component{
         var color = {color:'blue'};
         return(
             <div style={fullscreen}>
-                <NavBar page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
+                <NavBar goToPath = {this.goToPath} page = {"useractivity"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
                 <div className="col-md-8 col-md-8">
                 <div className="text-center">
                     <h1 className="login-brand-text">User Profile</h1>

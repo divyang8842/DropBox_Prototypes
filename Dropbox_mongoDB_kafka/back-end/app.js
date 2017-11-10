@@ -17,6 +17,7 @@ var uploadFile=require('./routes/fileoperations/uploadfile');
 var star =  require('./routes/star');
 var files = require('./routes/fileoperations');
 var userprofile = require('./routes/utils/userprofile');
+var userGroups = require('./routes/usergroups');
 
 var mongoSessionURL = "mongodb://localhost:27017/sessions";
 var expressSessions = require("express-session");
@@ -71,6 +72,8 @@ app.post('/shareFile',security.authenticate,files.shareFile);
 app.post('/validateEmails',security.authenticate,files.validateEmails);
 app.post('/unstar',security.authenticate,star.unstardir);
 
+app.post('/getUserGroups',security.authenticate,userGroups.getUserGroups);
+app.post('/setUserGroups',security.authenticate,userGroups.setUserGroups);
 
 
 app.post('/logout', function(req,res) {

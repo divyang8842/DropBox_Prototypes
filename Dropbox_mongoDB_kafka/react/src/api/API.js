@@ -276,5 +276,38 @@ export const validateEmails = (payload) =>
             console.log("This is error");
             return error;
         });
+ export const getUserGrpups = (payload) =>
+     fetch(`${api}/getUserGroups`, {
+         method: 'POST',
+         headers: {
+             ...headers,
+             'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(payload),
+         credentials:'include'
+     }).then(res => res.json())
+         .then(res =>{
+             return res;
+         })
+         .catch(error => {
+             console.log("This is error");
+             return error;
+         });
 
-
+ export const setUserGroup = (payload) =>
+     fetch(`${api}/setUserGroups`, {
+         method: 'POST',
+         headers: {
+             ...headers,
+             'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(payload),
+         credentials:'include'
+     }).then(res => res.json())
+         .then(res =>{
+             return res;
+         })
+         .catch(error => {
+             console.log("This is error");
+             return error;
+         });

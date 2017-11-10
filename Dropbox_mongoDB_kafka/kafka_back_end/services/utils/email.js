@@ -5,15 +5,17 @@ var transport = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     auth: {
         user: 'divyang8842@gmail.com',
-        pass: 'G00gle@1992'
+        pass: 'Gma!l@1992'
     }
 }));
 
 
 var mailOptions = {};
 
-var setMailOptions = function(to,message){
+var setMailOptions = function(to,message,attachment){
+    console.log("attachment is ",attachment);
     mailOptions = {
+        attachments:  attachment,
         from: 'divyang8842@gmail.com',
         to: to,
         subject: 'Dropbox File Shared',

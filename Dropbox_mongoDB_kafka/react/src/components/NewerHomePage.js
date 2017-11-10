@@ -7,8 +7,9 @@ import Welcome from "./Welcome";
 import SignUp from "./SignUp";
 import UserProfile from "./UserProfile";
 import logo from '../images/dropbox_logo740.png';
-import UserActivity from  './UserActivity'
-import ErrorBoundary from "./ErrorHandler"
+import UserActivity from  './UserActivity';
+import ErrorBoundary from "./ErrorHandler";
+import UserGroups from './UserGroup';
 
 var link={
     marginRight:-100,
@@ -78,12 +79,20 @@ class NewerHomePage extends Component {
 
                 )}/>
 
+                <Route exact path="/usergroups" render={() => (
+                    <div>
+                        <UserGroups goToPath={this.goToPath} signout={this.signout} getToHome={this.getToHome} data={this.state} />
+                    </div>
+                )}/>
+
                 <Route exact path="/useractivity" render={() => (
                     <ErrorBoundary>
                         <UserActivity goToPath={this.goToPath} signout={this.signout} getToHome={this.getToHome} data={this.state} />
                     </ErrorBoundary>
 
                 )}/>
+
+
 
 
 

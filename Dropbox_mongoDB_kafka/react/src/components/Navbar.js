@@ -40,6 +40,10 @@ export default class NavBar extends Component{
         this.props.getHome();
     }
 
+    getUserGroups = () =>{
+        this.props.goToPath('/usergroups');
+    }
+
     getUserLogs =()=>{
         this.props.getUserLogs();
     }
@@ -81,10 +85,10 @@ export default class NavBar extends Component{
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
 
-                        {(this.state.page=="userprofile" || this.state.page=="useractivity")?(
+                        {(this.state.page=="userprofile" || this.state.page=="useractivity" || this.state.page=="usergroup")?(
                             <MenuItem primaryText="Home" onClick={() =>  this.getHome()} />
                             ):''}
-
+                        <MenuItem primaryText="User Groups" onClick={() =>  this.getUserGroups()} />
                         <MenuItem primaryText="UserLogs" onClick={() =>  this.getUserLogs()} />
                         <MenuItem primaryText="UserProfile" onClick={() =>  this.getUserProfile()} />
 

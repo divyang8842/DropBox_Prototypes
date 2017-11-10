@@ -7,6 +7,7 @@ var starDir =  require('./services/user/staring');
 var files = require('./services/utils/files');
 var userprofile = require('./services/utils/userprofile');
 var permissions = require('./services/fileoperations/permissions');
+var usergroup = require('./services/user/usergroups');
 
 var fs = require('fs');
 
@@ -42,6 +43,9 @@ var consumer_user_profile = connection.getConsumer(userprofile_topic_name);
 
 var sharefile_topic_name = 'sharefile_topic';
 var consumer_sharefile = connection.getConsumer(sharefile_topic_name);
+
+var usergroup_topic_name  = 'usergroup_topic';
+var consumer_usergroup = connection.getConsumer(usergroup_topic_name);
 
 
 var producer = connection.getProducer();
@@ -243,7 +247,8 @@ consumer_user_profile.on('message', function (message) {
     var data = JSON.parse(message.value);
 
 
-    userprofile.processUserData(data.data, function(err,res){
+    userprofile.processUserData
+    (data.data, function(err,res){
         //console.log("response data : ",res)
         var payloads = [
             { topic: data.replyTo,
@@ -306,3 +311,27 @@ consumer_download_file.on('message',function (message) {
         return;
     });
 })
+
+
+consumer_usergroup.on('message',function (message) {
+    console.log('message received in usergroup');
+    console.log(JSON.stringify(message.value));
+    var data = JSON.parse(message.value);
+    usergroup.getAllUserGroups(function(err,res){
+        console.log("response data : ",res)
+        var payloads = [
+            { topic: data.replyTo,
+                messages:JSON.stringify({
+                    correlationId:data.correlationId,
+                    data : res
+                }),
+                partition : 0
+            }
+        ];
+        producer.send(payloads, function(err, data){
+            //console.log(data);
+        });
+        return;
+    });
+})
+

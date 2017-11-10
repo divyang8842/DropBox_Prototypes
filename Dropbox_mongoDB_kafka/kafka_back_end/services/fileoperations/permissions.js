@@ -3,8 +3,8 @@ var mongo = require('./../database/mongoDB');
 var utils = require('./../utils/userprofile');
 var email = require('./../utils/email');
 var dirlog = require('./../fileoperations/directoriesLogging');
-var listdir = require('./../fileoperations/listdir');
 var fileUtils = require('./../utils/files');
+var zipFolder = require('zip-folder');
 
 
 var GROUP = 1;
@@ -12,6 +12,7 @@ var USER = 0;
 var link = 2;
 
 var processData =  function(data,callback){
+    console.log("data here is ",data)
     if(data.type=="emails"){
         validateEmails(data,callback);
     }else{
@@ -21,9 +22,11 @@ var processData =  function(data,callback){
 }
 
 var validateEmails = function(data,callback){
-var emailAddress = data.emailAddress;
-var emails = emailAddress.split(',');
-console.log(emailAddress);
+
+
+    var emailAddress = data.emailAddress;
+    var emails = emailAddress.split(',');
+
     utils.checkValidUserEmails(emailAddress,function(err,results){
 		if(results.length!= emails.length){
             callback(false,{status:'201',linkShare:'true'});
@@ -35,10 +38,11 @@ console.log(emailAddress);
 }
 
 var shareFile = function(data,callback){
+    console.log("data is : ",data)
 	var fileToShare = data.fileToShare;
     var emailAddress = data.emailAddress;
     var emails = emailAddress.split(',');
-
+console.log("fileToShare is : "+fileToShare);
     dirlog.getDirectoryId(fileToShare,function (err,results1) {
         var dirId =  results1.id;
 	var type = link;
@@ -58,15 +62,59 @@ var shareFile = function(data,callback){
                     callback(false,{status:'201',linkShare:'false'});
 
             }
-            email.setMailOptions(emailAddress,setMessage(dirId,type));
-            email.sendEmail();
+
+            fileUtils.checkFileIsFolder1(fileUtils.GLOBAL_FILE_PATH +"/"+fileToShare,function(result){
+
+                var attachments = [];
+                console.log("check for type is : "+result);
+                if(type==link){
+                    console.log("check for folder is : "+result);
+                    if(!result){
+
+                        attachments.push({   // filename and content type is derived from path
+                            path: fileUtils.GLOBAL_FILE_PATH +"/"+fileToShare
+                        });
+                        console.log("check for attachments is : ",attachments);
+                        email.setMailOptions(emailAddress,setMessage(dirId,type),attachments);
+                        email.sendEmail();
+                    }else{
+
+                        ZipFolder(fileUtils.GLOBAL_FILE_PATH +"/"+fileToShare,function(zipPath){
+                            console.log("check for attachments is : ",attachments);
+                            attachments.push({   // filename and content type is derived from path
+                                path:zipPath
+                            });
+                            email.setMailOptions(emailAddress,setMessage(dirId,type),attachments);
+                            email.sendEmail();
+                        })
+                    }
+                }else{
+
+                    email.setMailOptions(emailAddress,setMessage(dirId,type),attachments);
+                    email.sendEmail();
+                }
+            });
         });
 
     });
 
 
 }
+
+var ZipFolder  = function(path,callback){
+
+    zipFolder(path, path+'.zip', function(err) {
+        if(err) {
+            console.log('oh no!', err);
+        } else {
+            console.log('EXCELLENT');
+        }
+        callback(path+'.zip');
+    });
+}
 var setMessage = function(dirid,type){
+
+
 		var data = "A File is shared with you by a Dropbox User.";
 		if(type == link){
             data += "\n You can Download it from below link.";

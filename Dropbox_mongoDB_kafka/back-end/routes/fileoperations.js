@@ -196,6 +196,8 @@ var shareFile = function(req,res){
     var fileToShare = req.body.fileToShare;
     var emailAddress = req.body.emails;
 
+    console.log('req.body is : ',req.body);
+
     var data = {fileToShare:fileToShare,emailAddress:emailAddress};
 
     kafka.make_request('sharefile_topic',data, function(err,results){

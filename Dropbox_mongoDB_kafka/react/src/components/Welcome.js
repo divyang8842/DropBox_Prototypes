@@ -107,6 +107,9 @@ class Welcome extends Component {
 
     }
 
+    goToPath = (path) =>{
+        this.props.goToPath(path);
+    }
 
     getHome =() =>{
         this.props.goToPath('/welcome');
@@ -287,7 +290,6 @@ class Welcome extends Component {
     shareFileData = (path,filename) =>{
         this.setState({
             fileToShare:path
-
         });
     }
 
@@ -307,7 +309,7 @@ class Welcome extends Component {
         var username = this.state.userid;
 
         return(<div style={fullscreen}>
-                <NavBar fileToShare={this.state.fileToShare} shareFile={this.shareFile} createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  signout= {this.signout}  ></NavBar>
+                <NavBar goToPath={this.goToPath} fileToShare={this.state.fileToShare} shareFile={this.shareFile} createDir = {this.createDir} getHome={this.getHome} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  signout= {this.signout}  ></NavBar>
                 <hr id="divider"></hr>
                 <div >
 
@@ -430,7 +432,7 @@ class Welcome extends Component {
                                 <a  >{file.name}</a>
                                 <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
                                 <Button style={del}  onClick={()=>this.download(file.relative_path,file.name)}   bsStyle="danger">Download</Button>
-                                <Button style={del}  onClick={()=>this.shareFileData(file.path,file.name)}   bsStyle="danger">Share</Button>
+                                <Button style={del}  onClick={()=>this.shareFileData(file.relative_path,file.name)}   bsStyle="danger">Share</Button>
                                 <Checkbox  style={star} checked={file.isStared} value={file.relative_path} onChange={(e) => this.handleChange(e,file.relative_path)} >Star</Checkbox>
                             </div>)
                         }</ListGroupItem>
