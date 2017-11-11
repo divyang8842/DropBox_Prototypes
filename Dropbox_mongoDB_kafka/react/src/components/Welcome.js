@@ -344,11 +344,11 @@ class Welcome extends Component {
                                              backgroundColor={blue300}
                                              size={30}
                                              style={style}/>
-                                    <a onClick={() => this.getChildDir(file.path)}> {file.name} </a>
+                                    <a onClick={() => this.getChildDir(file.relative_path)}> {file.name} </a>
                                     <Button style={del}  onClick={()=>this.deleteDir(file.name)} bsStyle="danger">Delete</Button>
                                     <Button style={del}  onClick={()=>this.getChildDir(file.relative_path)}   bsStyle="danger">Lookup--> </Button>
                                     <Button style={del}  onClick={()=>this.shareFileData(file.relative_path,file.name)}   bsStyle="danger">Share</Button>
-                                    <Checkbox  checked={true} style={star} value={file.path} onChange={(e) => this.handleChange(e,file.relative_path)} >Star</Checkbox>
+                                    <Checkbox  checked={true} style={star} value={file.relative_path} onChange={(e) => this.handleChange(e,file.relative_path)} >Star</Checkbox>
 
                                 </div>
 
@@ -358,12 +358,12 @@ class Welcome extends Component {
                                            backgroundColor={purple500}
                                            size={30}
                                            style={style}/>
-                                    <a  onClick={()=>this.download(file.path,file.name)} >{file.name}</a>
+                                    <a  onClick={()=>this.download(file.relative_path,file.name)} >{file.name}</a>
 
                                     <Button style={del} onClick={()=>this.deleteDir(file.name)}  bsStyle="danger">Delete</Button>
-                                <Button style={del}  onClick={()=>this.download(file.path,file.name)}   bsStyle="danger">Download</Button>
-                                <Button style={del}  onClick={()=>this.shareFileData(file.path,file.name)}   bsStyle="danger">Share</Button>
-                                <Checkbox  checked={true} style={star}  value={file.path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
+                                <Button style={del}  onClick={()=>this.download(file.relative_path,file.name)}   bsStyle="danger">Download</Button>
+                                <Button style={del}  onClick={()=>this.shareFileData(file.relative_path,file.name)}   bsStyle="danger">Share</Button>
+                                <Checkbox  checked={true} style={star}  value={file.relative_path} onChange={(e) => this.handleChange(e,file.path)} >Star</Checkbox>
                             </div> )}</ListGroupItem>
                     )}
                     </ListGroup>

@@ -139,15 +139,16 @@ function base64_encode(file,callback) {
 }
 
 var download = function(data,callback){
+    console.log(" data for download is : ",data);
     var file = GLOBAL_FILE_PATH + '/'+data.path;
     var filename = file.split('/');
     filename = filename[filename.length-1];
     var mimetype = mime.lookup(file);
-
+callback();/*
     base64_encode(file,function(bufferdata){
         var bitmap = new Buffer(bufferdata, 'base64');
         callback(false,{bufferdata:bitmap,mimetype:mimetype,status:201,filename:filename});
-    });
+    });*/
 };
 
 exports.GLOBAL_TEMP_PATH = GLOBAL_TEMP_PATH;

@@ -23,7 +23,7 @@ var error = false;
                 callback(err,null);
             }else{
                 free_pool.push(_db);
-                console.log("",free_pool.length);
+                //console.log("",free_pool.length);
                 createConnectionPool(poolingcount,function(err,result){
                    callback(true);
                 });
@@ -39,7 +39,7 @@ var error = false;
                     callback(err,null);
                 }else{
                     free_pool.push(_db);
-                    console.log("",free_pool.length);
+                   // console.log("",free_pool.length);
                 }
             });
         }
@@ -65,12 +65,9 @@ var error = false;
             });
 
         }
-
-
-    }
+    };
 
     var closeConnection = function(db){
-
         free_pool.push(db);
         console.log("after getting connection back, the count is ",free_pool.length);
     }

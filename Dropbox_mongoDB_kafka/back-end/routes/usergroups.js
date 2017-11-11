@@ -28,11 +28,11 @@ var getUserGroups = function(req,res) {
 var setUserGroups = function(req,res) {
     var data = {
         "userid": req.session.user.userid,
-        "group":req.data,
+        "group":req.body.data,
         "type":'set'
     };
 
-    kafka.make_request('usergroup_topic ',data, function(err,results){
+    kafka.make_request('usergroup_topic',data, function(err,results){
         console.log('in result');
         console.log(results);
         if(err){

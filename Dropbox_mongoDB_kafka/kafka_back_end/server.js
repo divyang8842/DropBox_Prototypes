@@ -316,22 +316,45 @@ consumer_download_file.on('message',function (message) {
 consumer_usergroup.on('message',function (message) {
     console.log('message received in usergroup');
     console.log(JSON.stringify(message.value));
-    var data = JSON.parse(message.value);
-    usergroup.getAllUserGroups(function(err,res){
-        console.log("response data : ",res)
-        var payloads = [
-            { topic: data.replyTo,
-                messages:JSON.stringify({
-                    correlationId:data.correlationId,
-                    data : res
-                }),
-                partition : 0
-            }
-        ];
-        producer.send(payloads, function(err, data){
-            //console.log(data);
+    const data = JSON.parse(message.value);
+
+    if(data.data.type == 'get') {
+        usergroup.getAllUserGroups(function (err, res) {
+            //console.log("response data : ", res)
+            var payloads = [
+                {
+                    topic: data.replyTo,
+                    messages: JSON.stringify({
+                        correlationId: data.correlationId,
+                        data: res
+                    }),
+                    partition: 0
+                }
+            ];
+            producer.send(payloads, function (err, data) {
+                //console.log(data);
+            });
+            return;
         });
-        return;
-    });
+    }else{
+
+        usergroup.createUserGroup(data.data.group.groupName,data.data.userid,data.data.group.groupMembers,data.data.group.id,function(err,res){
+           // console.log("response data : ", res)
+            var payloads = [
+                {
+                    topic: data.replyTo,
+                    messages: JSON.stringify({
+                        correlationId: data.correlationId,
+                        data: res
+                    }),
+                    partition: 0
+                }
+            ];
+            producer.send(payloads, function (err, data) {
+                //console.log(data);
+            });
+            return;
+        })
+    }
 })
 

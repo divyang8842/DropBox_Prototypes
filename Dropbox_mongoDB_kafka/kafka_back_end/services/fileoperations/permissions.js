@@ -169,12 +169,12 @@ var getAllPermittedDirectories = function(userid,callback){
                     while(length-->0){
                         var filedata ={};
                         filedata.name = directories[length].name;
-                        filedata.relative_path = directories[length].path;
+                        filedata.relative_path = directories[length].relative_path;
                         filedata.fullPath =fileUtils.GLOBAL_FILE_PATH +"/"+filedata.path;
                         filedata.isFile = (directories[length].isFile);
                         returnData.push(filedata);
                     }
-                    console.log("returnData : "+returnData)
+                    console.log("returnData : ",returnData)
                     callback(false,returnData);
                 }else{
                     callback(err,directories);

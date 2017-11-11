@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
-import Button from 'react-bootstrap/lib/Button';
-import Panel from 'react-bootstrap/lib/Panel';
+import Group from "./Group";
+import Groups from "./Groups";
 import * as API from '../api/API';
 import NavBar from "../components/Navbar";
-import { FormControl, Checkbox } from 'react-bootstrap';
+import {withRouter} from 'react-router-dom';
+
 
 var fullscreen={position: 'fixed',
     top: '0',
@@ -12,13 +12,16 @@ var fullscreen={position: 'fixed',
     bottom: '0',
     right:'0',
     overflow: 'auto',
-    background: 'white'};
+    background: 'white'}
 
-class UserGroup extends  Component{
+class UserGroup extends Component {
+
     state = {
         groupInfo :[],
         groupMembers : [],
-        groupName:''
+        groupName:'',
+        groupMember :'',
+        count :0
     };
 
     getHome =() =>{
@@ -39,12 +42,21 @@ class UserGroup extends  Component{
         this.props.signout();
     };
 
+    updateGroup = (group) =>{
+        alert("group : "+ JSON.stringify(group) );
+        this.setState({
+            groupName :group.groupname,
+            groupMembers : group.memberjson
+        });
+    }
+
     setUserGroup = (groupData) => {
-        API.setUserGroup(groupData)
-            .then((status) => {
-                if (status === 200) {
+        var data = {'data':groupData};
+        API.setUserGroup(data)
+            .then((result) => {
+                if (result.status == 201) {
                     alert("Group saved successfully.");
-                } else if (status === 401) {
+                } else if (result.status == 401) {
                     alert("Error while saving user group.");
                 }
             });
@@ -54,12 +66,14 @@ class UserGroup extends  Component{
         var userid = localStorage.getItem('token');
         var data = {'userid':userid};
         API.getUserGrpups(data).then((resData) => {
-           // alert("data is "+JSON.stringify(resData));
+             //alert("data is "+JSON.stringify(resData));
             if (resData.status == 201) {
                 this.setState({
                     groupInfo :resData.groups,
                     groupName : '',
-                    groupMembers : []
+                    groupMembers : [],
+                    groupMember : '',
+                    count : this.state.groupMembers.length
                 })
             }else if(resData.status==501){
                 localStorage.removeItem("token");
@@ -69,58 +83,118 @@ class UserGroup extends  Component{
         });
     };
 
+    addItem(userEmail){
+        var data = {'email':userEmail, 'index':this.state.count};
+        var jsonArry = this.state.groupMembers;
+        jsonArry.push(data);
+        this.setState({
+            count: this.state.count+1,
+            groupMembers : jsonArry
+        },alert("User added successfully"));
+
+    }
+
+    removeItem(index){
+
+        var jsonArry = this.state.groupMembers;
+        jsonArry.slice(index,1);
+        this.setState({
+            groupMembers : jsonArry
+        },alert("User removed successfully"));
+    }
+
     render() {
-        console.log(JSON.stringify(this.state.groupInfo));
-        var totStyle={float:'right',fontSize:25};
-        var totStyle1={float:'left', fontSize:25};
-        var borderStyle={borderStyle: 'inset', backgroundColor:'lightBlue'};
-        var flr={float:'right'};
-        var mr80={marginRight:100};
-        var bgcolor={backgroundColor:'lightblue'};
-
-        var pt15={paddingTop:15};
-        const todoClass = `alert `;
-
+        //console.log(this.props);
 
         return (
-            <div style={fullscreen}>
+            <div  style={fullscreen}>
                 <NavBar goToPath={this.goToPath} page = {"usergroup"} getUserLogs={this.getUserLogs} getUserProfile={this.getUserProfile}  getHome={this.getHome} shareFile={this.getHome}   signout= {this.signout}></NavBar>
 
-                <div className="container-fluid" >
-                    <div className="row justify-content-md-center">
-                        <div className="col-md-6">
-                            <h2 className="text-center">User Groups</h2>
-                        </div>
-
+                <div className="row justify-content-md-center">
+                    <div className="col-md-6">
+                        <h2 className="text-center">User Groups</h2>
                     </div>
-                    <hr/>
+                </div>
+                <hr/>
 
-                    <hr/>
-                    <div className="row justify-content-md-center" >
+                <div className="row justify-content-md-center">
+                    <div className="card col-md-6">
+                        <div className="card-body">
+                            {
+                                this.state.groupInfo.map((group,index) => {
+                                    return(
+                                        <Groups updateGroup = {this.updateGroup}
+                                               key={index}
+                                               item={group}
+                                        />
+                                    );
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
 
-                        <div className="card col-sm-8">
-                            <div className="card-body">
-                                <h4>User Logs</h4>
-                                {
-                                    this.state.groupInfo.map((log,index) => {
-                                        return (
-                                            <div className="row justify-content-md-center">
-                                                <div className="col-md-12">
-                                                    {<div className={todoClass} style={bgcolor} role="alert">
-                                                        <div style={mr80}>Group Name : { log.groupname } </div>
-                                                        <div style={mr80}>Created By : { log.createdBy } </div>
-                                                        {/*<div>  <span>Operation : {log.operation}</span></div>
-                                                        <div>
-                                                            <span aria-hidden={true}>Date Time : {log.operationtime}</span>
-                                                        </div>*/}
-                                                    </div>}
-                                                </div>
-                                            </div>
-                                        );
-                                    })
-                                }
-                            </div>
 
+                <div className="row justify-content-md-center">
+                    <div className="col-md-6">
+                        <div className="form-group">
+                            <input
+                                className="form-control"
+                                value = {this.state.groupName}
+                                type="text"
+                                placeholder="Enter Group Name"
+                                onChange={(event) => {
+                                 //   const value=event.target.value
+                                    this.setState({
+                                        groupName: event.target.value
+                                    });
+                                }}
+                            />
+
+                            <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Enter user email address"
+                                onChange={(event) => {
+                                  //  const value=event.target.value
+                                    this.setState({
+                                        groupMember: event.target.value
+                                    });
+                                }}
+                            />
+                        </div>
+                        <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => {
+                               // alert(this.state.groupMember);
+                                this.addItem(this.state.groupMember)
+                            }}
+                        >Add</button>
+
+                        <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => {
+                                // alert(this.state.groupMember);
+                                this.setUserGroup(this.state)
+                            }}
+                        >Save</button>
+                    </div>
+                </div>
+
+                <hr/>
+                <div className="row justify-content-md-center">
+                    <div className="card col-md-6">
+                        <div className="card-body">
+                            {
+                                this.state.groupMembers.map((member,index) => {
+                                    return(
+                                        <Group removeItem = {this.removeItem}
+                                            key={index}
+                                            item={member}
+                                        />
+                                    );
+                                })
+                            }
                         </div>
                     </div>
                 </div>

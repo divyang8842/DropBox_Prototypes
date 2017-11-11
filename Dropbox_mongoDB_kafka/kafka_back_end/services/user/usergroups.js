@@ -12,7 +12,7 @@ var mongo = require('./../database/mongoDB');
 var getAllUserGroups = function(callback){
 	mongo.findDoc("usergroup",{},function (err,results) {
 	    var data = {status:201, groups : results};
-	    console.log("USer group search data is ",data);
+	   // console.log("USer group search data is ",data);
 		callback(err,data);
     })
 
@@ -22,31 +22,55 @@ var getBulkUserInfo = function(emailids,callback){
     var query  =  [];
     var length =  emailids.length;
     while(length>0){
-        query.push({emailid:emailids[--length]});
+        query.push({emailid:emailids[--length].email});
     }
+
     query = {$or : query};
+    console.log("query : ",query);
     mongo.findDoc("user",query,callback);
 }
 
 
-var createUserGroup = function(groupname,userid,memberjson,callback) {
+var createUserGroup = function(groupname,userid,memberjson,id,callback) {
 
+    //console.log("createUserGroup");
+    //console.log("id is ",id);
 	getBulkUserInfo(memberjson,function(err,data){
         var data = {
             groupname : groupname,
             createdBy : userid,
             users:data,
+            memberjson : memberjson,
             id:''
         }
 
-        mongo.insertDoc("usergroup",data,function(err,results){
-            var id =  result["ops"][0]["_id"];
-            data = {$set: {id:(id+'')}};
-            var query = {_id:id};
-            mongo.update("usergroup",query,data,function(err,results){
-                callback(err,results);
-            });
+        mongo.findOneDoc("usergroup",{groupname:groupname},function (err,result) {
+            if(result && result.id){
+                id = result.id;
+            }
+
+           // console.log("id is ",id);
+
+            if(id!= undefined && id.trim()!=''){
+                data.id = id;
+                mongo.update("usergroup",{id:id},data,function (err,results){
+                    callback(err,{status:201});
+                });
+            }else{
+                mongo.insertDoc("usergroup",data,function(err,results){
+                    var id =  results["ops"][0]["_id"];
+                    data = {$set: {id:(id+'')}};
+                    var query = {_id:id};
+                    mongo.update("usergroup",query,data,function(err,results){
+                        callback(err,{status:201});
+                    });
+                });
+            }
         });
+
+
+
+
     })
 
 

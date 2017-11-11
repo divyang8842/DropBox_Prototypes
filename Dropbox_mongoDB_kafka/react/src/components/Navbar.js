@@ -98,7 +98,7 @@ export default class NavBar extends Component{
                     onLeftIconButtonTouchTap={this._toggleDrawer}
                 />
 
-                {(this.state.page!="userprofile" && this.state.page!="useractivity" )?(
+                {(this.state.page!="userprofile" && this.state.page!="useractivity" && this.state.page!="usergroup")?(
                 <section id="options-section" className="row">
                     <section id="option-items" className="row">
 
@@ -112,10 +112,6 @@ export default class NavBar extends Component{
                             }}/>
 
                             <RaisedButton className="option-btn" onClick={() =>this.props.createDir(this.state.filename)} label="New Directory"/>
-
-
-
-
                             <input style={{display: this.props.fileToShare=='' ? 'none' : 'inline-block' }} type='email' onChange={(event) => {
                                 const value=event.target.value
                                 this.setState({

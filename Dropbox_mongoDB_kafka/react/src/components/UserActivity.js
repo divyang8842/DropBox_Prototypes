@@ -50,7 +50,6 @@ class UserActivity extends Component {
         var userid = localStorage.getItem('token');
         var data = {'userid':userid};
         API.getUserLogs(data).then((resData) => {
-            debugger;
             if (resData.status == 201) {
                 this.setState({
                     logs: resData.logs
@@ -66,7 +65,6 @@ class UserActivity extends Component {
 
     render() {
 
-        console.log(JSON.stringify(this.state.logs));
 
         var totStyle={float:'right',fontSize:25};
         var totStyle1={float:'left', fontSize:25};
