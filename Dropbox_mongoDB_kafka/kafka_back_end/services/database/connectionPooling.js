@@ -69,7 +69,7 @@ var error = false;
 
     var closeConnection = function(db){
         free_pool.push(db);
-        console.log("after getting connection back, the count is ",free_pool.length);
+        //console.log("after getting connection back, the count is ",free_pool.length);
     }
 
 exports.getConnection = getConnection;

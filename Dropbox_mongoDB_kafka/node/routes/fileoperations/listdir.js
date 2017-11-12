@@ -51,13 +51,13 @@ var listdir = function (req,res)
                 star.getAllStaredDirectories(userid,function (err1,results1) {
 
                     if(err1){
-                        res.json({status:'201',fileLst:files,stared:[]});
+                        res.status(201).json({status:'201',fileLst:files,stared:[]});
                     }else{
                     	permission.getAllPermittedDirectories(userid,function(err,results2){
                     		if(!err){
-                                res.json({status:'201',fileLst:(files),stared:(results1),shared:(results2)});
+                                res.status(201).json({status:'201',fileLst:(files),stared:(results1),shared:(results2)});
 							}else{
-                                res.json({status:'201',fileLst:(files),stared:(results1),shared:[]});
+                                res.status(201).json({status:'201',fileLst:(files),stared:(results1),shared:[]});
 							}
 						})
                       }
