@@ -53,11 +53,11 @@ var producer = connection.getProducer();
 
 consumer_login.on('message', function (message) {
     console.log('message received in login');
-    //console.log(JSON.stringify(message.value));
+    console.log(JSON.stringify(message.value));
     var data = JSON.parse(message.value);
 
     login.handle_request(data.data, function(err,res){
-        //console.log('after handle'+ JSON.stringify(res) );
+        console.log('after handle'+ JSON.stringify(res) );
         var payloads = [
             { topic: data.replyTo,
                 messages:JSON.stringify({

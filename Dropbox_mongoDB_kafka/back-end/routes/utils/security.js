@@ -1,7 +1,7 @@
 
 // Define authentication middleware BEFORE your routes
 var authenticate = function (req, res, next) {
-    if (req.session.user) {
+    if (req.session.user || req.body.userid) {
 
         return next();
     }else{

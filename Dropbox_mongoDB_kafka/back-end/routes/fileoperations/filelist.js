@@ -6,7 +6,13 @@ var getFileList = function (req,res)
 {
     var root = req.body.dir;
     var sess= req.session;
-    var userid = sess.user.userid;
+    var userid = '';
+    if(sess==undefined){
+        userid = req.body.userid;
+    }else{
+         userid  = sess.user.userid;
+    }
+
     kafka.make_request('getdir_topic',{"root":root,"userid":userid}, function(err,results){
 
         if(err){

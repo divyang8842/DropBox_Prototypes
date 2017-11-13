@@ -21,7 +21,12 @@ class Groups extends Component {
                             onClick={() => {
                                 this.props.updateGroup(item);
                             }}
-                        ><span aria-hidden={true}>edit</span></button>
+                        ><span aria-hidden={true}>Edit</span></button>
+
+                        <button
+                            className="delete"
+
+                        ><span aria-hidden={true}>Delete</span></button>
                     </div>
                 </div>
             </div>

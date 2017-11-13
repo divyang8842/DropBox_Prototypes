@@ -43,7 +43,7 @@ class UserGroup extends Component {
     };
 
     updateGroup = (group) =>{
-        alert("group : "+ JSON.stringify(group) );
+        //alert("group : "+ JSON.stringify(group) );
         this.setState({
             groupName :group.groupname,
             groupMembers : group.memberjson

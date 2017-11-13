@@ -10,7 +10,7 @@ pool.createpool(100,function(){});
 var connect = function(callback){
 
     pool.getConnection(callback);
-   /* MongoClient.connect(url, function(err, _db){
+    /*MongoClient.connect(url, function(err, _db){
         if (err) { throw new Error('Could not connect: '+err); }
         db = _db;
         connected = true;
@@ -45,7 +45,7 @@ exports.findDoc = function(collectionname,conditionjson,callback){
         cursor.forEach(function(doc) {
             data.push(doc);
         }, function(err) {
-            pool.closeConnection(db);
+           pool.closeConnection(db);
             callback(false,data);
         });
     });

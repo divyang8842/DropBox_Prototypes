@@ -56,7 +56,7 @@ app.use(expressSessions({
 }));
 app.use(passport.initialize());
 
-app.use('/', routes);
+app.use('/',security.authenticate, routes);
 app.use('/users', users);
 app.post('/getDir',security.authenticate, filelist.getFileList);
 app.post('/afterSignUp', signup.afterSignUp);

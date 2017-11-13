@@ -79,8 +79,13 @@ var getuserlogs = function(req,res){
 
 
 var getUserProfileDataReq = function(req,res){
-
-    var data = {userid:req.session.user.userid, type:"get"}
+    var userid = '';
+if(req.session.user){
+    userid = req.session.user.userid;
+}else{
+    userid = req.body.userid;
+}
+    var data = {userid:userid, type:"get"}
     kafka.make_request('user_profile_topic',data, function(err,results){
         console.log('in result mkdir');
         console.log(results);
