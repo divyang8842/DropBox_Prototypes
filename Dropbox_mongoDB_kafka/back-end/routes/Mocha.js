@@ -122,7 +122,7 @@ describe('http tests', function() {
             }
         }, function(error, response, body) {
            // console.log('response',response)
-            assert.equal(501, response.statusCode);
+            assert.equal(201, response.statusCode);
             done();
         });
     });
