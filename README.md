@@ -1,28 +1,7 @@
-# CMPE273
-CMPE273 assignments
+# Dropbox 
 
-This repository contains 2 apps
-1) Calculator
-2) DropBox
-
-1) For Calculator app
-
-There are 2 Separate Directories for
-i) Node Server
-ii) React Client
 
 Recomanded IDE is westrome
-
-Node : cd calc -> cd node
-npm install
-npm start
-
-React : cd calc -> cd react
-npm install
-npm start
-
-
-2) For Dropbox App
 
 There are 2 Separate Directories for
 i) Node Server
