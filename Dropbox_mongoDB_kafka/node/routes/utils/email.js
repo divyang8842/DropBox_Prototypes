@@ -4,8 +4,8 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var transport = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
     auth: {
-        user: 'divyang8842@gmail.com',
-        pass: 'G00gle@1992'
+        user: 'xyz@gmail.com',
+        pass: 'xxxyyy'
     }
 }));
 
@@ -14,7 +14,7 @@ var mailOptions = {};
 
 var setMailOptions = function(to,message){
     mailOptions = {
-        from: 'divyang8842@gmail.com',
+        from: 'xyz@gmail.com',
         to: to,
         subject: 'Dropbox File Shared',
         text: message
